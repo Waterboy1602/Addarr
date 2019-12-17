@@ -1,0 +1,7 @@
+#IGNORE
+.vscode/
+__pycache__/
+
+*.code-workspace
+config.*
+
