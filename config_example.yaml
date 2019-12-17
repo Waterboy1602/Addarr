@@ -1,0 +1,28 @@
+#Sonarr Configuration
+sonarr:
+    server:
+      addr: 
+      port: #Default is 8989
+      ssl: #Default is false
+    auth:
+      apikey: 
+      username: 
+      password:
+  
+#Radarr Configuration
+radarr:
+    server:
+        addr:
+        port: # Default is 7878
+        ssl:  #Default false
+    auth:
+        apikey:
+        username:
+        password:
+  
+#Telegram Configuration
+telegram:
+    token:
+
+#Language
+language: en

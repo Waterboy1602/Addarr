@@ -1,0 +1,63 @@
+{
+    "en": {
+        "Start": "Start",
+        "Stop": "Stop",
+        "Movie": "Movie",
+        "Serie": "Serie",
+        "Start chatting": "Start chatting with Addarr in Telegram",
+        "End": "The adding of movies or series has ended.",
+        "Title": "Enter the title:",
+        "What is this?": "Is this a movie or a serie?",
+        "New": "Execute a new search command",
+        "Next result": "No, show me the next result",
+        "No results": "No more results to show",
+        "Yes":"Yes, add this",
+    
+        "serie": {
+            "Yes":"Yes, add this serie",
+            "This": "Is this the serie you want to add?",
+            "Failed": "Oops, failed to add the serie. Maybe give it another try.",
+            "Success": "The serie is added with success :)",
+            "Exist": "The serie already exists on Plex"
+        },    
+    
+        "movie": {
+            "Yes": "Yes, add this movie",
+            "This": "Is this the movie you want to add?",
+            "Failed": "I failed to add the movie",
+            "Success": "The movie is added with success :)",
+            "Exist": "The movie already exists on Plex"
+        }
+    },
+
+    "nl": {
+        "Start": "Start",
+        "Stop": "Stop",
+        "Movie": "Film",
+        "Serie": "Serie",
+        "Start chatting": "Start met chatten met Addarr op Telegram",
+        "End": "Het toevoegen van films of series is beëindigd.",
+        "Title": "Geef de titel:",
+        "What is this?": "Is dit een film of een serie?",
+        "New": "Voer een nieuwe zoekopdracht uit",
+        "Next result": "Nee, toon me volgend resultaat",
+        "No results": "Geen resultaten meer te tonen.",
+        "Yes":"Ja, voeg deze",
+    
+        "serie": {
+            "Yes":"Ja, voeg deze serie toe",
+            "This": "Is dit de serie die je wilt toevoegen?",
+            "Failed": "Oeps, mislukt om de serie toe te voegen. Probeer misschien nog eens opnieuw.",
+            "Success": "De serie is met succes toegevoegd :)",
+            "Exist": "Deze serie staat al op Plex"
+        },    
+    
+        "film": {
+            "Yes": "Ja, voeg deze film toe",
+            "This": "Is dit de film die je wilt toevoegen?",
+            "Failed": "Oeps, mislukt om de film toe te voegen. Probeer misschien nog eens opnieuw.",
+            "Success": "De film is met succes toegevoegd :)",
+            "Exist": "Deze film staat al op Plex"
+        }
+    }   
+}
