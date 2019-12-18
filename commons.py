@@ -1,9 +1,11 @@
-import yaml #pip install pyyaml
+import yaml
 import logging
+
+from definitions import CONFIG_PATH, LANG_PATH
 
 
 log = logging
-config = yaml.safe_load(open("config.yaml"))
+config = yaml.safe_load(open(CONFIG_PATH, encoding='utf8'))
 log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='telegramBot.log',
                         filemode='w',
                         level=logging.INFO)

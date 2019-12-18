@@ -4,9 +4,8 @@ from telegram import *
 from telegram.ext import *
 import sonarr as sonarr
 import radarr as radarr
-import logging, json, os
+import logging, json
 import yaml
-import os
 
 from definitions import CONFIG_PATH, LANG_PATH
 
@@ -16,13 +15,13 @@ log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', f
                              level=logging.INFO)
 SERIE_MOVIE, READ_CHOICE, GIVE_OPTION = range(3)
 
-config = yaml.safe_load(open(CONFIG_PATH))
+config = yaml.safe_load(open(CONFIG_PATH, encoding='utf8'))
 
 updater = Updater(config['telegram']['token'], use_context=True)
 dispatcher = updater.dispatcher
 lang = config["language"]
 
-transcript = yaml.safe_load(open(LANG_PATH))
+transcript = yaml.safe_load(open(LANG_PATH, encoding='utf8'))
 transcript = transcript[lang]
 
 output = None
@@ -36,7 +35,7 @@ def main():
         states={
             SERIE_MOVIE: [MessageHandler(Filters.text, choiceSerieMovie)],
             READ_CHOICE: [MessageHandler(Filters.regex(f'^({transcript["Movie"]}|{transcript["Serie"]})$'), search)],
-            GIVE_OPTION: [MessageHandler(Filters.regex(f'({transcript["Yes"]})'), add),
+            GIVE_OPTION: [MessageHandler(Filters.regex(f'({transcript["Add"]})'), add),
                            MessageHandler(Filters.regex(f'({transcript["Next result"]})'), nextOpt),
                            MessageHandler(Filters.regex(f'({transcript["New"]})'), start)],
         },
@@ -84,7 +83,7 @@ def search(update, context):
     position = context.user_data['position']
     output = service.giveTitles(service.search(title))        
 
-    reply_keyboard = [[transcript[choice.lower()]["Yes"], transcript["Next result"]],
+    reply_keyboard = [[transcript[choice.lower()]["Add"], transcript["Next result"]],
                         [transcript["New"], transcript["Stop"]]]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript[choice.lower()]["This"])
@@ -101,7 +100,7 @@ def nextOpt(update, context):
     choice = context.user_data['choice']
 
     if position < len(output):
-        reply_keyboard = [[transcript[choice.lower()]["Yes"], transcript["Next result"]],
+        reply_keyboard = [[transcript[choice.lower()]["Add"], transcript["Next result"]],
                             [transcript["New"], transcript["Stop"]]]
         markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
 
