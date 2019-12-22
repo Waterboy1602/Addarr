@@ -9,9 +9,9 @@ The rest will be made clear by the bot
 
 ## Screenshots
 <div style="float: left">
-<img src="https://i.imgur.com/gO4UGG6.png" height="250" style="padding-right: 15px">
-<img src="https://i.imgur.com/6UAmcAk.png" height="250" style="padding-right: 15px">
-<img src="https://i.imgur.com/1X3xUNA.png" height="250" style="padding-right: 15px">
+<img src="https://i.imgur.com/gO4UGG6.png" height="350" style="padding-right: 50px">
+<img src="https://i.imgur.com/6UAmcAk.png" height="350" style="padding-right: 50px">
+<img src="https://i.imgur.com/1X3xUNA.png" height="350" style="padding-right: 50px">
 </div>
 
 ## INSTALLATION
