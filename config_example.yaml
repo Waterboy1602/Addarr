@@ -13,8 +13,8 @@ sonarr:
 radarr:
     server:
         addr:
-        port: # Default is 7878
-        ssl:  #Default false
+        port: #Default is 7878
+        ssl:  #Default is false
     auth:
         apikey:
         username:
@@ -25,4 +25,4 @@ telegram:
     token:
 
 #Language
-language: en
+language: en #'en' or 'nl'

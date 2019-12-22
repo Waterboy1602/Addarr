@@ -21,7 +21,7 @@ en:
         Exist: The serie already exists on Plex
         
     movie:
-        Add: Yes, add this movie,
+        Add: Yes, add this movie
         This: Is this the movie you want to add?
         Failed: I failed to add the movie
         Success: "The movie is added with success :)"
