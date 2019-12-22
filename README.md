@@ -7,7 +7,7 @@ You can start the bot with sending a message or command 'start'
 
 The rest will be made clear by the bot
 
-## Screenshots
+## SCREENSHOTS
 <div style="float: left">
 <img src="https://i.imgur.com/gO4UGG6.png" height="350" style="padding-right: 50px">
 <img src="https://i.imgur.com/6UAmcAk.png" height="350" style="padding-right: 50px">
