@@ -8,10 +8,10 @@ You can start the bot with sending a message or command 'start'
 The rest will be made clear by the bot
 
 ## Screenshots
-<div style="float: left;">
-<img src="https://i.imgur.com/gO4UGG6.png" height="250"></div>
-<img src="https://i.imgur.com/6UAmcAk.png" height="250"></div>
-<img src="https://i.imgur.com/1X3xUNA.png" height="250"></div>
+<div style="float: left">
+<img src="https://i.imgur.com/gO4UGG6.png" height="250" style="padding-right: 15px">
+<img src="https://i.imgur.com/6UAmcAk.png" height="250" style="padding-right: 15px">
+<img src="https://i.imgur.com/1X3xUNA.png" height="250" style="padding-right: 15px">
 </div>
 
 ## INSTALLATION
