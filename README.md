@@ -18,5 +18,5 @@ The rest will be made clear by the bot.
 For the moment I only made a wikipage for [installation on FreeBSD](https://github.com/Waterboy1602/Addarr/wiki/Installation-on-FreeBSD). If there is interest for other wikipages, just tell me and I will look for it.
 ### Docker
 * To build a docker image use the command `docker-compose build`.
-* After that copy the provided config-example.yaml to config.yaml and set the values to your configuration.
+* After that copy the provided `config_example.yaml` to `config.yaml` and set the values to your configuration.
 * Then you can use the provided docker-compose file to run the bot using the command `docker-compose up -d`.
