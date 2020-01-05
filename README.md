@@ -14,8 +14,7 @@ The rest will be made clear by the bot.
 </div>
 
 ## INSTALLATION
-### FreeBSD
-For the moment there is only a wikipage for [FreeBSD](https://github.com/Waterboy1602/Addarr/wiki/Installation-on-FreeBSD) and Docker. If there is interest for other wikipages, just tell me and I will look for it.
+For the moment there is only an installationguide for [FreeBSD](https://github.com/Waterboy1602/Addarr/wiki/Installation-on-FreeBSD) and Docker. If there is interest for other guides, just tell me and I will look for it.
 ### Docker
 * To build a docker image use the command `docker-compose build`.
 * After that copy the provided `config_example.yaml` to `config.yaml` and set the values to your configuration.
