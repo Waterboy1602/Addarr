@@ -1,11 +1,18 @@
+#!/usr/bin/env python3
+
 import requests, json, sys, logging
 import commons as commons
-import yaml #pip install pyyaml
+import yaml
+
+from definitions import CONFIG_PATH, LANG_PATH
 
 log = logging
 log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='telegramBot.log',
                         filemode='w',
                         level=logging.INFO)
+
+config = yaml.safe_load(open(CONFIG_PATH, encoding='utf8'))
+config = config["sonarr"]
 
 addSerieNeededFields = ['tvdbId', 'tvTageId', 'title', 'titleSlug', 'images', 'seasons']
                           
@@ -68,12 +75,12 @@ def addToLibrary(tvdbId):
 
 def buildData(json):
     built_data = {
-        'qualityProfileId': 1,
+        'qualityProfileId': config["qualityProfileId"],
         'addOptions': {'ignoreEpisodesWithFiles': 'true',
                         'ignoreEpisodesWithoutFiles': 'false',
-                        'searchForMissingEpisodes':'true'},
-        'rootFolderPath': '/media/series/',
-        'seasonFolder': 'true'                          
+                        'searchForMissingEpisodes': config["search"]},
+        'rootFolderPath': config["rootFolder"],
+        'seasonFolder': config["seasonFolder"]                          
         }
 
     for show in json:

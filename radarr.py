@@ -2,11 +2,17 @@
 
 import requests, json, sys, logging
 import commons as commons
+import yaml
+
+from definitions import CONFIG_PATH, LANG_PATH
 
 log = logging
 log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='telegramBot.log',
                         filemode='w',
                         level=logging.INFO)
+
+config = yaml.safe_load(open(CONFIG_PATH, encoding='utf8'))
+config = config["radarr"]
 
 addMovieNeededFields = ['tmdbId', 'year', 'title', 'titleSlug', 'images']
 
@@ -68,10 +74,10 @@ def addToLibrary(tmdbId):
 
 def buildData(json):
     built_data = {
-        'qualityProfileId': 1,
-        'rootFolderPath': '/media/movies/',
+        'qualityProfileId': config["qualityProfileId"],
+        'rootFolderPath': config["rootFolder"],
         "addOptions" : {
-            "searchForMovie" : "true"},
+            "searchForMovie" : config["search"]},
         }
 
     for key in addMovieNeededFields:
