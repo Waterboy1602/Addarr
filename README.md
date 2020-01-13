@@ -19,4 +19,5 @@ For the moment there is only an installationguide for [FreeBSD](https://github.c
 * To build a docker image use the command `docker-compose build`.
 * After that copy the provided `config_example.yaml` to `config.yaml` and set the values to your configuration.
 * Then you can use the provided docker-compose file to run the bot using the command `docker-compose up -d`.
-All the credits for the docker setup go to @tedvdb
+
+All the credits for the docker setup go to [@tedvdb](https://github.com/tedvdb)
