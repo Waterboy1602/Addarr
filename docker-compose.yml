@@ -1,8 +1,7 @@
 version: '3'
 services:
   addarr:
-    container_name: addarr_bot
-    build: .
+    image: waterboy1602/addarr
     restart: unless-stopped
     network_mode: host
     volumes:
