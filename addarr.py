@@ -13,7 +13,7 @@ log = logging
 log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='telegramBot.log',
                              filemode='w',
                              level=logging.INFO)
-SERIE_MOVIE, READ_CHOICE, GIVE_OPTION = range(3)
+SERIE_MOVIE_AUTH, READ_CHOICE, GIVE_OPTION = range(3)
 
 config = yaml.safe_load(open(CONFIG_PATH, encoding='utf8'))
 
@@ -34,7 +34,7 @@ def main():
                         MessageHandler(Filters.regex('^(Start|start)$'), start)],
 
         states={
-            SERIE_MOVIE: [MessageHandler(Filters.text, choiceSerieMovie)],
+            SERIE_MOVIE_AUTH: [MessageHandler(Filters.text, choiceSerieMovie)],
             READ_CHOICE: [MessageHandler(Filters.regex(f'^({transcript["Movie"]}|{transcript["Serie"]})$'), search)],
             GIVE_OPTION: [MessageHandler(Filters.regex(f'({transcript["Add"]})'), add),
                            MessageHandler(Filters.regex(f'({transcript["Next result"]})'), nextOpt),
@@ -51,7 +51,7 @@ def main():
     updater.idle()
 
 def auth(update, context):
-    password = " ".join(context.args)
+    password = update.message.text
     chatid=update.effective_message.chat_id
     if password == config["telegram"]["password"]:
         with open(CHATID_PATH, 'r') as file:
@@ -61,8 +61,10 @@ def auth(update, context):
                     file.write(str(chatid))
                     context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Chatid added"])
                     file.close()
+                    start(update, context)
     else:
         context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Wrong password"])
+        return ConversationHandler.END
 
 
 def stop(update, context):
@@ -76,21 +78,26 @@ def start(update, context):
         if str(chatid) in file.read():
             context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Title"])
             file.close()
-            return SERIE_MOVIE
+            return SERIE_MOVIE_AUTH
         else:
-            context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Auth"])
-            return ConversationHandler.END    
+            context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Authorize"])
+            return SERIE_MOVIE_AUTH
+
 
 def choiceSerieMovie(update, context):
-    text = update.message.text
-    context.user_data['title'] = text
-    reply_keyboard = [[transcript["Movie"], transcript["Serie"]]]
-    markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-    update.message.reply_text(transcript["What is this?"], reply_markup=markup)
-    return READ_CHOICE
+    with open(CHATID_PATH, 'r') as file:
+        if not str(update.effective_message.chat_id) in file.read():
+            auth(update, context)
+            file.close()
+        else:
+            text = update.message.text
+            context.user_data['title'] = text
+            reply_keyboard = [[transcript["Movie"], transcript["Serie"]]]
+            markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+            update.message.reply_text(transcript["What is this?"], reply_markup=markup)
+            return READ_CHOICE
 
 def search(update, context):
-    
     title = context.user_data['title']
     del context.user_data['title']
     choice = update.message.text

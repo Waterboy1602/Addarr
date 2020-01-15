@@ -4,9 +4,8 @@
 This is a TelegramBot made to add series to [Sonarr](https://github.com/Sonarr/Sonarr) or movies to [Radarr](https://github.com/Radarr/Radarr) with a couple of commands.
 
 ## HOW IT WORKS
-Before you can use this bot you should send `/auth <password>` to allow the chat you're in to use this bot. You need to set a password in the config file.
-You can start the bot with sending `/start` or just `start`. At any time you can stop with the bot by sending `/stop` or `stop`.
-The rest will be made clear by the bot.
+You can start the bot with sending `/start` or just `start`. At any time you can stop with the bot by sending `/stop` or `stop`. The first time you use `start` you will be asked to enter your password you set in the config file. You will only need to do this one time. The chatId will be saved to a file and be checked there every time.
+The next steps will be made clear by the bot.
 
 ## SCREENSHOTS
 <div style="float: left">
