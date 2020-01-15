@@ -7,7 +7,7 @@ import radarr as radarr
 import logging, json
 import yaml
 
-from definitions import CONFIG_PATH, LANG_PATH
+from definitions import CONFIG_PATH, LANG_PATH, CHATID_PATH
 
 log = logging
 log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='telegramBot.log',
@@ -28,6 +28,7 @@ output = None
 service = None
     
 def main():
+    auth_handler = CommandHandler('auth', auth)
     conversationHandler = ConversationHandler(
         entry_points=[CommandHandler('start', start),
                         MessageHandler(Filters.regex('^(Start|start)$'), start)],
@@ -44,9 +45,25 @@ def main():
                     MessageHandler(Filters.regex('^(Stop|stop)$'), stop)]
     )
     dispatcher.add_handler(conversationHandler)
+    dispatcher.add_handler(auth_handler)
     print(transcript["Start chatting"])
     updater.start_polling()
     updater.idle()
+
+def auth(update, context):
+    password = " ".join(context.args)
+    chatid=update.effective_message.chat_id
+    if password == config["telegram"]["password"]:
+        with open(CHATID_PATH, 'r') as file:
+            if not str(chatid) in file.read():
+                file.close()
+                with open(CHATID_PATH, 'a') as file:
+                    file.write(str(chatid))
+                    context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Chatid added"])
+                    file.close()
+    else:
+        context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Wrong password"])
+
 
 def stop(update, context):
     context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["End"])
@@ -54,8 +71,15 @@ def stop(update, context):
 
 
 def start(update, context):
-    context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Title"])
-    return SERIE_MOVIE
+    chatid=update.effective_message.chat_id
+    with open(CHATID_PATH, 'r') as file:
+        if str(chatid) in file.read():
+            context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Title"])
+            file.close()
+            return SERIE_MOVIE
+        else:
+            context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Auth"])
+            return ConversationHandler.END    
 
 def choiceSerieMovie(update, context):
     text = update.message.text

@@ -4,7 +4,7 @@ en:
     Stop: Stop
     Movie: Movie
     Serie: Serie
-    Start chatting: Start chatting with Addarr in Telegram
+    Start chatting: Start chatting with Addarr in Telegram, but first authorize the chat with "/auth `password`"
     End: The adding of movies or series has ended.
     Title: "Enter the title:"
     What is this?: Is this a movie or a serie?
@@ -12,6 +12,9 @@ en:
     Next result: No, show me the next result
     No results: No more results to show
     Add: Yes, add this
+    Auth: You first need to authorize this chat with `/auth` before you can use the bot.
+    Wrong password: You entered the wrong password.
+    Chatid added: This chat is succesfully added to the list with allowed chats.
 
     serie:
         Add: Yes, add this serie
@@ -33,7 +36,7 @@ nl:
     Stop: Stop
     Movie: Film
     Serie: Serie
-    Start chatting: Start met chatten met Addarr op Telegram
+    Start chatting: Je kan nu chatten met Addarr op Telegram, maar vergeet niet om eerst "/auth `paswoord`" uit te voeren
     End: Het toevoegen van films of series is beëindigd.
     Title: "Geef de titel:"
     What is this?: Is dit een film of een serie?
@@ -41,6 +44,9 @@ nl:
     Next result: Nee, toon me volgend resultaat
     No results: Geen resultaten meer te tonen.
     Add: Ja, voeg deze
+    Auth: Je moet eerst deze chat toestemming geven met `/auth` voor dat je deze bot kan gebruiken.
+    Wrong password: Het wachtwoord is verkeerd.
+    Chatid added: Deze chat is succesvol toegevoegd aan de lijst met toegestane chats.
 
     serie:
         Add: Ja, voeg deze serie toe

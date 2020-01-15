@@ -32,6 +32,7 @@ radarr:
 #Telegram Configuration
 telegram:
     token: #Get this from @BotFather
+    password:
 
 #Language
 language: en #'en' or 'nl'
