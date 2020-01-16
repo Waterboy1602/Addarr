@@ -54,14 +54,11 @@ def auth(update, context):
     password = update.message.text
     chatid=update.effective_message.chat_id
     if password == config["telegram"]["password"]:
-        with open(CHATID_PATH, 'r') as file:
-            if not str(chatid) in file.read():
-                file.close()
-                with open(CHATID_PATH, 'a') as file:
-                    file.write(str(chatid) + '\n')
-                    context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Chatid added"])
-                    file.close()
-                    start(update, context)
+        with open(CHATID_PATH, 'a') as file:
+            file.write(str(chatid) + '\n')
+            context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Chatid added"])
+            file.close()
+            start(update, context)
     else:
         context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Wrong password"])
         return ConversationHandler.END
@@ -73,22 +70,36 @@ def stop(update, context):
 
 
 def start(update, context):
-    chatid=update.effective_message.chat_id
+    authorize=False
     with open(CHATID_PATH, 'r') as file:
-        if str(chatid) in file.read():
+        firstChar = file.read(1)
+        if not firstChar:
+            context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Authorize"])
+            return SERIE_MOVIE_AUTH
+        file.close()
+    with open(CHATID_PATH, 'r') as file:
+        for line in file:
+            if line.strip("\n") == str(update.effective_message.chat_id):
+                authorize=True
+        file.close()
+        if authorize:
             context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Title"])
-            file.close()
             return SERIE_MOVIE_AUTH
         else:
             context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Authorize"])
             return SERIE_MOVIE_AUTH
 
 
+
 def choiceSerieMovie(update, context):
+    authorized=False
     with open(CHATID_PATH, 'r') as file:
-        if not str(update.effective_message.chat_id) in file.read():
+        for line in file:
+            if line.strip("\n") == str(update.effective_message.chat_id):
+                authorized=True
+        file.close()
+        if not authorized:
             auth(update, context)
-            file.close()
         else:
             text = update.message.text
             context.user_data['title'] = text
