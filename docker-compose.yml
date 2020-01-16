@@ -7,3 +7,4 @@ services:
     network_mode: host
     volumes:
     - ./config.yaml:/usr/src/addarr/config.yaml:ro
+    - ./chatid.txt:/usr/src/addarr/chatid.txt:rw
