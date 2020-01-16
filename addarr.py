@@ -58,7 +58,7 @@ def auth(update, context):
             if not str(chatid) in file.read():
                 file.close()
                 with open(CHATID_PATH, 'a') as file:
-                    file.write(str(chatid))
+                    file.write(str(chatid) + '\n')
                     context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Chatid added"])
                     file.close()
                     start(update, context)
