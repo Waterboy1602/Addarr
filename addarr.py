@@ -6,12 +6,14 @@ import sonarr as sonarr
 import radarr as radarr
 import logging, json
 import yaml
+import time
+import datetime
 
-from definitions import CONFIG_PATH, LANG_PATH, CHATID_PATH
+from definitions import CONFIG_PATH, LANG_PATH, CHATID_PATH, LOG_PATH
 
 log = logging
-log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='telegramBot.log',
-                             filemode='w',
+log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename=LOG_PATH,
+                             filemode='a',
                              level=logging.INFO)
 SERIE_MOVIE_AUTH, READ_CHOICE, GIVE_OPTION = range(3)
 
@@ -28,6 +30,7 @@ output = None
 service = None
     
 def main():
+    open(LOG_PATH, 'w').close() #clear logfile at startup of script
     auth_handler = CommandHandler('auth', auth)
     conversationHandler = ConversationHandler(
         entry_points=[CommandHandler('start', start),
@@ -60,6 +63,11 @@ def auth(update, context):
             file.close()
             start(update, context)
     else:
+        with open(LOG_PATH, 'a') as file:
+            ts = time.time()
+            sttime = datetime.datetime.fromtimestamp(ts).strftime('%d%m%Y_%H:%M:%S - ')
+            file.write(sttime + '@'+str(update.message.from_user.username) + ' - ' + str(password) + '\n')
+            file.close()
         context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Wrong password"])
         return ConversationHandler.END
 
