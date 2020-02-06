@@ -1,11 +1,11 @@
 import yaml
 import logging
 
-from definitions import CONFIG_PATH, LANG_PATH
+from definitions import CONFIG_PATH, LANG_PATH, LOG_PATH
 
 log = logging
 config = yaml.safe_load(open(CONFIG_PATH, encoding='utf8'))
-log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='telegramBot.log',
+log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename=LOG_PATH,
                         filemode='a',
                         level=logging.INFO)
 

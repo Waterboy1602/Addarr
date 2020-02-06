@@ -4,10 +4,10 @@ import requests, json, sys, logging
 import commons as commons
 import yaml
 
-from definitions import CONFIG_PATH, LANG_PATH
+from definitions import CONFIG_PATH, LANG_PATH, LOG_PATH
 
 log = logging
-log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename='telegramBot.log',
+log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename=LOG_PATH,
                         filemode='a',
                         level=logging.INFO)
 

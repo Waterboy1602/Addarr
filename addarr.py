@@ -15,6 +15,7 @@ log = logging
 log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename=LOG_PATH,
                              filemode='a',
                              level=logging.INFO)
+                             
 SERIE_MOVIE_AUTH, READ_CHOICE, GIVE_OPTION = range(3)
 
 config = yaml.safe_load(open(CONFIG_PATH, encoding='utf8'))
