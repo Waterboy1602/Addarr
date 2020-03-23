@@ -36,3 +36,4 @@ telegram:
 
 #Language
 language: en #'en' or 'nl'
+entrypoint: start #start or a custom entrypoint

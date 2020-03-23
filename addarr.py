@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 
+import datetime
+import logging
+import re
+import time
+
+import yaml
 from telegram import *
 from telegram.ext import *
-import sonarr as sonarr
-import radarr as radarr
-import logging, json
-import yaml
-import time
-import datetime
 
+import radarr as radarr
+import sonarr as sonarr
 from definitions import CONFIG_PATH, LANG_PATH, CHATID_PATH, LOG_PATH
 
 log = logging
 log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename=LOG_PATH,
-                             filemode='a',
+                filemode='a',
                              level=logging.INFO)
                              
 SERIE_MOVIE_AUTH, READ_CHOICE, GIVE_OPTION = range(3)
@@ -34,15 +36,15 @@ def main():
     open(LOG_PATH, 'w').close() #clear logfile at startup of script
     auth_handler = CommandHandler('auth', auth)
     conversationHandler = ConversationHandler(
-        entry_points=[CommandHandler('start', start),
-                        MessageHandler(Filters.regex('^(Start|start)$'), start)],
+        entry_points=[CommandHandler(config['entrypoint'], start),
+                      MessageHandler(Filters.regex(re.compile(r'' + config['entrypoint'] + '', re.IGNORECASE)), start)],
 
         states={
             SERIE_MOVIE_AUTH: [MessageHandler(Filters.text, choiceSerieMovie)],
             READ_CHOICE: [MessageHandler(Filters.regex(f'^({transcript["Movie"]}|{transcript["Serie"]})$'), search)],
             GIVE_OPTION: [MessageHandler(Filters.regex(f'({transcript["Add"]})'), add),
-                           MessageHandler(Filters.regex(f'({transcript["Next result"]})'), nextOpt),
-                           MessageHandler(Filters.regex(f'({transcript["New"]})'), start)],
+                          MessageHandler(Filters.regex(f'({transcript["Next result"]})'), nextOpt),
+                          MessageHandler(Filters.regex(f'({transcript["New"]})'), start)],
         },
 
         fallbacks=[CommandHandler('stop', stop),
