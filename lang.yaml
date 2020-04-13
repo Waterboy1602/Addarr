@@ -14,21 +14,32 @@ en:
     Add: Yes, add this
     Authorize: You first need to authorize this chat. What is the password?
     Wrong password: You entered the wrong password. Try again...
-    Chatid added: This chat is succesfully added to the list with allowed chats. Now you can start using this bot.
+    Chatid added: "This chat is succesfully added to the list with allowed chats. Now you can start using this bot. \nIf you entered a command, then you need to execute it again"
 
     serie:
         Add: Yes, add this serie
         This: Is this the serie you want to add?
         Failed: Oops, failed to add the serie. Maybe give it another try.
-        Success: "The serie is added with success :)"
-        Exist: The serie already exists on Plex
+        Success: "The serie is added with success 🙂"
+        Exist: The serie already exists on Plex 😉
         
     movie:
         Add: Yes, add this movie
         This: Is this the movie you want to add?
         Failed: I failed to add the movie
-        Success: "The movie is added with success :)"
-        Exist: The movie already exists on Plex
+        Success: "The movie is added with success 🙂"
+        Exist: The movie already exists on Plex 😉
+    
+    Transmission:
+        NotEnabled: "The Transmission function is not activated."
+        Speed: "Which speed do you want Transmission to use?"
+        Turtle: Temporary Speed Limits
+        Normal: Normal speed
+        ChangedToTurtle: "Temporary Speed Limits is enabled."
+        ChangedToNormal: "Temporary Speed Limits is disabled."
+        IsTurtle: "Temporary Speed Limits was already enabled."
+        IsNormal: "Temporary Speed Limits was already disabled."
+    
 
 #Dutch
 nl: 
@@ -46,18 +57,28 @@ nl:
     Add: Ja, voeg deze
     Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
     Wrong password: Het wachtwoord is verkeerd. Probeer opnieuw...
-    Chatid added: Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken.
+    Chatid added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
 
     serie:
         Add: Ja, voeg deze serie toe
         This: Is dit de serie die je wilt toevoegen?
         Failed: Oeps, mislukt om de serie toe te voegen. Probeer misschien nog eens opnieuw.
-        Success: "De serie is met succes toegevoegd :)"
-        Exist: Deze serie staat al op Plex
+        Success: "De serie is met succes toegevoegd 🙂"
+        Exist: Deze serie staat al op Plex 😉
 
     film: 
         Add: Ja, voeg deze film toe
         This: Is dit de film die je wilt toevoegen?
         Failed: Oeps, mislukt om de film toe te voegen. Probeer misschien nog eens opnieuw.
-        Success: "De film is met succes toegevoegd :)"
-        Exist: Deze film staat al op Plex
+        Success: "De film is met succes toegevoegd 🙂"
+        Exist: Deze film staat al op Plex 😉
+
+    Transmission:
+        NotEnabled: "De Transmission functie is niet geactiveerd."
+        Speed: "Welke snelheid wil je dat Transmission gebruikt?"
+        Turtle: Tijdelijke snelheidslimiet
+        Normal: Normale snelheid
+        ChangedToTurtle: "Tijdelijke snelheidslimiet staat aan."
+        ChangedToNormal: "Tijdelijke snelheidslimiet staat af."
+        IsTurtle: "Tijdelijke snelheidslimiet stond al aan."
+        IsNormal: "Tijdelijke snelheidslimiet stond al af."
