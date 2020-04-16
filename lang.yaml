@@ -15,6 +15,7 @@ en:
     Authorize: You first need to authorize this chat. What is the password?
     Wrong password: You entered the wrong password. Try again...
     Chatid added: "This chat is succesfully added to the list with allowed chats. Now you can start using this bot. \nIf you entered a command, then you need to execute it again"
+    NotAdmin: "You can't execute this command, because you aren't an admin."
 
     serie:
         Add: Yes, add this serie
@@ -37,8 +38,6 @@ en:
         Normal: Normal speed
         ChangedToTurtle: "Temporary Speed Limits is enabled."
         ChangedToNormal: "Temporary Speed Limits is disabled."
-        IsTurtle: "Temporary Speed Limits was already enabled."
-        IsNormal: "Temporary Speed Limits was already disabled."
     
 
 #Dutch
@@ -58,6 +57,7 @@ nl:
     Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
     Wrong password: Het wachtwoord is verkeerd. Probeer opnieuw...
     Chatid added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
+    NotAdmin: "Je kan dit commando niet uitvoeren, omdat je geen admin bent."
 
     serie:
         Add: Ja, voeg deze serie toe
@@ -80,5 +80,3 @@ nl:
         Normal: Normale snelheid
         ChangedToTurtle: "Tijdelijke snelheidslimiet staat aan."
         ChangedToNormal: "Tijdelijke snelheidslimiet staat af."
-        IsTurtle: "Tijdelijke snelheidslimiet stond al aan."
-        IsNormal: "Tijdelijke snelheidslimiet stond al af."

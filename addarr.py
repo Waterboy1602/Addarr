@@ -12,7 +12,7 @@ from telegram.ext import *
 
 import radarr as radarr
 import sonarr as sonarr
-from definitions import CONFIG_PATH, LANG_PATH, CHATID_PATH, LOG_PATH
+from definitions import CONFIG_PATH, LANG_PATH, CHATID_PATH, LOG_PATH, ADMIN_PATH
 
 log = logging
 log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename=LOG_PATH,
@@ -88,13 +88,31 @@ def checkId(update):
         else:
             return False
 
+#Check if user is an admin
+def checkAdmin(update):
+    admin=False
+    user = update.message.from_user
+    with open(ADMIN_PATH, 'r') as file:
+        for line in file:
+            if line.strip("\n") == str(user['username']) or line.strip("\n") == str(user['id']):
+                admin=True
+        file.close()
+        if admin:
+            return True
+        else:
+            return False
+
 def transmission(update, context,):
     if config["transmission"]["enable"]:
         if checkId(update):
-            reply_keyboard = [[transcript["Transmission"]["Turtle"], transcript["Transmission"]["Normal"]]]
-            markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-            update.message.reply_text(transcript["Transmission"]["Speed"], reply_markup=markup)
-            return TURTLE_NORMAL
+            if checkAdmin(update):
+                reply_keyboard = [[transcript["Transmission"]["Turtle"], transcript["Transmission"]["Normal"]]]
+                markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+                update.message.reply_text(transcript["Transmission"]["Speed"], reply_markup=markup)
+                return TURTLE_NORMAL
+            else:
+                context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["NotAdmin"])
+                return TURTLE_NORMAL
         else:
             context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Authorize"])
             return TURTLE_NORMAL
