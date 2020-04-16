@@ -19,7 +19,7 @@ log.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', f
                 filemode='a',
                              level=logging.INFO)
                              
-SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, TURTLE_NORMAL = range(4)
+SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, TSL_NORMAL = range(4)
 
 config = yaml.safe_load(open(CONFIG_PATH, encoding='utf8'))
 
@@ -56,7 +56,7 @@ def main():
                       MessageHandler(Filters.regex(re.compile(r'' + config['entrypointTransmission'] + '', re.IGNORECASE)), transmission)],
 
         states={
-            TURTLE_NORMAL: [MessageHandler(Filters.text, changeSpeedTransmission)]
+            TSL_NORMAL: [MessageHandler(Filters.text, changeSpeedTransmission)]
         },
 
         fallbacks=[CommandHandler('stop', stop),
@@ -106,16 +106,16 @@ def transmission(update, context,):
     if config["transmission"]["enable"]:
         if checkId(update):
             if checkAdmin(update):
-                reply_keyboard = [[transcript["Transmission"]["Turtle"], transcript["Transmission"]["Normal"]]]
+                reply_keyboard = [[transcript["Transmission"]["TSL"], transcript["Transmission"]["Normal"]]]
                 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
                 update.message.reply_text(transcript["Transmission"]["Speed"], reply_markup=markup)
-                return TURTLE_NORMAL
+                return TSL_NORMAL
             else:
                 context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["NotAdmin"])
-                return TURTLE_NORMAL
+                return TSL_NORMAL
         else:
             context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Authorize"])
-            return TURTLE_NORMAL
+            return TSL_NORMAL
     else :
         context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Transmission"]["NotEnabled"])
         return ConversationHandler.END
@@ -126,11 +126,11 @@ def changeSpeedTransmission(update, context):
             return ConversationHandler.END
     else:
         choice = update.message.text
-        if choice == transcript["Transmission"]["Turtle"]:
+        if choice == transcript["Transmission"]["TSL"]:
             if config["transmission"]["authentication"]:
                 auth = " --auth " + config["transmission"]["username"] + ":" + config["transmission"]["password"]
             os.system('transmission-remote ' + config["transmission"]["host"] + auth + " --alt-speed")
-            context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Transmission"]["ChangedToTurtle"])
+            context.bot.send_message(chat_id=update.effective_message.chat_id, text=transcript["Transmission"]["ChangedToTSL"])
             return ConversationHandler.END
 
         elif choice == transcript["Transmission"]["Normal"]:

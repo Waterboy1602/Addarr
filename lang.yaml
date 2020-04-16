@@ -34,9 +34,9 @@ en:
     Transmission:
         NotEnabled: "The Transmission function is not activated."
         Speed: "Which speed do you want Transmission to use?"
-        Turtle: Temporary Speed Limits
+        TSL: Temporary Speed Limits
         Normal: Normal speed
-        ChangedToTurtle: "Temporary Speed Limits is enabled."
+        ChangedToTSL: "Temporary Speed Limits is enabled."
         ChangedToNormal: "Temporary Speed Limits is disabled."
     
 
@@ -76,7 +76,7 @@ nl:
     Transmission:
         NotEnabled: "De Transmission functie is niet geactiveerd."
         Speed: "Welke snelheid wil je dat Transmission gebruikt?"
-        Turtle: Tijdelijke snelheidslimiet
+        TSL: Tijdelijke snelheidslimiet
         Normal: Normale snelheid
-        ChangedToTurtle: "Tijdelijke snelheidslimiet staat aan."
+        ChangedToTSL: "Tijdelijke snelheidslimiet staat aan."
         ChangedToNormal: "Tijdelijke snelheidslimiet staat af."
