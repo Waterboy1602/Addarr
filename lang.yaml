@@ -7,22 +7,22 @@ en:
     Start chatting: Start chatting with Addarr in Telegram. The first time you use "start" you will be asked to enter your password.
     End: The adding of movies or series has ended.
     Title: "Enter the title:"
-    What is this?: Is this a movie or a serie?
+    What is this?: Is this a movie or a series?
     New: Execute a new search command
     Next result: No, show me the next result
     No results: No more results to show
     Add: Yes, add this
     Authorize: You first need to authorize this chat. What is the password?
     Wrong password: You entered the wrong password. Try again...
-    Chatid added: "This chat is succesfully added to the list with allowed chats. Now you can start using this bot. \nIf you entered a command, then you need to execute it again"
+    Chatid added: "This chat is successfully added to the list with allowed chats. Now you can start using this bot. \nIf you entered a command, then you need to execute it again"
     NotAdmin: "You can't execute this command, because you aren't an admin."
 
     serie:
-        Add: Yes, add this serie
-        This: Is this the serie you want to add?
-        Failed: Oops, failed to add the serie. Maybe give it another try.
-        Success: "The serie is added with success 🙂"
-        Exist: The serie already exists on Plex 😉
+        Add: Yes, add this series
+        This: Is this the series you want to add?
+        Failed: Oops, failed to add the series. Maybe give it another try.
+        Success: "The series is added with success 🙂"
+        Exist: The series already exists on Plex 😉
         
     movie:
         Add: Yes, add this movie
