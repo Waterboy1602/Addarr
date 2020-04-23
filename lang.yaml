@@ -14,8 +14,8 @@ en:
     Add: Yes, add this
     Authorize: You first need to authorize this chat. What is the password?
     Wrong password: You entered the wrong password. Try again...
-    Chatid added: "This chat is successfully added to the list with allowed chats. Now you can start using this bot. \nIf you entered a command, then you need to execute it again"
-    NotAdmin: "You can't execute this command, because you aren't an admin."
+    Chatid added: "This chat is successfully added to the list with allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
+    NotAdmin: "You need to be an admin to execute this command."
 
     serie:
         Add: Yes, add this series
@@ -57,7 +57,7 @@ nl:
     Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
     Wrong password: Het wachtwoord is verkeerd. Probeer opnieuw...
     Chatid added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
-    NotAdmin: "Je kan dit commando niet uitvoeren, omdat je geen admin bent."
+    NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
 
     serie:
         Add: Ja, voeg deze serie toe
