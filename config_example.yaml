@@ -1,39 +1,53 @@
+#Restrict some commands (Transmission) to only admins 
+enableAdmin: true
+
 #Sonarr Configuration
 sonarr:
-    server:
-        addr:
-        port: #Default 8989
-        ssl: false 
-    auth:
-        apikey: 
-        username:
-        password:
-    search: true
-    rootFolder: #Path
-    seasonFolder: true
-    qualityProfileId: #Must be a number
+  server:
+    addr: 
+    port : 8989 # Default is 8989
+    ssl: false #default false
+  auth:
+    apikey: 
+    username: 
+    password:
+  search: true
+  rootFolder: 
+  seasonFolder: true
+  qualityProfileId: 1
 
-    
-  
 #Radarr Configuration
 radarr:
-    server:
-        addr:
-        port: #Default 7878
-        ssl:  false
-    auth:
-        apikey:
-        username:
-        password:
-    search: true
-    rootFolder: #Path
-    qualityProfileId: #Must be a number
+  server:
+    addr:
+    port : 7878 # Default is 7878
+    ssl: false #default false
+  auth:
+    apikey:
+    username:
+    password: 
+  search: true
+  rootFolder:
+  qualityProfileId: 1
 
 #Telegram Configuration
 telegram:
-    token: #Get this from @BotFather
-    password: password
+  token:
+  password:
+
+#Transmission Configuration
+transmission:
+  enable: true #enable the transmission commands
+  onlyAdmin: true #transmission command  will only work for admins
+  host:
+  authentication: true #is transmission protected with a password?
+  username: 
+  password:
 
 #Language
-language: en #'en' or 'nl'
-entrypoint: start #start or a custom entrypoint
+language: en
+
+#Entrypoints
+entrypointAuth: auth #auth or a custom entrypoint
+entrypointAdd: start #start or a custom entrypoint
+entrypointTransmission: transmission #transmission or a custom entrypoint
