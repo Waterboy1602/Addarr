@@ -3,7 +3,7 @@ en:
     Start: Start
     Stop: Stop
     Movie: Movie
-    Serie: Serie
+    Serie: Series
     Start chatting: Start chatting with Addarr in Telegram. The first time you use "start" you will be asked to enter your password.
     End: The adding of movies or series has ended.
     Title: "Enter the title:"
@@ -14,23 +14,23 @@ en:
     Add: Yes, add this
     Authorize: You first need to authorize this chat. What is the password?
     Wrong password: You entered the wrong password. Try again...
-    Chatid added: "This chat is successfully added to the list with allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
+    Chatid added: "This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
     NotAdmin: "You need to be an admin to execute this command."
 
-    serie:
+    series:
         Add: Yes, add this series
         This: Is this the series you want to add?
         Failed: Oops, failed to add the series. Maybe give it another try.
         Success: "The series is added with success 🙂"
-        Exist: The series already exists on Plex 😉
-        
+        Exist: The series already exists 😉
+
     movie:
         Add: Yes, add this movie
         This: Is this the movie you want to add?
         Failed: I failed to add the movie
         Success: "The movie is added with success 🙂"
-        Exist: The movie already exists on Plex 😉
-    
+        Exist: The movie already exists 😉
+
     Transmission:
         NotEnabled: "The Transmission function is not activated."
         Speed: "Which speed do you want Transmission to use?"
@@ -38,7 +38,7 @@ en:
         Normal: Normal speed
         ChangedToTSL: "Temporary Speed Limits is enabled."
         ChangedToNormal: "Temporary Speed Limits is disabled."
-    
+
 
 #Dutch
 nl: 
