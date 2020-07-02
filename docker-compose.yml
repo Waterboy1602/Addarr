@@ -1,9 +1,11 @@
 version: '3'
 services:
   addarr:
+    container_name: addarr
     image: waterboy1602/addarr
     restart: unless-stopped
     network_mode: host
     volumes:
     - ./config.yaml:/usr/src/addarr/config.yaml:ro
     - ./chatid.txt:/usr/src/addarr/chatid.txt:rw
+    - ./admin.txt:/usr/src/addarr/admin.txt:ro
