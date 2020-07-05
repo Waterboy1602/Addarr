@@ -12,7 +12,6 @@ sonarr:
     username: 
     password:
   search: true
-  rootFolder: 
   seasonFolder: true
   qualityProfileId: 1
 
@@ -27,7 +26,6 @@ radarr:
     username:
     password: 
   search: true
-  rootFolder:
   qualityProfileId: 1
 
 #Telegram Configuration
