@@ -6,17 +6,15 @@ import logging
 import requests
 import yaml
 
-from definitions import CONFIG_PATH, LOG_PATH
-
-log = logging
-log.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    filename=LOG_PATH,
-    filemode="a",
-    level=logging.INFO,
-)
+import logger
+from definitions import CONFIG_PATH
 
 config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
+
+# Set up logging
+logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
+logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", False))
+
 config = config["radarr"]
 
 addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images"]
@@ -73,13 +71,13 @@ def inLibrary(tmdbId):
     return next((True for movie in parsed_json if movie["tmdbId"] == tmdbId), False)
 
 
-def addToLibrary(tmdbId):
+def addToLibrary(tmdbId, path):
     parameters = {"tmdbId": str(tmdbId)}
     req = requests.get(
         commons.generateApiQuery("radarr", "movie/lookup/tmdb", parameters)
     )
     parsed_json = json.loads(req.text)
-    data = json.dumps(buildData(parsed_json))
+    data = json.dumps(buildData(parsed_json, path))
     add = requests.post(commons.generateApiQuery("radarr", "movie"), data=data)
     if add.status_code == 201:
         return True
@@ -87,13 +85,21 @@ def addToLibrary(tmdbId):
         return False
 
 
-def buildData(json):
+def buildData(json, path):
     built_data = {
         "qualityProfileId": config["qualityProfileId"],
-        "rootFolderPath": config["rootFolder"],
+        "rootFolderPath": path,  # config["rootFolder"],
         "addOptions": {"searchForMovie": config["search"]},
     }
 
     for key in addMovieNeededFields:
         built_data[key] = json[key]
     return built_data
+
+
+def getRootFolders():
+    parameters = {}
+    req = requests.get(commons.generateApiQuery("radarr", "Rootfolder", parameters))
+    parsed_json = json.loads(req.text)
+    logger.debug(f"Found Radarr paths: {parsed_json}")
+    return parsed_json

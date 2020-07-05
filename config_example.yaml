@@ -51,3 +51,7 @@ language: en
 entrypointAuth: auth #auth or a custom entrypoint
 entrypointAdd: start #start or a custom entrypoint
 entrypointTransmission: transmission #transmission or a custom entrypoint
+
+#Logging
+logToConsole: true
+debugLogging: false

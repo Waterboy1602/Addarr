@@ -1,16 +1,14 @@
 import yaml
 import logging
 
-from definitions import CONFIG_PATH, LOG_PATH
+import logger
+from definitions import CONFIG_PATH
 
-log = logging
 config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
-log.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    filename=LOG_PATH,
-    filemode="a",
-    level=logging.INFO,
-)
+
+# Set up logging
+logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
+logger = logger.getLogger("addarr.commons", logLevel, config.get("logToConsole", False))
 
 
 def generateServerAddr(app):
@@ -24,10 +22,9 @@ def generateServerAddr(app):
             port = config[app]["server"]["port"]
             return http + addr + ":" + str(port)
         except Exception:
-            log.warn("No ip or port defined.")
-
+            logger.warn("No ip or port defined.")
     except Exception as e:
-        log.warn(f"Generate of serveraddress failed: {e}.")
+        logger.warn(f"Generate of serveraddress failed: {e}.")
 
 
 def cleanUrl(text):
@@ -47,4 +44,4 @@ def generateApiQuery(app, endpoint, parameters={}):
                 url += "&" + key + "=" + value
         return cleanUrl(url)  # Clean URL (validate) and return as string
     except Exception as e:
-        log.warn(f"Generate of APIQUERY failed: {e}.")
+        logger.warn(f"Generate of APIQUERY failed: {e}.")

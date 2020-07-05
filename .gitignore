@@ -5,4 +5,4 @@ __pycache__/
 *.code-workspace
 *.log
 config.*
-
+logs/
