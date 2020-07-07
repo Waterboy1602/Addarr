@@ -12,7 +12,6 @@ sonarr:
     username: 
     password:
   search: true
-  rootFolder: 
   seasonFolder: true
   qualityProfileId: 1
 
@@ -27,7 +26,6 @@ radarr:
     username:
     password: 
   search: true
-  rootFolder:
   qualityProfileId: 1
 
 #Telegram Configuration
@@ -51,3 +49,7 @@ language: en
 entrypointAuth: auth #auth or a custom entrypoint
 entrypointAdd: start #start or a custom entrypoint
 entrypointTransmission: transmission #transmission or a custom entrypoint
+
+#Logging
+logToConsole: true
+debugLogging: false

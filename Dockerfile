@@ -1,14 +1,12 @@
 FROM python:3.8-alpine
 
-WORKDIR /usr/src
+WORKDIR /app
 # Install requirements
 RUN apk add --no-cache gcc musl-dev libffi-dev openssl-dev
 # Copy files to container
-COPY . /usr/src/addarr
+COPY . /app
 # Install ans build Addarr requirements, make symlink to redirect logs to stdout
-RUN	cd addarr && \
-	pip install --no-cache-dir -r requirements.txt --upgrade && \
-	ln -s /dev/stdout /usr/src/telegramBot.log 
+RUN	pip install --no-cache-dir -r requirements.txt --upgrade
 
 ENTRYPOINT ["python"]
-CMD ["/usr/src/addarr/addarr.py"]
+CMD ["/app/addarr.py"]

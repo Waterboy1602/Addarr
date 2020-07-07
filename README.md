@@ -10,9 +10,11 @@ If you've entered a wrong password, there will be saved a log to `addarr.log` wi
 
 You can start the Transmission command with `/transmission` or `transmission`. After that you will be asked what you want to do. Just press the action you want and it's done.
 
-You can start adding series/movies with`/start` or just `start`. The next steps will be made clear by the bot. At any time you can stop the adding by sending `/stop` or `stop`.
+You can start adding series/movies with `/start` or just `start`. The next steps will be made clear by the bot. At any time you can stop the adding by sending `/stop` or `stop`.
 
-Different entrypoints for all these commands can be entered in the config file.
+You can also start adding a series or movie with `/movie` or `/series` when the bot is running in English or `/film` or `/serie` when the bot is running in Dutch. This will skip the step of asking if the title represents a series or a movie.
+
+Different entrypoints for all these commands can be entered in the config file, except `/movie`/`/film`/`series`/`serie`, which are defined in `lang.yaml`.
 
 ## FUNCTIONS    
 - Add series/movies to Sonarr/Radarr
@@ -25,6 +27,8 @@ Different entrypoints for all these commands can be entered in the config file.
 These are the default commands:
 - Auth: authenticate the chat to use your bot
 - Start: start adding a series or movie to Sonarr/Radarr
+- Movie (en)/Film (nl): starting adding a movie to Radarr
+- Series (en)/Serie (nl): starting adding a series to Sonarr
 - Transmission: change the down-/upload speed of Transmission from Temporary Speed Limit to normal or the other way around
 - Stop: stop the command you were executing
 
