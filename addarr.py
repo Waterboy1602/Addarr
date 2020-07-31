@@ -334,27 +334,35 @@ def searchSerieMovie(update, context):
     service = getService(context)
 
     position = context.user_data["position"]
-    context.user_data["output"] = service.giveTitles(service.search(title))
+    
+    if service.search(title):
+        context.user_data["output"] = service.giveTitles(service.search(title))
 
-    reply_keyboard = [
-        [transcript[choice.lower()]["Add"], transcript["Next result"]],
-        [transcript["New"], transcript["Stop"]],
-    ]
-    markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-    context.bot.send_message(
-        chat_id=update.effective_message.chat_id,
-        text=transcript[choice.lower()]["This"],
-    )
-    context.bot.sendPhoto(
-        chat_id=update.effective_message.chat_id,
-        photo=context.user_data["output"][position]["poster"],
-    )
-    text = f"{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})"
-    context.bot.send_message(
-        chat_id=update.effective_message.chat_id, text=text, reply_markup=markup
-    )
-    return GIVE_OPTION
-
+        reply_keyboard = [
+            [transcript[choice.lower()]["Add"], transcript["Next result"]],
+            [transcript["New"], transcript["Stop"]],
+        ]
+        markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=transcript[choice.lower()]["This"],
+        )
+        context.bot.sendPhoto(
+            chat_id=update.effective_message.chat_id,
+            photo=context.user_data["output"][position]["poster"],
+        )
+        text = f"{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})"
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id, text=text, reply_markup=markup
+        )
+        return GIVE_OPTION
+    else :
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=transcript["No results"],
+        )
+        clearUserData(context)
+        return ConversationHandler.END
 
 def nextOption(update, context):
     position = context.user_data["position"] + 1
@@ -390,11 +398,11 @@ def nextOption(update, context):
     else:
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=transcript["No results"],
+            text=transcript["Last result"],
             reply_markup=markup,
         )
-        return stop()
-
+        clearUserData(context)
+        return ConversationHandler.END
 
 def pathSerieMovie(update, context):
     service = getService(context)

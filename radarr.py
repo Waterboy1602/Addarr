@@ -25,7 +25,7 @@ def search(title):
     req = requests.get(commons.generateApiQuery("radarr", "movie/lookup", parameters))
     parsed_json = json.loads(req.text)
 
-    if req.status_code == 200:
+    if req.status_code == 200 and parsed_json:
         return parsed_json
     else:
         return False

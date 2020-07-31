@@ -10,13 +10,15 @@ en:
     What is this?: Is this a movie or a series?
     New: Execute a new search command
     Next result: No, show me the next result
-    No results: No more results to show
+    Last result: No more results to show
     Add: Yes, add this
     Select a path: Please select a path for the movie or series
     Authorize: You first need to authorize this chat. What is the password?
     Wrong password: You entered the wrong password. Try again...
     Chatid added: "This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
     NotAdmin: "You need to be an admin to execute this command."
+    No results: "No results found"
+
 
     series:
         Add: Yes, add this series
@@ -31,6 +33,7 @@ en:
         Failed: I failed to add the movie
         Success: "The movie is added with success 🙂"
         Exist: The movie already exists 😉
+
 
     Transmission:
         NotEnabled: "The Transmission function is not activated."
@@ -59,6 +62,7 @@ nl:
     Wrong password: Het wachtwoord is verkeerd. Probeer opnieuw...
     Chatid added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
     NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
+    No results: "Er zijn geen resultaten gevonden."
 
     serie:
         Add: Ja, voeg deze serie toe
