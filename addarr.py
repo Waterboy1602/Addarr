@@ -335,8 +335,9 @@ def searchSerieMovie(update, context):
 
     position = context.user_data["position"]
     
-    if service.search(title):
-        context.user_data["output"] = service.giveTitles(service.search(title))
+    searchResult = service.search(title)
+    if searchResult:
+        context.user_data["output"] = service.giveTitles(searchResult)
 
         reply_keyboard = [
             [transcript[choice.lower()]["Add"], transcript["Next result"]],
