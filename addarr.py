@@ -334,7 +334,7 @@ def searchSerieMovie(update, context):
     service = getService(context)
 
     position = context.user_data["position"]
-    
+
     searchResult = service.search(title)
     if searchResult:
         context.user_data["output"] = service.giveTitles(searchResult)
@@ -357,13 +357,13 @@ def searchSerieMovie(update, context):
             chat_id=update.effective_message.chat_id, text=text, reply_markup=markup
         )
         return GIVE_OPTION
-    else :
+    else:
         context.bot.send_message(
-            chat_id=update.effective_message.chat_id,
-            text=transcript["No results"],
+            chat_id=update.effective_message.chat_id, text=transcript["No results"],
         )
         clearUserData(context)
         return ConversationHandler.END
+
 
 def nextOption(update, context):
     position = context.user_data["position"] + 1
@@ -404,6 +404,7 @@ def nextOption(update, context):
         )
         clearUserData(context)
         return ConversationHandler.END
+
 
 def pathSerieMovie(update, context):
     service = getService(context)
