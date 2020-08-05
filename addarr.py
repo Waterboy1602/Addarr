@@ -231,8 +231,19 @@ def changeSpeedTransmission(update, context):
 
 
 def authentication(update, context):
-    password = update.message.text
     chatid = update.effective_message.chat_id
+    with open(CHATID_PATH, "r") as file:
+        if(str(chatid) in file.read()):
+            context.bot.send_message(
+                chat_id=update.effective_message.chat_id,
+                text=transcript["Chatid already allowed"],
+            )                
+            file.close()
+        else:
+            file.close()
+    password = update.message.text
+            if("/auth" in password):
+                password = password.replace("/auth ", "")
     if password == config["telegram"]["password"]:
         with open(CHATID_PATH, "a") as file:
             file.write(str(chatid) + "\n")
@@ -249,9 +260,8 @@ def authentication(update, context):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=transcript["Wrong password"]
         )
-        return (
-            ConversationHandler.END
-        )  # This only stops the auth conv, so it goes back to choosing screen
+                return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
+            
 
 
 def stop(update, context):

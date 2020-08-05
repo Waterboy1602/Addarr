@@ -18,6 +18,7 @@ en:
     Chatid added: "This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
     NotAdmin: "You need to be an admin to execute this command."
     No results: "No results found"
+    Chatid already allowed: "This chat is already authorized."
 
 
     series:
@@ -63,6 +64,7 @@ nl:
     Chatid added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
     NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
     No results: "Er zijn geen resultaten gevonden."
+    Chatid already allowed: "Deze chat heeft al toestemming."
 
     serie:
         Add: Ja, voeg deze serie toe
