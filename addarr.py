@@ -39,8 +39,20 @@ transcript = transcript[lang]
 
 
 def main():
-    auth_handler = CommandHandler(config["entrypointAuth"], authentication)
-    allSeries_handler = CommandHandler(config["entrypointAllSeries"], allSeries)
+    auth_handler_command = CommandHandler(config["entrypointAuth"], authentication)
+    auth_handler_text = MessageHandler(
+                            Filters.regex(
+                                re.compile(r"" + config["entrypointAuth"] + "", re.IGNORECASE)
+                            ),
+                            authentication,
+                        )
+    allSeries_handler_command = CommandHandler(config["entrypointAllSeries"], allSeries)
+    allSeries_handler_text = MessageHandler(
+                            Filters.regex(
+                                re.compile(r"" + config["entrypointAllSeries"] + "", re.IGNORECASE)
+                            ),
+                            allSeries,
+                        )
     addMovieserie_handler = ConversationHandler(
         entry_points=[
             CommandHandler(config["entrypointAdd"], startSerieMovie),
@@ -101,8 +113,10 @@ def main():
         ],
     )
 
-    dispatcher.add_handler(auth_handler)
-    dispatcher.add_handler(allSeries_handler)
+    dispatcher.add_handler(auth_handler_command)
+    dispatcher.add_handler(auth_handler_text)
+    dispatcher.add_handler(allSeries_handler_command)
+    dispatcher.add_handler(allSeries_handler_text)
     dispatcher.add_handler(addMovieserie_handler)
     dispatcher.add_handler(changeTransmissionSpeed_handler)
 
