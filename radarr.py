@@ -49,21 +49,6 @@ def giveTitles(parsed_json):
     return data
 
 
-def returnVal(rawjson):
-    totalData = []
-    moviesList = rawjson
-    for movie in moviesList:
-        specMovie = moviesList[movie]
-        totalData.append(
-            specMovie["title"],
-            specMovie["tmdbId"],
-            specMovie["remotePoster"],
-            specMovie["overview"],
-            specMovie["year"],
-        )
-    return totalData
-
-
 def inLibrary(tmdbId):
     parameters = {}
     req = requests.get(commons.generateApiQuery("radarr", "movie", parameters))

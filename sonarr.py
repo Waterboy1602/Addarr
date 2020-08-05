@@ -49,22 +49,6 @@ def giveTitles(parsed_json):
             )
     return data
 
-
-def returnVal(rawjson):
-    totalData = []
-    seriesList = rawjson
-    for show in seriesList:
-        specShow = seriesList[show]
-        totalData.append(
-            specShow["title"],
-            specShow["itvDb"],
-            specShow["remotePoster"],
-            specShow["seasonCount"],
-            specShow["year"],
-        )
-    return totalData
-
-
 def inLibrary(tvdbId):
     parameters = {}
     req = requests.get(commons.generateApiQuery("sonarr", "series", parameters))
