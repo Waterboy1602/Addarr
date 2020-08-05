@@ -16,8 +16,11 @@ You can also start adding a series or movie with `/movie` or `/series` when the 
 
 Different entrypoints for all these commands can be entered in the config file, except `/movie`/`/film`/`series`/`serie`, which are defined in `lang.yaml`.
 
+To receive a list of all the series on Sonarr you can use the command `/allSeries` or `allSeries`. This will give you their title, year, status and if they are monitored or not.
+
 ## FUNCTIONS    
 - Add series/movies to Sonarr/Radarr
+- List of series on Sonarr
 - Change speed of Transmission
 - Secure bot with a password. New chats first need to authenticate
 - Wrong login attempts are saved in `addarr.log`
@@ -29,6 +32,7 @@ These are the default commands:
 - Start: start adding a series or movie to Sonarr/Radarr
 - Movie (en)/Film (nl): starting adding a movie to Radarr
 - Series (en)/Serie (nl): starting adding a series to Sonarr
+- allSeries: receive list of series on Sonarr
 - Transmission: change the down-/upload speed of Transmission from Temporary Speed Limit to normal or the other way around
 - Stop: stop the command you were executing
 
