@@ -39,8 +39,9 @@ transcript = transcript[lang]
 
 
 def main():
-    auth_handler = CommandHandler("entrypointAuth", authentication)
-    addMovieserie = ConversationHandler(
+    auth_handler = CommandHandler(config["entrypointAuth"], authentication)
+    allSeries_handler = CommandHandler(config["entrypointAllSeries"], allSeries)
+    addMovieserie_handler = ConversationHandler(
         entry_points=[
             CommandHandler(config["entrypointAdd"], startSerieMovie),
             CommandHandler(transcript["Movie"], startSerieMovie),
@@ -81,7 +82,7 @@ def main():
             MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
         ],
     )
-    changeTransmissionSpeed = ConversationHandler(
+    changeTransmissionSpeed_handler = ConversationHandler(
         entry_points=[
             CommandHandler(config["entrypointTransmission"], transmission),
             MessageHandler(
@@ -101,8 +102,9 @@ def main():
     )
 
     dispatcher.add_handler(auth_handler)
-    dispatcher.add_handler(addMovieserie)
-    dispatcher.add_handler(changeTransmissionSpeed)
+    dispatcher.add_handler(allSeries_handler)
+    dispatcher.add_handler(addMovieserie_handler)
+    dispatcher.add_handler(changeTransmissionSpeed_handler)
 
     logger.info(transcript["Start chatting"])
     updater.start_polling()
@@ -241,25 +243,25 @@ def authentication(update, context):
             file.close()
         else:
             file.close()
-    password = update.message.text
+            password = update.message.text
             if("/auth" in password):
                 password = password.replace("/auth ", "")
-    if password == config["telegram"]["password"]:
-        with open(CHATID_PATH, "a") as file:
-            file.write(str(chatid) + "\n")
-            context.bot.send_message(
-                chat_id=update.effective_message.chat_id,
-                text=transcript["Chatid added"],
-            )
-            file.close()
-        return "added"
-    else:
-        logger.warning(
-            f"Failed authentication attempt by [{update.message.from_user.username}]. Password entered: [{password}]"
-        )
-        context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=transcript["Wrong password"]
-        )
+            if password == config["telegram"]["password"]:
+                with open(CHATID_PATH, "a") as file:
+                    file.write(str(chatid) + "\n")
+                    context.bot.send_message(
+                        chat_id=update.effective_message.chat_id,
+                        text=transcript["Chatid added"],
+                    )
+                    file.close()
+                    return "added"
+            else:
+                logger.warning(
+                    f"Failed authentication attempt by [{update.message.from_user.username}]. Password entered: [{password}]"
+                )
+                context.bot.send_message(
+                    chat_id=update.effective_message.chat_id, text=transcript["Wrong password"]
+                )
                 return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
             
 
@@ -489,6 +491,68 @@ def addSerieMovie(update, context):
         clearUserData(context)
         return ConversationHandler.END
 
+def allSeries(update, context):
+    if not checkId(update):
+        if (
+            authentication(update, context) == "added"
+        ):  # To also stop the beginning command
+            return ConversationHandler.END
+    else:
+        result = sonarr.allSeries()
+        string = ""
+        for serie in result:
+            string += "• " \
+            + serie["title"] \
+            + " (" \
+            + str(serie["year"]) \
+            + ")" \
+            + "\n" \
+            + "        status: " \
+            + serie["status"] \
+            + "\n" \
+            + "        monitored: " \
+            + str(serie["monitored"]).lower() \
+            + "\n"
+        
+        #max length of a message is 4096 chars
+        if len(string) <= 4096:
+            context.bot.send_message(
+                chat_id=update.effective_message.chat_id,
+                text=string,
+            )
+        #split string if longer then 4096 chars
+        else: 
+            neededSplits = int(len(string) / 4096)
+            positionNewLine = []
+            index = 0
+            while index < len(string): #Get positions of newline, so that the split will happen after a newline
+                i = string.find("\n", index)
+                if i == -1:
+                    return positionNewLine
+                positionNewLine.append(i)
+                index = i + 1
+            
+            #split string at newline closest to maxlength
+            stringParts = []
+            lastSplit = 0
+            timesSplit = 1
+            for i in range (int(4096*neededSplits/timesSplit), 0, -1): 
+                if timesSplit < neededSplits+1:
+                    if i in positionNewLine:
+                        stringParts.append(string[0+lastSplit:i])
+                        if(len(string[i+1:-1])<4096): #string doesnt need to be split again, will be appended to substrings
+                            string = string[i+1:-1]
+                        timesSplit+=1
+                        lastSplit = i
+            stringParts.append(string)
+
+            #print every substring
+            for subString in stringParts:
+                context.bot.send_message(
+                chat_id=update.effective_message.chat_id,
+                text=subString,
+            )
+        return ConversationHandler.END
 
 def getService(context):
     if context.user_data.get("choice") == transcript["Serie"]:

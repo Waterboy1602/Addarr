@@ -25,7 +25,7 @@ def search(title):
     req = requests.get(commons.generateApiQuery("sonarr", "series/lookup", parameters))
     parsed_json = json.loads(req.text)
 
-    if req.status_code == 200:
+    if req.status_code == 200 and parsed_json:
         return parsed_json
     else:
         return False
@@ -45,6 +45,8 @@ def giveTitles(parsed_json):
                     "poster": show["remotePoster"],
                     "year": show["year"],
                     "id": show["tvdbId"],
+                    "monitored": show["monitored"],
+                    "status": show["status"],
                 }
             )
     return data
@@ -98,3 +100,27 @@ def getRootFolders():
         item.pop("unmappedFolders")
     logger.debug(f"Found sonarr paths: {parsed_json}")
     return parsed_json
+
+def allSeries():
+    parameters = {}
+    req = requests.get(commons.generateApiQuery("sonarr", "series", parameters))
+    parsed_json = json.loads(req.text)
+
+    if req.status_code == 200:
+        data = []
+        for show in parsed_json:
+            if all(
+                x in show
+                for x in ["title", "year", "monitored", "status"]
+            ):
+                data.append(
+                    {
+                        "title": show["title"],
+                        "year": show["year"],
+                        "monitored": show["monitored"],
+                        "status": show["status"],
+                    }
+                )
+        return data
+    else:
+        return False
