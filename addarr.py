@@ -3,6 +3,7 @@
 import logging
 import re
 import os
+import math
 
 import yaml
 from telegram import ReplyKeyboardMarkup
@@ -536,7 +537,7 @@ def allSeries(update, context):
             )
         #split string if longer then 4096 chars
         else: 
-            neededSplits = int(len(string) / 4096)
+            neededSplits = math.ceil(len(string) / 4096)
             positionNewLine = []
             index = 0
             while index < len(string): #Get positions of newline, so that the split will happen after a newline
@@ -544,20 +545,21 @@ def allSeries(update, context):
                 if i == -1:
                     return positionNewLine
                 positionNewLine.append(i)
-                index = i + 1
-            
+                index+=1
+
             #split string at newline closest to maxlength
             stringParts = []
-            lastSplit = 0
-            timesSplit = 1
-            for i in range (int(4096*neededSplits/timesSplit), 0, -1): 
-                if timesSplit < neededSplits+1:
-                    if i in positionNewLine:
-                        stringParts.append(string[0+lastSplit:i])
-                        if(len(string[i+1:-1])<4096): #string doesnt need to be split again, will be appended to substrings
-                            string = string[i+1:-1]
+            lastSplit = timesSplit = 0
+            i = 4096
+            while i > 0 and len(string)>4096: 
+                if timesSplit < neededSplits:
+                    if i+lastSplit in positionNewLine:
+                        stringParts.append(string[0:i])
+                        string = string[i+1:]
                         timesSplit+=1
                         lastSplit = i
+                        i = 4096
+                i-=1
             stringParts.append(string)
 
             #print every substring
