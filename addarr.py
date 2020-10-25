@@ -6,7 +6,7 @@ import os
 import math
 
 import yaml
-from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import (
     Updater,
     CommandHandler,
@@ -284,7 +284,8 @@ def authentication(update, context):
 def stop(update, context):
     clearUserData(context)
     context.bot.send_message(
-        chat_id=update.effective_message.chat_id, text=transcript["End"]
+        chat_id=update.effective_message.chat_id, text=transcript["End"],
+        reply_markup=ReplyKeyboardRemove()
     )
     return ConversationHandler.END
 
