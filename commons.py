@@ -20,7 +20,8 @@ def generateServerAddr(app):
         try:
             addr = config[app]["server"]["addr"]
             port = config[app]["server"]["port"]
-            return http + addr + ":" + str(port)
+            path = config[app]["server"]["path"]
+            return http + addr + ":" + str(port) + path
         except Exception:
             logger.warn("No ip or port defined.")
     except Exception as e:
@@ -36,7 +37,7 @@ def generateApiQuery(app, endpoint, parameters={}):
     try:
         apikey = config[app]["auth"]["apikey"]
         url = (
-            generateServerAddr(app) + "/api/" + str(endpoint) + "?apikey=" + str(apikey)
+            generateServerAddr(app) + "api/" + str(endpoint) + "?apikey=" + str(apikey)
         )
         # If parameters exist iterate through dict and add parameters to URL.
         if parameters:
