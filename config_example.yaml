@@ -6,6 +6,7 @@ sonarr:
   server:
     addr: 
     port : 8989 # Default is 8989
+    path: / # Default is / . If set, it must start and finish with / . Eg: /sonarr/
     ssl: false #default false
   auth:
     apikey: 
@@ -20,6 +21,7 @@ radarr:
   server:
     addr:
     port : 7878 # Default is 7878
+    path: / # Default is / . If set, it must start and finish with / . Eg: /radarr/
     ssl: false #default false
   auth:
     apikey:
