@@ -43,14 +43,14 @@ def main():
     auth_handler_command = CommandHandler(config["entrypointAuth"], authentication)
     auth_handler_text = MessageHandler(
                             Filters.regex(
-                                re.compile(r"" + config["entrypointAuth"] + "", re.IGNORECASE)
+                                re.compile(r"^" + config["entrypointAuth"] + "$", re.IGNORECASE)
                             ),
                             authentication,
                         )
     allSeries_handler_command = CommandHandler(config["entrypointAllSeries"], allSeries)
     allSeries_handler_text = MessageHandler(
                             Filters.regex(
-                                re.compile(r"" + config["entrypointAllSeries"] + "", re.IGNORECASE)
+                                re.compile(r"^" + config["entrypointAllSeries"] + "$", re.IGNORECASE)
                             ),
                             allSeries,
                         )
@@ -75,12 +75,17 @@ def main():
                 )
             ],
             GIVE_OPTION: [
-                MessageHandler(Filters.regex(f'({transcript["Add"]})'), pathSerieMovie),
                 MessageHandler(
-                    Filters.regex(f'({transcript["Next result"]})'), nextOption
+                    Filters.regex(f'^({transcript["Add"]})$'), 
+                    pathSerieMovie
                 ),
                 MessageHandler(
-                    Filters.regex(f'({transcript["New"]})'), startSerieMovie
+                    Filters.regex(f'^({transcript["Next result"]})$'), 
+                    nextOption
+                ),
+                MessageHandler(
+                    Filters.regex(f'^({transcript["New"]})$'), 
+                    startSerieMovie
                 ),
             ],
             GIVE_PATHS: [
