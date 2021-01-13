@@ -61,7 +61,7 @@ def main():
             CommandHandler(transcript["Serie"], startSerieMovie),
             MessageHandler(
                 Filters.regex(
-                    re.compile(r"" + config["entrypointAdd"] + "", re.IGNORECASE)
+                    re.compile(r'^' + config["entrypointAdd"] + '$', re.IGNORECASE)
                 ),
                 startSerieMovie,
             ),
