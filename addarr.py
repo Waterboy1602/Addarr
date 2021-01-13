@@ -331,6 +331,8 @@ def choiceSerieMovie(update, context):
             authentication(update, context) == "added"
         ):  # To also stop the beginning command
             return ConversationHandler.END
+    elif update.message.text.lower() == "/stop".lower() or update.message.text.lower() == "stop".lower():
+        return stop(update, context)
     else:
         text = update.message.text
         if text[1:].lower() not in [
