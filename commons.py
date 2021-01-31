@@ -102,3 +102,19 @@ def authentication(update, context):
                     chat_id=update.effective_message.chat_id, text=transcript["Wrong password"]
                 )
                 return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
+
+# Check if user is an admin, only used by transmission at the moment
+def checkAdmin(update):
+    admin = False
+    user = update.message.from_user
+    with open(ADMIN_PATH, "r") as file:
+        for line in file:
+            if line.strip("\n") == str(user["username"]) or line.strip("\n") == str(
+                user["id"]
+            ):
+                admin = True
+        file.close()
+        if admin:
+            return True
+        else:
+            return False
