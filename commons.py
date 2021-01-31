@@ -2,7 +2,7 @@ import yaml
 import logging
 
 import logger
-from definitions import CONFIG_PATH
+from definitions import CONFIG_PATH, CHATID_PATH
 
 config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
 
@@ -46,3 +46,21 @@ def generateApiQuery(app, endpoint, parameters={}):
         return cleanUrl(url)  # Clean URL (validate) and return as string
     except Exception as e:
         logger.warn(f"Generate of APIQUERY failed: {e}.")
+
+# Check if Id is authenticated
+def checkId(update):
+    authorize = False
+    with open(CHATID_PATH, "r") as file:
+        firstChar = file.read(1)
+        if not firstChar:
+            return False
+        file.close()
+    with open(CHATID_PATH, "r") as file:
+        for line in file:
+            if line.strip("\n") == str(update.effective_message.chat_id):
+                authorize = True
+        file.close()
+        if authorize:
+            return True
+        else:
+            return False

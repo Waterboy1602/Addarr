@@ -15,6 +15,7 @@ from telegram.ext import (
     Filters,
 )
 
+from commons import checkId
 from definitions import CONFIG_PATH, LANG_PATH, CHATID_PATH, ADMIN_PATH
 import radarr as radarr
 import sonarr as sonarr
@@ -95,157 +96,37 @@ def main():
             MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
         ],
     )
-    changeTransmissionSpeed_handler = ConversationHandler(
-        entry_points=[
-            CommandHandler(config["entrypointTransmission"], transmission),
-            MessageHandler(
-                Filters.regex(
-                    re.compile(
-                        r"" + config["entrypointTransmission"] + "", re.IGNORECASE
-                    )
+    if config["transmission"]["enable"]:
+        import transmission as transmission
+        changeTransmissionSpeed_handler = ConversationHandler(
+            entry_points=[
+                CommandHandler(config["entrypointTransmission"], transmission.transmission),
+                MessageHandler(
+                    Filters.regex(
+                        re.compile(
+                            r"" + config["entrypointTransmission"] + "", re.IGNORECASE
+                        )
+                    ),
+                    transmission.transmission,
                 ),
-                transmission,
-            ),
-        ],
-        states={TSL_NORMAL: [MessageHandler(Filters.text, changeSpeedTransmission)]},
-        fallbacks=[
-            CommandHandler("stop", stop),
-            MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
-        ],
-    )
+            ],
+            states={TSL_NORMAL: [MessageHandler(Filters.text, transmission.changeSpeedTransmission)]},
+            fallbacks=[
+                CommandHandler("stop", stop),
+                MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
+            ],
+        )
+        dispatcher.add_handler(changeTransmissionSpeed_handler)
 
     dispatcher.add_handler(auth_handler_command)
     dispatcher.add_handler(auth_handler_text)
     dispatcher.add_handler(allSeries_handler_command)
     dispatcher.add_handler(allSeries_handler_text)
     dispatcher.add_handler(addMovieserie_handler)
-    dispatcher.add_handler(changeTransmissionSpeed_handler)
 
     logger.info(transcript["Start chatting"])
     updater.start_polling()
     updater.idle()
-
-
-# Check if Id is authenticated
-def checkId(update):
-    authorize = False
-    with open(CHATID_PATH, "r") as file:
-        firstChar = file.read(1)
-        if not firstChar:
-            return False
-        file.close()
-    with open(CHATID_PATH, "r") as file:
-        for line in file:
-            if line.strip("\n") == str(update.effective_message.chat_id):
-                authorize = True
-        file.close()
-        if authorize:
-            return True
-        else:
-            return False
-
-
-# Check if user is an admin
-def checkAdmin(update):
-    admin = False
-    user = update.message.from_user
-    with open(ADMIN_PATH, "r") as file:
-        for line in file:
-            if line.strip("\n") == str(user["username"]) or line.strip("\n") == str(
-                user["id"]
-            ):
-                admin = True
-        file.close()
-        if admin:
-            return True
-        else:
-            return False
-
-
-def transmission(
-    update, context,
-):
-    if config["transmission"]["enable"]:
-        if checkId(update):
-            if checkAdmin(update):
-                reply_keyboard = [
-                    [
-                        transcript["Transmission"]["TSL"],
-                        transcript["Transmission"]["Normal"],
-                    ]
-                ]
-                markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-                update.message.reply_text(
-                    transcript["Transmission"]["Speed"], reply_markup=markup
-                )
-                return TSL_NORMAL
-            else:
-                context.bot.send_message(
-                    chat_id=update.effective_message.chat_id,
-                    text=transcript["NotAdmin"],
-                )
-                return TSL_NORMAL
-        else:
-            context.bot.send_message(
-                chat_id=update.effective_message.chat_id, text=transcript["Authorize"]
-            )
-            return TSL_NORMAL
-    else:
-        context.bot.send_message(
-            chat_id=update.effective_message.chat_id,
-            text=transcript["Transmission"]["NotEnabled"],
-        )
-        return ConversationHandler.END
-
-
-def changeSpeedTransmission(update, context):
-    if not checkId(update):
-        if (
-            authentication(update, context) == "added"
-        ):  # To also stop the beginning command
-            return ConversationHandler.END
-    else:
-        choice = update.message.text
-        if choice == transcript["Transmission"]["TSL"]:
-            if config["transmission"]["authentication"]:
-                auth = (
-                    " --auth "
-                    + config["transmission"]["username"]
-                    + ":"
-                    + config["transmission"]["password"]
-                )
-            os.system(
-                "transmission-remote "
-                + config["transmission"]["host"]
-                + auth
-                + " --alt-speed"
-            )
-            context.bot.send_message(
-                chat_id=update.effective_message.chat_id,
-                text=transcript["Transmission"]["ChangedToTSL"],
-            )
-            return ConversationHandler.END
-
-        elif choice == transcript["Transmission"]["Normal"]:
-            if config["transmission"]["authentication"]:
-                auth = (
-                    " --auth "
-                    + config["transmission"]["username"]
-                    + ":"
-                    + config["transmission"]["password"]
-                )
-            os.system(
-                "transmission-remote "
-                + config["transmission"]["host"]
-                + auth
-                + " --no-alt-speed"
-            )
-            context.bot.send_message(
-                chat_id=update.effective_message.chat_id,
-                text=transcript["Transmission"]["ChangedToNormal"],
-            )
-            return ConversationHandler.END
-
 
 def authentication(update, context):
     chatid = update.effective_message.chat_id
