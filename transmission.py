@@ -1,11 +1,19 @@
+import os
 import yaml
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import ReplyKeyboardMarkup
+from telegram.ext import ConversationHandler
 
-from commons import checkId
-from definitions import CONFIG_PATH
+from commons import checkId, authentication
+from definitions import CONFIG_PATH, LANG_PATH, ADMIN_PATH
 
 config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
+lang = config["language"]
 config = config["radarr"]
+
+transcript = yaml.safe_load(open(LANG_PATH, encoding="utf8"))
+transcript = transcript[lang]
+
+TSL_NORMAL = 'normal'
 
 def transmission(
     update, context,
@@ -17,7 +25,7 @@ def transmission(
                     [
                         transcript["Transmission"]["TSL"],
                         transcript["Transmission"]["Normal"],
-                    ]
+                    ],
                 ]
                 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
                 update.message.reply_text(
@@ -51,6 +59,7 @@ def changeSpeedTransmission(update, context):
     else:
         choice = update.message.text
         if choice == transcript["Transmission"]["TSL"]:
+            auth = None
             if config["authentication"]:
                 auth = (
                     " --auth "
@@ -71,6 +80,7 @@ def changeSpeedTransmission(update, context):
             return ConversationHandler.END
 
         elif choice == transcript["Transmission"]["Normal"]:
+            auth = None
             if config["authentication"]:
                 auth = (
                     " --auth "
