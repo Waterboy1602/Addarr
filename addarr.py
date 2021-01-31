@@ -2,7 +2,6 @@
 
 import logging
 import re
-import os
 import math
 
 import yaml
@@ -15,8 +14,8 @@ from telegram.ext import (
     Filters,
 )
 
-from commons import checkId
-from definitions import CONFIG_PATH, LANG_PATH, CHATID_PATH, ADMIN_PATH
+from commons import checkId, authentication
+from definitions import CONFIG_PATH, LANG_PATH
 import radarr as radarr
 import sonarr as sonarr
 import logger
@@ -127,39 +126,6 @@ def main():
     logger.info(transcript["Start chatting"])
     updater.start_polling()
     updater.idle()
-
-def authentication(update, context):
-    chatid = update.effective_message.chat_id
-    with open(CHATID_PATH, "r") as file:
-        if(str(chatid) in file.read()):
-            context.bot.send_message(
-                chat_id=update.effective_message.chat_id,
-                text=transcript["Chatid already allowed"],
-            )                
-            file.close()
-        else:
-            file.close()
-            password = update.message.text
-            if("/auth" in password):
-                password = password.replace("/auth ", "")
-            if password == config["telegram"]["password"]:
-                with open(CHATID_PATH, "a") as file:
-                    file.write(str(chatid) + "\n")
-                    context.bot.send_message(
-                        chat_id=update.effective_message.chat_id,
-                        text=transcript["Chatid added"],
-                    )
-                    file.close()
-                    return "added"
-            else:
-                logger.warning(
-                    f"Failed authentication attempt by [{update.message.from_user.username}]. Password entered: [{password}]"
-                )
-                context.bot.send_message(
-                    chat_id=update.effective_message.chat_id, text=transcript["Wrong password"]
-                )
-                return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
-            
 
 
 def stop(update, context):
