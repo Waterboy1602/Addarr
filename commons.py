@@ -102,3 +102,10 @@ def authentication(update, context):
                     chat_id=update.effective_message.chat_id, text=transcript["Wrong password"]
                 )
                 return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
+
+def format_bytes(num, suffix='B'):
+    for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
+        if abs(num) < 1024.0:
+            return "%3.1f%s%s" % (num, unit, suffix)
+        num /= 1024.0
+    return "%.1f%s%s" % (num, 'Yi', suffix)
