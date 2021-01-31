@@ -6,10 +6,12 @@ import math
 
 import yaml
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
     Updater,
     CommandHandler,
     ConversationHandler,
+    CallbackQueryHandler,
     MessageHandler,
     Filters,
 )
@@ -72,7 +74,8 @@ def main():
                 MessageHandler(
                     Filters.regex(f'^({transcript["Movie"]}|{transcript["Serie"]})$'),
                     searchSerieMovie,
-                )
+                ),
+                CallbackQueryHandler(startSerieMovie)
             ],
             GIVE_OPTION: [
                 MessageHandler(Filters.regex(f'({transcript["Add"]})'), pathSerieMovie),
@@ -137,35 +140,42 @@ def stop(update, context):
     return ConversationHandler.END
 
 
-def startSerieMovie(update, context):
-    if checkId(update):
-        if update.message.text[1:].lower() in [
-            transcript["Serie"].lower(),
-            transcript["Movie"].lower(),
-        ]:
-            logger.debug(
-                f"User issued {update.message.text} command, so setting user_data[choice] accordingly"
-            )
-            context.user_data.update(
-                {
-                    "choice": transcript["Serie"]
-                    if update.message.text[1:].lower() == transcript["Serie"].lower()
-                    else transcript["Movie"]
-                }
-            )
-        elif update.message.text.lower() == transcript["New"].lower():
-            logger.debug("User issued New command, so clearing user_data")
-            clearUserData(context)
-        context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=transcript["Title"]
-        )
-        return SERIE_MOVIE_AUTHENTICATED
-    else:
+def startSerieMovie(update : Update, context):
+    if not checkId(update):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=transcript["Authorize"]
         )
         return SERIE_MOVIE_AUTHENTICATED
 
+    if update.message is not None:
+        reply = update.message.text.lower()
+    elif update.callback_query is not None:
+        reply = update.callback_query.data
+    else:
+        return SERIE_MOVIE_AUTHENTICATED
+
+    if reply in [
+        transcript["Serie"].lower(),
+        transcript["Movie"].lower(),
+    ]:
+        logger.debug(
+            f"User issued {reply} command, so setting user_data[choice] accordingly"
+        )
+        context.user_data.update(
+            {
+                "choice": transcript["Serie"]
+                if reply == transcript["Serie"].lower()
+                else transcript["Movie"]
+            }
+        )
+    elif reply == transcript["New"].lower():
+        logger.debug("User issued New command, so clearing user_data")
+        clearUserData(context)
+    
+    context.bot.send_message(
+        chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+transcript["Title"]
+    )
+    return SERIE_MOVIE_AUTHENTICATED
 
 def choiceSerieMovie(update, context):
     if not checkId(update):
@@ -174,12 +184,22 @@ def choiceSerieMovie(update, context):
         ):  # To also stop the beginning command
             return ConversationHandler.END
     else:
-        text = update.message.text
-        if text[1:].lower() not in [
+        if update.message is not None:
+            reply = update.message.text
+        elif update.callback_query is not None:
+            reply = update.callback_query.data
+        else:
+            return SERIE_MOVIE_AUTHENTICATED
+
+        if reply.lower() not in [
             transcript["Serie"].lower(),
             transcript["Movie"].lower(),
         ]:
-            context.user_data["title"] = text
+            logger.debug(
+                f"User entered a title {reply}"
+            )
+            context.user_data["title"] = reply
+
         if context.user_data.get("choice") in [
             transcript["Serie"],
             transcript["Movie"],
@@ -189,21 +209,40 @@ def choiceSerieMovie(update, context):
             )
             return searchSerieMovie(update, context)
         else:
-            reply_keyboard = [[transcript["Movie"], transcript["Serie"]]]
-            markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+            keyboard = [
+                [
+                    InlineKeyboardButton(
+                        '\U0001F3AC '+transcript["Movie"],
+                        callback_data=transcript["Movie"].lower()
+                    ),
+                    InlineKeyboardButton(
+                        '\U0001F4FA '+transcript["Serie"],
+                        callback_data=transcript["Serie"].lower()
+                    ),
+                ],
+                [ InlineKeyboardButton(
+                        '\U0001F50D '+transcript["New"],
+                        callback_data=transcript["New"].lower()
+                    ),
+                ]
+            ]
+            markup = InlineKeyboardMarkup(keyboard)
             update.message.reply_text(transcript["What is this?"], reply_markup=markup)
             return READ_CHOICE
 
 
 def searchSerieMovie(update, context):
     title = context.user_data["title"]
-    if context.user_data.get("title"):
-        context.user_data.pop("title")
+
     if not context.user_data.get("choice"):
-        choice = update.message.text
+        choice = None
+        if update.message is not None:
+            choice = update.message.text
+        elif update.callback_query is not None:
+            choice = update.callback_query.data
         context.user_data["choice"] = choice
-    else:
-        choice = context.user_data["choice"]
+    
+    choice = context.user_data["choice"]
     context.user_data["position"] = 0
 
     service = getService(context)
@@ -214,11 +253,29 @@ def searchSerieMovie(update, context):
     if searchResult:
         context.user_data["output"] = service.giveTitles(searchResult)
 
-        reply_keyboard = [
-            [transcript[choice.lower()]["Add"], transcript["Next result"]],
-            [transcript["New"], transcript["Stop"]],
-        ]
-        markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+        keyboard = [
+                [
+                    InlineKeyboardButton(
+                        '\U0001F3AC '+transcript["Add"],
+                        callback_data=transcript["Add"].lower()
+                    ),
+                    InlineKeyboardButton(
+                        '\U0001F4FA '+transcript["Next result"],
+                        callback_data=transcript["Next result"].lower()
+                    ),
+                ],
+                [
+                    InlineKeyboardButton(
+                        '\U0001F3AC '+transcript["New"],
+                        callback_data=transcript["New"].lower()
+                    ),
+                    InlineKeyboardButton(
+                        '\U0001F4FA '+transcript["Stop"],
+                        callback_data=transcript["Stop"].lower()
+                    ),
+                ],
+            ]
+        markup = InlineKeyboardMarkup(keyboard)
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=transcript[choice.lower()]["This"],
