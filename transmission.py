@@ -16,44 +16,43 @@ transcript = transcript[lang]
 TSL_LIMIT = 'limited'
 TSL_NORMAL = 'normal'
 
-def transmission(
-    update, context,
-):
-    if config["enable"]:
-        if checkId(update):
-            if checkAdmin(update):
-                keyboard = [[
-                    InlineKeyboardButton(
-                        '\U0001F40C '+transcript["Transmission"]["TSL"],
-                        callback_data=TSL_LIMIT
-                    ),
-                    InlineKeyboardButton(
-                        '\U0001F406 '+transcript["Transmission"]["Normal"],
-                        callback_data=TSL_NORMAL
-                    ),
-                ]]
-                markup = InlineKeyboardMarkup(keyboard)
-                update.message.reply_text(
-                    transcript["Transmission"]["Speed"], reply_markup=markup
-                )
-                return TSL_NORMAL
-            else:
-                context.bot.send_message(
-                    chat_id=update.effective_message.chat_id,
-                    text=transcript["NotAdmin"],
-                )
-                return TSL_NORMAL
-        else:
-            context.bot.send_message(
-                chat_id=update.effective_message.chat_id, text=transcript["Authorize"]
-            )
-            return TSL_NORMAL
-    else:
+def transmission(update, context):
+    if not config["enable"]:
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=transcript["Transmission"]["NotEnabled"],
         )
         return ConversationHandler.END
+
+    if not checkId(update):
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id, text=transcript["Authorize"]
+        )
+        return TSL_NORMAL
+
+    if not checkAdmin(update):
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=transcript["NotAdmin"],
+        )
+        return TSL_NORMAL
+
+    keyboard = [[
+        InlineKeyboardButton(
+            '\U0001F40C '+transcript["Transmission"]["TSL"],
+            callback_data=TSL_LIMIT
+        ),
+        InlineKeyboardButton(
+            '\U0001F406 '+transcript["Transmission"]["Normal"],
+            callback_data=TSL_NORMAL
+        ),
+    ]]
+    markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text(
+        transcript["Transmission"]["Speed"], reply_markup=markup
+    )
+    return TSL_NORMAL
+
 
 def changeSpeedTransmission(update, context):
     if not checkId(update):
