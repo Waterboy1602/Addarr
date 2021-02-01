@@ -8,7 +8,7 @@ from definitions import CONFIG_PATH, LANG_PATH, ADMIN_PATH
 
 config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
 lang = config["language"]
-config = config["radarr"]
+config = config["transmission"]
 
 transcript = yaml.safe_load(open(LANG_PATH, encoding="utf8"))
 transcript = transcript[lang]
