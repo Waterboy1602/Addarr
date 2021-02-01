@@ -59,7 +59,7 @@ def changeSpeedTransmission(update, context):
     else:
         choice = update.message.text
         if choice == transcript["Transmission"]["TSL"]:
-            auth = None
+            auth = ""
             if config["authentication"]:
                 auth = (
                     " --auth "
@@ -80,7 +80,7 @@ def changeSpeedTransmission(update, context):
             return ConversationHandler.END
 
         elif choice == transcript["Transmission"]["Normal"]:
-            auth = None
+            auth = ""
             if config["authentication"]:
                 auth = (
                     " --auth "
