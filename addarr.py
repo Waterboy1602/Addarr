@@ -113,7 +113,11 @@ def main():
                     transmission.transmission,
                 ),
             ],
-            states={transmission.TSL_NORMAL: [MessageHandler(Filters.text, transmission.changeSpeedTransmission)]},
+            states={
+                transmission.TSL_NORMAL: [
+                    CallbackQueryHandler(transmission.changeSpeedTransmission),
+                ]
+            },
             fallbacks=[
                 CommandHandler("stop", stop),
                 MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
