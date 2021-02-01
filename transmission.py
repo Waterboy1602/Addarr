@@ -3,12 +3,12 @@ import yaml
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler
 
-from commons import checkId, authentication
+from commons import checkId, authentication, checkAdmin
 from definitions import CONFIG_PATH, LANG_PATH, ADMIN_PATH
 
 config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
 lang = config["language"]
-config = config["radarr"]
+config = config["transmission"]
 
 transcript = yaml.safe_load(open(LANG_PATH, encoding="utf8"))
 transcript = transcript[lang]
@@ -87,20 +87,3 @@ def changeSpeedTransmission(update, context):
             text=message,
         )
     return ConversationHandler.END
-
-
-# Check if user is an admin
-def checkAdmin(update):
-    admin = False
-    user = update.message.from_user
-    with open(ADMIN_PATH, "r") as file:
-        for line in file:
-            if line.strip("\n") == str(user["username"]) or line.strip("\n") == str(
-                user["id"]
-            ):
-                admin = True
-        file.close()
-        if admin:
-            return True
-        else:
-            return False
