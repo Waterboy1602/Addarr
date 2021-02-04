@@ -158,7 +158,7 @@ def startSerieMovie(update : Update, context):
     else:
         return SERIE_MOVIE_AUTHENTICATED
 
-    if reply in [
+    if reply[1:] in [
         transcript["Serie"].lower(),
         transcript["Movie"].lower(),
     ]:
@@ -168,7 +168,7 @@ def startSerieMovie(update : Update, context):
         context.user_data.update(
             {
                 "choice": transcript["Serie"]
-                if reply == transcript["Serie"].lower()
+                if reply[1:] == transcript["Serie"].lower()
                 else transcript["Movie"]
             }
         )
