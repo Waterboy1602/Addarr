@@ -49,6 +49,7 @@ language: en
 
 #Entrypoints
 entrypointAuth: auth #auth or a custom entrypoint
+entrypointHelp: help #help entrypoint
 entrypointAdd: start #start or a custom entrypoint
 entrypointAllSeries: allSeries #allSeries or a custom entrypoint
 entrypointTransmission: transmission #transmission or a custom entrypoint

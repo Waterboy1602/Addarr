@@ -121,6 +121,9 @@ def main():
     dispatcher.add_handler(addMovieserie_handler)
     dispatcher.add_handler(changeTransmissionSpeed_handler)
 
+    help_handler_command = CommandHandler(config["entrypointHelp"], help)
+    dispatcher.add_handler(help_handler_command)
+
     logger.info(transcript["Start chatting"])
     updater.start_polling()
     updater.idle()
@@ -580,6 +583,20 @@ def getService(context):
         raise ValueError(
             f"Cannot determine service based on unknown or missing choice: {context.user_data.get('choice')}."
         )
+
+def help(update, context):
+    context.bot.send_message(
+        chat_id=update.effective_message.chat_id, text=transcript["Help"].format(
+            config["entrypointHelp"],
+            config["entrypointAuth"],
+            config["entrypointAdd"],
+            'serie',
+            'movie',
+            config["entrypointAllSeries"],
+            config["entrypointTransmission"],
+        )
+    )
+    return ConversationHandler.END
 
 
 def clearUserData(context):
