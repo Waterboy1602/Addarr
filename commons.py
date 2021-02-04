@@ -1,13 +1,9 @@
-import yaml
 import logging
-
 import logger
-
+import yaml
 from telegram.ext import ConversationHandler
-
-from definitions import CONFIG_PATH, CHATID_PATH, ADMIN_PATH, LANG_PATH
-
-config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
+from definitions import CHATID_PATH, ADMIN_PATH, LANG_PATH
+from config import config
 
 lang = config["language"]
 transcript = yaml.safe_load(open(LANG_PATH, encoding="utf8"))

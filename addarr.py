@@ -15,14 +15,14 @@ from telegram.ext import (
 )
 
 from commons import checkId, authentication
-from definitions import CONFIG_PATH, LANG_PATH
+from definitions import LANG_PATH
 import radarr as radarr
 import sonarr as sonarr
 import logger
 
-__version__ = "0.3"
+from config import config
 
-config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
+__version__ = "0.3"
 
 # Set up logging
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
