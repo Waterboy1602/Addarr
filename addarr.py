@@ -5,16 +5,18 @@ import re
 import math
 
 import yaml
-from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove
+
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
     Updater,
     CommandHandler,
     ConversationHandler,
+    CallbackQueryHandler,
     MessageHandler,
     Filters,
 )
 
-from commons import checkId, authentication
+from commons import checkId, authentication, format_bytes
 from definitions import CONFIG_PATH, LANG_PATH
 import radarr as radarr
 import sonarr as sonarr
@@ -72,27 +74,29 @@ def main():
                 MessageHandler(
                     Filters.regex(f'^({transcript["Movie"]}|{transcript["Serie"]})$'),
                     searchSerieMovie,
-                )
+                ),
+                CallbackQueryHandler(searchSerieMovie, pattern=f'^({transcript["Movie"]}|{transcript["Serie"]})$')
             ],
             GIVE_OPTION: [
                 MessageHandler(Filters.regex(f'({transcript["Add"]})'), pathSerieMovie),
+                CallbackQueryHandler(pathSerieMovie, pattern=f'({transcript["Add"]})'),
                 MessageHandler(
                     Filters.regex(f'({transcript["Next result"]})'), nextOption
                 ),
+                CallbackQueryHandler(nextOption, pattern=f'({transcript["Next result"]})'),
                 MessageHandler(
                     Filters.regex(f'({transcript["New"]})'), startSerieMovie
                 ),
+                CallbackQueryHandler(startSerieMovie, pattern=f'({transcript["New"]})'),
             ],
             GIVE_PATHS: [
-                MessageHandler(
-                    Filters.regex(re.compile(r"^(Path: )(.*)$", re.IGNORECASE)),
-                    addSerieMovie,
-                ),
+                CallbackQueryHandler(addSerieMovie, pattern="^(Path: )(.*)$"),
             ],
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
+            MessageHandler(Filters.regex("^(?i)Stop$"), stop),
+            CallbackQueryHandler(stop, pattern=f"^(?i)Stop$"),
         ],
     )
     if config["transmission"]["enable"]:
@@ -109,7 +113,11 @@ def main():
                     transmission.transmission,
                 ),
             ],
-            states={transmission.TSL_NORMAL: [MessageHandler(Filters.text, transmission.changeSpeedTransmission)]},
+            states={
+                transmission.TSL_NORMAL: [
+                    CallbackQueryHandler(transmission.changeSpeedTransmission),
+                ]
+            },
             fallbacks=[
                 CommandHandler("stop", stop),
                 MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
@@ -131,41 +139,47 @@ def main():
 def stop(update, context):
     clearUserData(context)
     context.bot.send_message(
-        chat_id=update.effective_message.chat_id, text=transcript["End"],
-        reply_markup=ReplyKeyboardRemove()
+        chat_id=update.effective_message.chat_id, text=transcript["End"]
     )
     return ConversationHandler.END
 
 
-def startSerieMovie(update, context):
-    if checkId(update):
-        if update.message.text[1:].lower() in [
-            transcript["Serie"].lower(),
-            transcript["Movie"].lower(),
-        ]:
-            logger.debug(
-                f"User issued {update.message.text} command, so setting user_data[choice] accordingly"
-            )
-            context.user_data.update(
-                {
-                    "choice": transcript["Serie"]
-                    if update.message.text[1:].lower() == transcript["Serie"].lower()
-                    else transcript["Movie"]
-                }
-            )
-        elif update.message.text.lower() == transcript["New"].lower():
-            logger.debug("User issued New command, so clearing user_data")
-            clearUserData(context)
-        context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=transcript["Title"]
-        )
-        return SERIE_MOVIE_AUTHENTICATED
-    else:
+def startSerieMovie(update : Update, context):
+    if not checkId(update):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=transcript["Authorize"]
         )
         return SERIE_MOVIE_AUTHENTICATED
 
+    if update.message is not None:
+        reply = update.message.text.lower()
+    elif update.callback_query is not None:
+        reply = update.callback_query.data.lower()
+    else:
+        return SERIE_MOVIE_AUTHENTICATED
+
+    if reply[1:] in [
+        transcript["Serie"].lower(),
+        transcript["Movie"].lower(),
+    ]:
+        logger.debug(
+            f"User issued {reply} command, so setting user_data[choice] accordingly"
+        )
+        context.user_data.update(
+            {
+                "choice": transcript["Serie"]
+                if reply[1:] == transcript["Serie"].lower()
+                else transcript["Movie"]
+            }
+        )
+    elif reply == transcript["New"].lower():
+        logger.debug("User issued New command, so clearing user_data")
+        clearUserData(context)
+    
+    context.bot.send_message(
+        chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+transcript["Title"]
+    )
+    return SERIE_MOVIE_AUTHENTICATED
 
 def choiceSerieMovie(update, context):
     if not checkId(update):
@@ -174,12 +188,22 @@ def choiceSerieMovie(update, context):
         ):  # To also stop the beginning command
             return ConversationHandler.END
     else:
-        text = update.message.text
-        if text[1:].lower() not in [
+        if update.message is not None:
+            reply = update.message.text
+        elif update.callback_query is not None:
+            reply = update.callback_query.data
+        else:
+            return SERIE_MOVIE_AUTHENTICATED
+
+        if reply.lower() not in [
             transcript["Serie"].lower(),
             transcript["Movie"].lower(),
         ]:
-            context.user_data["title"] = text
+            logger.debug(
+                f"User entered a title {reply}"
+            )
+            context.user_data["title"] = reply
+
         if context.user_data.get("choice") in [
             transcript["Serie"],
             transcript["Movie"],
@@ -189,21 +213,40 @@ def choiceSerieMovie(update, context):
             )
             return searchSerieMovie(update, context)
         else:
-            reply_keyboard = [[transcript["Movie"], transcript["Serie"]]]
-            markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+            keyboard = [
+                [
+                    InlineKeyboardButton(
+                        '\U0001F3AC '+transcript["Movie"],
+                        callback_data=transcript["Movie"]
+                    ),
+                    InlineKeyboardButton(
+                        '\U0001F4FA '+transcript["Serie"],
+                        callback_data=transcript["Serie"]
+                    ),
+                ],
+                [ InlineKeyboardButton(
+                        '\U0001F50D '+transcript["New"],
+                        callback_data=transcript["New"]
+                    ),
+                ]
+            ]
+            markup = InlineKeyboardMarkup(keyboard)
             update.message.reply_text(transcript["What is this?"], reply_markup=markup)
             return READ_CHOICE
 
 
 def searchSerieMovie(update, context):
     title = context.user_data["title"]
-    if context.user_data.get("title"):
-        context.user_data.pop("title")
+
     if not context.user_data.get("choice"):
-        choice = update.message.text
+        choice = None
+        if update.message is not None:
+            choice = update.message.text
+        elif update.callback_query is not None:
+            choice = update.callback_query.data
         context.user_data["choice"] = choice
-    else:
-        choice = context.user_data["choice"]
+    
+    choice = context.user_data["choice"]
     context.user_data["position"] = 0
 
     service = getService(context)
@@ -214,11 +257,30 @@ def searchSerieMovie(update, context):
     if searchResult:
         context.user_data["output"] = service.giveTitles(searchResult)
 
-        reply_keyboard = [
-            [transcript[choice.lower()]["Add"], transcript["Next result"]],
-            [transcript["New"], transcript["Stop"]],
-        ]
-        markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+        keyboard = [
+                [
+                    InlineKeyboardButton(
+                        '\U00002795 '+transcript["Add"],
+                        callback_data=transcript["Add"]
+                    ),
+                ],[
+                    InlineKeyboardButton(
+                        '\U000023ED '+transcript["Next result"],
+                        callback_data=transcript["Next result"]
+                    ),
+                ],[
+                    InlineKeyboardButton(
+                        '\U0001F5D1 '+transcript["New"],
+                        callback_data=transcript["New"]
+                    ),
+                ],[
+                    InlineKeyboardButton(
+                        '\U0001F6D1 '+transcript["Stop"],
+                        callback_data=transcript["Stop"]
+                    ),
+                ],
+            ]
+        markup = InlineKeyboardMarkup(keyboard)
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=transcript[choice.lower()]["This"],
@@ -247,11 +309,30 @@ def nextOption(update, context):
     choice = context.user_data["choice"]
 
     if position < len(context.user_data["output"]):
-        reply_keyboard = [
-            [transcript[choice.lower()]["Add"], transcript["Next result"]],
-            [transcript["New"], transcript["Stop"]],
-        ]
-        markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+        keyboard = [
+                [
+                    InlineKeyboardButton(
+                        '\U00002795 '+transcript[choice.lower()]["Add"],
+                        callback_data=transcript[choice.lower()]["Add"]
+                    ),
+                ],[
+                    InlineKeyboardButton(
+                        '\U000023ED '+transcript["Next result"],
+                        callback_data=transcript["Next result"]
+                    ),
+                ],[
+                    InlineKeyboardButton(
+                        '\U0001F5D1 '+transcript["New"],
+                        callback_data=transcript["New"]
+                    ),
+                ],[
+                    InlineKeyboardButton(
+                        '\U0001F6D1 '+transcript["Stop"],
+                        callback_data=transcript["Stop"]
+                    ),
+                ],
+            ]
+        markup = InlineKeyboardMarkup(keyboard)
 
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
@@ -274,8 +355,7 @@ def nextOption(update, context):
     else:
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=transcript["Last result"],
-            reply_markup=markup,
+            text=transcript["Last result"]
         )
         clearUserData(context)
         return ConversationHandler.END
@@ -290,17 +370,19 @@ def pathSerieMovie(update, context):
         logger.debug("Only found 1 path, so proceeding with that one...")
         context.user_data["path"] = paths[0]["path"]
         return addSerieMovie(update, context)
-    formattedPaths = [f"Path: {p['path']}" for p in paths]
+    logger.debug("Found multiple paths: "+str(paths))
 
-    if len(paths) % 2 > 0:
-        oddItem = formattedPaths.pop(-1)
-    reply_keyboard = [
-        [formattedPaths[i], formattedPaths[i + 1]]
-        for i in range(0, len(formattedPaths), 2)
-    ]
-    if len(paths) % 2 > 0:
-        reply_keyboard.append([oddItem])
-    markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+    keyboard = []
+    for p in paths:
+        free = format_bytes(p['freeSpace'])
+        keyboard += [[
+            InlineKeyboardButton(
+                f"Path: {p['path']}, Free: {free}",
+                callback_data=f"Path: {p['path']}"
+            ),
+        ]]
+    markup = InlineKeyboardMarkup(keyboard)
+
     context.bot.send_message(
         chat_id=update.effective_message.chat_id,
         text=transcript["Select a path"],
@@ -316,15 +398,15 @@ def addSerieMovie(update, context):
 
     if not context.user_data.get("path"):
         # Path selection should be in the update message
-        if update.message.text.replace("Path: ", "").strip() in context.user_data.get(
-            "paths", {}
-        ):
-            context.user_data["path"] = update.message.text.replace(
-                "Path: ", ""
-            ).strip()
-        else:
+        path = None
+        if update.callback_query is not None:
+            try_path = update.callback_query.data.replace("Path: ", "").strip()
+            if try_path in context.user_data.get("paths", {}):
+                context.user_data["path"] = update.callback_query.data
+                path = try_path
+        if path is None:
             logger.debug(
-                f"Message text [{update.message.text.replace('Path: ', '').strip()}] doesn't match any of the paths. Sending paths for selection..."
+                f"Callback query [{update.callback_query.data.replace('Path: ', '').strip()}] doesn't match any of the paths. Sending paths for selection..."
             )
             return pathSerieMovie(update, context)
 
