@@ -4,5 +4,6 @@ __pycache__/
 
 *.code-workspace
 *.log
-config.*
+config.yaml
 logs/
+env/

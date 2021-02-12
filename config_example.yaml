@@ -1,6 +1,3 @@
-#Restrict some commands (Transmission) to only admins 
-enableAdmin: true
-
 #Sonarr Configuration
 sonarr:
   server:
@@ -44,15 +41,19 @@ transmission:
   username: 
   password:
 
-#Language
+# Optional settings:
+##Language
 language: en
 
-#Entrypoints
+##Entrypoints
 entrypointAuth: auth #auth or a custom entrypoint
 entrypointAdd: start #start or a custom entrypoint
 entrypointAllSeries: allSeries #allSeries or a custom entrypoint
 entrypointTransmission: transmission #transmission or a custom entrypoint
 
-#Logging
+##Restrict some commands (Transmission) to only admins 
+enableAdmin: true
+
+##Logging
 logToConsole: true
 debugLogging: false

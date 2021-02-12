@@ -4,9 +4,10 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler
 
 from commons import checkId, authentication, checkAdmin
-from definitions import CONFIG_PATH, LANG_PATH, ADMIN_PATH
+from definitions import LANG_PATH
 
-config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
+from config import config
+
 lang = config["language"]
 config = config["transmission"]
 

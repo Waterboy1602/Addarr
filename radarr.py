@@ -4,12 +4,9 @@ import commons as commons
 import json
 import logging
 import requests
-import yaml
 
 import logger
-from definitions import CONFIG_PATH
-
-config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
+from config import config
 
 # Set up logging
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
