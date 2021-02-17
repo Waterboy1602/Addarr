@@ -36,7 +36,7 @@ telegram:
 transmission:
   enable: true #enable the transmission commands
   onlyAdmin: true #transmission command  will only work for admins
-  host:
+  host: # IP-adres of the Transmission service
   authentication: true #is transmission protected with a password?
   username: 
   password:
