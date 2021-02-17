@@ -17,8 +17,8 @@ This is a Telegram Bot made to add series to [Sonarr](https://github.com/Sonarr/
 ## COMMANDS
 These are the default commands:
 - `/help`: gives an overview of all the commands with their action
-- `/auth`/: authenticate the chat to use this bot
-- `/start`/: start adding a series or movie to Sonarr/Radarr
+- `/auth`: authenticate the chat to use this bot
+- `/start`: start adding a series or movie to Sonarr/Radarr
 - `/movie` (en)/`/film` (nl): start adding a movie to Radarr
 - `/series` (en)/`/serie` (nl): start adding a series to Sonarr
 - `/allSeries`: receive a list of all the series on Sonarr
