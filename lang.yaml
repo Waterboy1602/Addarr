@@ -19,7 +19,12 @@ en:
     NotAdmin: "You need to be an admin to execute this command."
     No results: "No results found"
     Chatid already allowed: "This chat is already authorized."
-
+    Help: "Want to see this text again? Use /{}.\n
+      To authenticate before first use you should use /{}.\n
+      To add a movie or series use /{}.\n
+      To immediatly add a movie or series you can use /{} or /{}.\n
+      To check which series are in Sonarr you can use /{}.\n
+      To toggle the download speed of Transmission use /{}."
 
     series:
         Add: Yes, add this series
@@ -66,6 +71,12 @@ nl:
     NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
     No results: "Er zijn geen resultaten gevonden."
     Chatid already allowed: "Deze chat heeft al toestemming."
+    Help: "Wil je deze tekst nog eens zien? Gebruik dan /{}.\n
+      Om de eerste keer te authenticeren gebruik je /{}.\n
+      Om een film of serie toe te voegen kun je /{} gebruiken.\n
+      Wil je meteen een keuze tussen film of serie maken, gebruik dan /{} of /{}.\n
+      Om te kijken welke series al in Sonarr zitten gebruik je /{}.\n
+      Wil je de snelheidslimiet van Transmission wijzigen gebruik je /{}."
 
     serie:
         Add: Ja, voeg deze serie toe
