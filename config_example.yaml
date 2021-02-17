@@ -1,6 +1,3 @@
-#Restrict some commands (Transmission) to only admins 
-enableAdmin: true
-
 #Sonarr Configuration
 sonarr:
   server:
@@ -39,20 +36,25 @@ telegram:
 transmission:
   enable: true #enable the transmission commands
   onlyAdmin: true #transmission command  will only work for admins
-  host:
+  host: # IP-adres of the Transmission service
   authentication: true #is transmission protected with a password?
   username: 
   password:
 
-#Language
+# Optional settings:
+##Language
 language: en
 
-#Entrypoints
+##Entrypoints
 entrypointAuth: auth #auth or a custom entrypoint
+entrypointHelp: help #help entrypoint
 entrypointAdd: start #start or a custom entrypoint
 entrypointAllSeries: allSeries #allSeries or a custom entrypoint
 entrypointTransmission: transmission #transmission or a custom entrypoint
 
-#Logging
+##Restrict some commands (Transmission) to only admins 
+enableAdmin: true
+
+##Logging
 logToConsole: true
 debugLogging: false

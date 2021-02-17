@@ -19,7 +19,12 @@ en:
     NotAdmin: "You need to be an admin to execute this command."
     No results: "No results found"
     Chatid already allowed: "This chat is already authorized."
-
+    Help: "Want to see this text again? Use /{}.\n
+      To authenticate before first use you should use /{}.\n
+      To add a movie or series use /{}.\n
+      To immediatly add a movie or series you can use /{} or /{}.\n
+      To check which series are in Sonarr you can use /{}.\n
+      To toggle the download speed of Transmission use /{}."
 
     series:
         Add: Yes, add this series
@@ -57,28 +62,35 @@ nl:
     What is this?: Is dit een film of een serie?
     New: Voer een nieuwe zoekopdracht uit
     Next result: Nee, toon me volgend resultaat
-    No results: Geen resultaten meer te tonen.
-    Add: Ja, voeg deze
+    Last result: Geen resultaten meer te tonen
+    Add: Ja, voeg deze toe
+    Select a path: Kies een pad voor deze film of serie
     Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
     Wrong password: Het wachtwoord is verkeerd. Probeer opnieuw...
     Chatid added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
     NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
     No results: "Er zijn geen resultaten gevonden."
     Chatid already allowed: "Deze chat heeft al toestemming."
+    Help: "Wil je deze tekst nog eens zien? Gebruik dan /{}.\n
+      Om de eerste keer te authenticeren gebruik je /{}.\n
+      Om een film of serie toe te voegen kun je /{} gebruiken.\n
+      Wil je meteen een keuze tussen film of serie maken, gebruik dan /{} of /{}.\n
+      Om te kijken welke series al in Sonarr zitten gebruik je /{}.\n
+      Wil je de snelheidslimiet van Transmission wijzigen gebruik je /{}."
 
     serie:
         Add: Ja, voeg deze serie toe
         This: Is dit de serie die je wilt toevoegen?
         Failed: Oeps, mislukt om de serie toe te voegen. Probeer misschien nog eens opnieuw.
         Success: "De serie is met succes toegevoegd 🙂"
-        Exist: Deze serie staat al op Plex 😉
+        Exist: Deze serie is al toegevoed 😉
 
     film: 
         Add: Ja, voeg deze film toe
         This: Is dit de film die je wilt toevoegen?
         Failed: Oeps, mislukt om de film toe te voegen. Probeer misschien nog eens opnieuw.
         Success: "De film is met succes toegevoegd 🙂"
-        Exist: Deze film staat al op Plex 😉
+        Exist: Deze film is al toegevoegd 😉
 
     Transmission:
         NotEnabled: "De Transmission functie is niet geactiveerd."
@@ -86,4 +98,4 @@ nl:
         TSL: Tijdelijke snelheidslimiet
         Normal: Normale snelheid
         ChangedToTSL: "Tijdelijke snelheidslimiet staat aan."
-        ChangedToNormal: "Tijdelijke snelheidslimiet staat af."
+        ChangedToNormal: "Tijdelijke snelheidslimiet staat uit."
