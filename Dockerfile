@@ -10,7 +10,7 @@ RUN apk add --no-cache \
             openssl-dev \
             cargo \
             rust \
-            transmission-cli \
+            transmission-cli
 
 # Copy files to container
 COPY . /app
