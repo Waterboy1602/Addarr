@@ -4,12 +4,6 @@ WORKDIR /app
 
 # Install requirements
 RUN apk add --no-cache \
-            gcc \
-            musl-dev \
-            libffi-dev \
-            openssl-dev \
-            cargo \
-            rust \
             transmission-cli
 
 # Copy files to container
