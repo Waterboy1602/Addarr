@@ -412,7 +412,7 @@ def addSerieMovie(update, context):
         if update.callback_query is not None:
             try_path = update.callback_query.data.replace("Path: ", "").strip()
             if try_path in context.user_data.get("paths", {}):
-                context.user_data["path"] = update.callback_query.data
+                context.user_data["path"] = try_path
                 path = try_path
         if path is None:
             logger.debug(
