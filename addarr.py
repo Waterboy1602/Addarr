@@ -374,6 +374,9 @@ def nextOption(update, context):
 def pathSerieMovie(update, context):
     service = getService(context)
     paths = service.getRootFolders()
+    excluded_root_folders = service.config.get("excludedRootFolders", [])
+    paths = [p for p in paths if p["path"] not in excluded_root_folders]
+    logger.debug(f"Excluded root folders: {excluded_root_folders}")
     context.user_data.update({"paths": [p["path"] for p in paths]})
     if len(paths) == 1:
         # There is only 1 path, so use it!

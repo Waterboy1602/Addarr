@@ -12,6 +12,8 @@ sonarr:
   search: true
   seasonFolder: true
   qualityProfileId: 1
+  excludedRootFolders: # If set must start and finish with / Eg: /mnt/Media/
+    - 
 
 #Radarr Configuration
 radarr:
@@ -26,6 +28,8 @@ radarr:
     password: 
   search: true
   qualityProfileId: 1
+  excludedRootFolders: # If set, must start and finish with / Eg: /mnt/Media/
+    -
 
 #Telegram Configuration
 telegram:
