@@ -2,12 +2,10 @@ import logging
 import logger
 import yaml
 from telegram.ext import ConversationHandler
-from definitions import CHATID_PATH, ADMIN_PATH, LANG_PATH
+from definitions import CHATID_PATH, ADMIN_PATH
 from config import config
 
-lang = config["language"]
-transcript = yaml.safe_load(open(LANG_PATH, encoding="utf8"))
-transcript = transcript[lang]
+from translations import i18n
 
 # Set up logging
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
@@ -73,7 +71,7 @@ def authentication(update, context):
         if(str(chatid) in file.read()):
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=transcript["Chatid already allowed"],
+                text=i18n.t("addarr.Chatid already allowed"),
             )
             file.close()
         else:
@@ -86,7 +84,7 @@ def authentication(update, context):
                     file.write(str(chatid) + "\n")
                     context.bot.send_message(
                         chat_id=update.effective_message.chat_id,
-                        text=transcript["Chatid added"],
+                        text=i18n.t("addarr.Chatid added"),
                     )
                     file.close()
                     return "added"
@@ -95,7 +93,7 @@ def authentication(update, context):
                     f"Failed authentication attempt by [{update.message.from_user.username}]. Password entered: [{password}]"
                 )
                 context.bot.send_message(
-                    chat_id=update.effective_message.chat_id, text=transcript["Wrong password"]
+                    chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Wrong password")
                 )
                 return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
 
