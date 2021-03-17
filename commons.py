@@ -1,10 +1,11 @@
 import logging
-import logger
+
 import yaml
 from telegram.ext import ConversationHandler
-from definitions import CHATID_PATH, ADMIN_PATH
-from config import config
 
+import logger
+from config import config
+from definitions import ADMIN_PATH, CHATID_PATH
 from translations import i18n
 
 # Set up logging

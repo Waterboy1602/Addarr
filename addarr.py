@@ -1,28 +1,21 @@
 #!/usr/bin/env python3
 
 import logging
-import re
 import math
+import re
 
 import yaml
-
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import (
-    Updater,
-    CommandHandler,
-    ConversationHandler,
-    CallbackQueryHandler,
-    MessageHandler,
-    Filters,
-)
+from telegram.ext import (CallbackQueryHandler, CommandHandler,
+                          ConversationHandler, Filters, MessageHandler,
+                          Updater)
 
-from commons import checkId, authentication, format_bytes
-from translations import i18n
+import logger
 import radarr as radarr
 import sonarr as sonarr
-import logger
-
+from commons import authentication, checkId, format_bytes
 from config import config
+from translations import i18n
 
 __version__ = "0.3"
 

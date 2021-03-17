@@ -1,12 +1,12 @@
 import os
+
 import yaml
-import i18n
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler
 
-from commons import checkId, authentication, checkAdmin
-from translations import i18n
+from commons import authentication, checkAdmin, checkId
 from config import config
+from translations import i18n
 
 config = config["transmission"]
 

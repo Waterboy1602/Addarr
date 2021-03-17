@@ -1,4 +1,5 @@
 import yaml
+
 from definitions import CONFIG_PATH, DEFAULT_SETTINGS
 
 config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
