@@ -436,7 +436,7 @@ def addSerieMovie(update, context):
         else:
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=i18n.t("addarr.messages.Failes", subject=choice.lower()),
+                text=i18n.t("addarr.messages.Failed", subject=choice.lower()),
             )
             clearUserData(context)
             return ConversationHandler.END
