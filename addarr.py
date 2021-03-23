@@ -1,28 +1,21 @@
 #!/usr/bin/env python3
 
 import logging
-import re
 import math
+import re
 
 import yaml
-
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.ext import (
-    Updater,
-    CommandHandler,
-    ConversationHandler,
-    CallbackQueryHandler,
-    MessageHandler,
-    Filters,
-)
+from telegram.ext import (CallbackQueryHandler, CommandHandler,
+                          ConversationHandler, Filters, MessageHandler,
+                          Updater)
 
-from commons import checkId, authentication, format_bytes
-from definitions import LANG_PATH
+import logger
 import radarr as radarr
 import sonarr as sonarr
-import logger
-
+from commons import authentication, checkId, format_bytes
 from config import config
+from translations import i18n
 
 __version__ = "0.3"
 
@@ -35,11 +28,6 @@ SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL = ra
 
 updater = Updater(config["telegram"]["token"], use_context=True)
 dispatcher = updater.dispatcher
-lang = config["language"]
-
-transcript = yaml.safe_load(open(LANG_PATH, encoding="utf8"))
-transcript = transcript[lang]
-
 
 def main():
     auth_handler_command = CommandHandler(config["entrypointAuth"], authentication)
@@ -59,8 +47,8 @@ def main():
     addMovieserie_handler = ConversationHandler(
         entry_points=[
             CommandHandler(config["entrypointAdd"], startSerieMovie),
-            CommandHandler(transcript["Movie"], startSerieMovie),
-            CommandHandler(transcript["Serie"], startSerieMovie),
+            CommandHandler(i18n.t("addarr.Movie"), startSerieMovie),
+            CommandHandler(i18n.t("addarr.Serie"), startSerieMovie),
             MessageHandler(
                 Filters.regex(
                     re.compile(r'^' + config["entrypointAdd"] + '$', re.IGNORECASE)
@@ -72,27 +60,27 @@ def main():
             SERIE_MOVIE_AUTHENTICATED: [MessageHandler(Filters.text, choiceSerieMovie)],
             READ_CHOICE: [
                 MessageHandler(
-                    Filters.regex(f'^({transcript["Movie"]}|{transcript["Serie"]})$'),
+                    Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Serie")})$'),
                     searchSerieMovie,
                 ),
-                CallbackQueryHandler(searchSerieMovie, pattern=f'^({transcript["Movie"]}|{transcript["Serie"]})$')
+                CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Serie")})$')
             ],
             GIVE_OPTION: [
-                CallbackQueryHandler(pathSerieMovie, pattern=f'({transcript["Add"]})'),
+                CallbackQueryHandler(pathSerieMovie, pattern=f'({i18n.t("addarr.Add")})'),
                 MessageHandler(
-                    Filters.regex(f'^({transcript["Add"]})$'), 
+                    Filters.regex(f'^({i18n.t("addarr.Add")})$'),
                     pathSerieMovie
                 ),
-                CallbackQueryHandler(nextOption, pattern=f'({transcript["Next result"]})'),
+                CallbackQueryHandler(nextOption, pattern=f'({i18n.t("addarr.Next result")})'),
                 MessageHandler(
-                    Filters.regex(f'^({transcript["Next result"]})$'), 
+                    Filters.regex(f'^({i18n.t("addarr.Next result")})$'),
                     nextOption
                 ),
                 MessageHandler(
-                    Filters.regex(f'^({transcript["New"]})$'), 
+                    Filters.regex(f'^({i18n.t("addarr.New")})$'),
                     startSerieMovie
                 ),
-                CallbackQueryHandler(startSerieMovie, pattern=f'({transcript["New"]})'),
+                CallbackQueryHandler(startSerieMovie, pattern=f'({i18n.t("addarr.New")})'),
             ],
             GIVE_PATHS: [
                 CallbackQueryHandler(addSerieMovie, pattern="^(Path: )(.*)$"),
@@ -139,7 +127,7 @@ def main():
     help_handler_command = CommandHandler(config["entrypointHelp"], help)
     dispatcher.add_handler(help_handler_command)
 
-    logger.info(transcript["Start chatting"])
+    logger.info(i18n.t("addarr.Start chatting"))
     updater.start_polling()
     updater.idle()
 
@@ -147,7 +135,7 @@ def main():
 def stop(update, context):
     clearUserData(context)
     context.bot.send_message(
-        chat_id=update.effective_message.chat_id, text=transcript["End"]
+        chat_id=update.effective_message.chat_id, text=i18n.t("addarr.End")
     )
     return ConversationHandler.END
 
@@ -155,7 +143,7 @@ def stop(update, context):
 def startSerieMovie(update : Update, context):
     if not checkId(update):
         context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=transcript["Authorize"]
+            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
         )
         return SERIE_MOVIE_AUTHENTICATED
 
@@ -167,25 +155,25 @@ def startSerieMovie(update : Update, context):
         return SERIE_MOVIE_AUTHENTICATED
 
     if reply[1:] in [
-        transcript["Serie"].lower(),
-        transcript["Movie"].lower(),
+        i18n.t("addarr.Serie").lower(),
+        i18n.t("addarr.Movie").lower(),
     ]:
         logger.debug(
             f"User issued {reply} command, so setting user_data[choice] accordingly"
         )
         context.user_data.update(
             {
-                "choice": transcript["Serie"]
-                if reply[1:] == transcript["Serie"].lower()
-                else transcript["Movie"]
+                "choice": i18n.t("addarr.Serie")
+                if reply[1:] == i18n.t("addarr.Serie").lower()
+                else i18n.t("addarr.Movie")
             }
         )
-    elif reply == transcript["New"].lower():
+    elif reply == i18n.t("addarr.New").lower():
         logger.debug("User issued New command, so clearing user_data")
         clearUserData(context)
     
     context.bot.send_message(
-        chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+transcript["Title"]
+        chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+i18n.t("addarr.Title")
     )
     return SERIE_MOVIE_AUTHENTICATED
 
@@ -206,8 +194,8 @@ def choiceSerieMovie(update, context):
             return SERIE_MOVIE_AUTHENTICATED
 
         if reply.lower() not in [
-            transcript["Serie"].lower(),
-            transcript["Movie"].lower(),
+            i18n.t("addarr.Serie").lower(),
+            i18n.t("addarr.Movie").lower(),
         ]:
             logger.debug(
                 f"User entered a title {reply}"
@@ -215,8 +203,8 @@ def choiceSerieMovie(update, context):
             context.user_data["title"] = reply
 
         if context.user_data.get("choice") in [
-            transcript["Serie"],
-            transcript["Movie"],
+            i18n.t("addarr.Serie"),
+            i18n.t("addarr.Movie"),
         ]:
             logger.debug(
                 f"user_data[choice] is {context.user_data['choice']}, skipping step of selecting movie/series"
@@ -226,22 +214,22 @@ def choiceSerieMovie(update, context):
             keyboard = [
                 [
                     InlineKeyboardButton(
-                        '\U0001F3AC '+transcript["Movie"],
-                        callback_data=transcript["Movie"]
+                        '\U0001F3AC '+i18n.t("addarr.Movie"),
+                        callback_data=i18n.t("addarr.Movie")
                     ),
                     InlineKeyboardButton(
-                        '\U0001F4FA '+transcript["Serie"],
-                        callback_data=transcript["Serie"]
+                        '\U0001F4FA '+i18n.t("addarr.Serie"),
+                        callback_data=i18n.t("addarr.Serie")
                     ),
                 ],
                 [ InlineKeyboardButton(
-                        '\U0001F50D '+transcript["New"],
-                        callback_data=transcript["New"]
+                        '\U0001F50D '+i18n.t("addarr.New"),
+                        callback_data=i18n.t("addarr.New")
                     ),
                 ]
             ]
             markup = InlineKeyboardMarkup(keyboard)
-            update.message.reply_text(transcript["What is this?"], reply_markup=markup)
+            update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
             return READ_CHOICE
 
 
@@ -264,52 +252,56 @@ def searchSerieMovie(update, context):
     position = context.user_data["position"]
 
     searchResult = service.search(title)
-    if searchResult:
-        context.user_data["output"] = service.giveTitles(searchResult)
-
-        keyboard = [
-                [
-                    InlineKeyboardButton(
-                        '\U00002795 '+transcript["Add"],
-                        callback_data=transcript["Add"]
-                    ),
-                ],[
-                    InlineKeyboardButton(
-                        '\U000023ED '+transcript["Next result"],
-                        callback_data=transcript["Next result"]
-                    ),
-                ],[
-                    InlineKeyboardButton(
-                        '\U0001F5D1 '+transcript["New"],
-                        callback_data=transcript["New"]
-                    ),
-                ],[
-                    InlineKeyboardButton(
-                        '\U0001F6D1 '+transcript["Stop"],
-                        callback_data=transcript["Stop"]
-                    ),
-                ],
-            ]
-        markup = InlineKeyboardMarkup(keyboard)
+    if not searchResult:
         context.bot.send_message(
-            chat_id=update.effective_message.chat_id,
-            text=transcript[choice.lower()]["This"],
-        )
-        context.bot.sendPhoto(
-            chat_id=update.effective_message.chat_id,
-            photo=context.user_data["output"][position]["poster"],
-        )
-        text = f"{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})"
-        context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=text, reply_markup=markup
-        )
-        return GIVE_OPTION
-    else:
-        context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=transcript["No results"],
+            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.searchresults", count=0),
         )
         clearUserData(context)
         return ConversationHandler.END
+
+    context.user_data["output"] = service.giveTitles(searchResult)
+    context.bot.send_message(
+        chat_id=update.effective_message.chat_id,
+        text=i18n.t("addarr.searchresults", count=len(searchResult)),
+    )
+
+    keyboard = [
+            [
+                InlineKeyboardButton(
+                    '\U00002795 '+i18n.t("addarr.Add"),
+                    callback_data=i18n.t("addarr.Add")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U000023ED '+i18n.t("addarr.Next result"),
+                    callback_data=i18n.t("addarr.Next result")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U0001F5D1 '+i18n.t("addarr.New"),
+                    callback_data=i18n.t("addarr.New")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U0001F6D1 '+i18n.t("addarr.Stop"),
+                    callback_data=i18n.t("addarr.Stop")
+                ),
+            ],
+        ]
+    markup = InlineKeyboardMarkup(keyboard)
+    context.bot.send_message(
+        chat_id=update.effective_message.chat_id,
+        text=i18n.t("addarr.messages.This", subject=choice.lower()),
+    )
+    context.bot.sendPhoto(
+        chat_id=update.effective_message.chat_id,
+        photo=context.user_data["output"][position]["poster"],
+    )
+    text = f"{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})"
+    context.bot.send_message(
+        chat_id=update.effective_message.chat_id, text=text, reply_markup=markup
+    )
+    return GIVE_OPTION
 
 
 def nextOption(update, context):
@@ -322,23 +314,23 @@ def nextOption(update, context):
         keyboard = [
                 [
                     InlineKeyboardButton(
-                        '\U00002795 '+transcript[choice.lower()]["Add"],
-                        callback_data=transcript[choice.lower()]["Add"]
+                        '\U00002795 '+i18n.t("addarr.messages.Add", subject=choice.lower()),
+                        callback_data=i18n.t("addarr.messages.Add", subject=choice.lower())
                     ),
                 ],[
                     InlineKeyboardButton(
-                        '\U000023ED '+transcript["Next result"],
-                        callback_data=transcript["Next result"]
+                        '\U000023ED '+i18n.t("addarr.Next result"),
+                        callback_data=i18n.t("addarr.Next result")
                     ),
                 ],[
                     InlineKeyboardButton(
-                        '\U0001F5D1 '+transcript["New"],
-                        callback_data=transcript["New"]
+                        '\U0001F5D1 '+i18n.t("addarr.New"),
+                        callback_data=i18n.t("addarr.New")
                     ),
                 ],[
                     InlineKeyboardButton(
-                        '\U0001F6D1 '+transcript["Stop"],
-                        callback_data=transcript["Stop"]
+                        '\U0001F6D1 '+i18n.t("addarr.Stop"),
+                        callback_data=i18n.t("addarr.Stop")
                     ),
                 ],
             ]
@@ -346,7 +338,7 @@ def nextOption(update, context):
 
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=transcript[choice.lower()]["This"],
+            text=i18n.t("addarr.messages.This", subject=choice.lower()),
         )
         context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,
@@ -365,7 +357,7 @@ def nextOption(update, context):
     else:
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=transcript["Last result"]
+            text=i18n.t("addarr.Last result")
         )
         clearUserData(context)
         return ConversationHandler.END
@@ -398,7 +390,7 @@ def pathSerieMovie(update, context):
 
     context.bot.send_message(
         chat_id=update.effective_message.chat_id,
-        text=transcript["Select a path"],
+        text=i18n.t("addarr.Select a path"),
         reply_markup=markup,
     )
     return GIVE_PATHS
@@ -430,21 +422,21 @@ def addSerieMovie(update, context):
         if service.addToLibrary(idnumber, path):
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=transcript[choice.lower()]["Success"],
+                text=i18n.t("addarr.messages.Success", subject=choice.lower()),
             )
             clearUserData(context)
             return ConversationHandler.END
         else:
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=transcript[choice.lower()]["Failed"],
+                text=i18n.t("addarr.messages.Failed", subject=choice.lower()),
             )
             clearUserData(context)
             return ConversationHandler.END
     else:
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=transcript[choice.lower()]["Exist"],
+            text=i18n.t("addarr.messages.Exist", subject=choice.lower()),
         )
         clearUserData(context)
         return ConversationHandler.END
@@ -514,9 +506,9 @@ def allSeries(update, context):
         return ConversationHandler.END
 
 def getService(context):
-    if context.user_data.get("choice") == transcript["Serie"]:
+    if context.user_data.get("choice") == i18n.t("addarr.Serie"):
         return sonarr
-    elif context.user_data.get("choice") == transcript["Movie"]:
+    elif context.user_data.get("choice") == i18n.t("addarr.Movie"):
         return radarr
     else:
         raise ValueError(
@@ -525,14 +517,14 @@ def getService(context):
 
 def help(update, context):
     context.bot.send_message(
-        chat_id=update.effective_message.chat_id, text=transcript["Help"].format(
-            config["entrypointHelp"],
-            config["entrypointAuth"],
-            config["entrypointAdd"],
-            'serie',
-            'movie',
-            config["entrypointAllSeries"],
-            config["entrypointTransmission"],
+        chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Help",
+            help=config["entrypointHelp"],
+            authenticate=config["entrypointAuth"],
+            add=config["entrypointAdd"],
+            serie='serie',
+            movie='movie',
+            allseries=config["entrypointAllSeries"],
+            transmission=config["entrypointTransmission"],
         )
     )
     return ConversationHandler.END

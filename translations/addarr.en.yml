@@ -1,0 +1,46 @@
+#English
+en: 
+  Start: Start
+  Stop: Stop
+  Movie: Movie
+  Serie: Series
+  Start chatting: Start chatting with Addarr in Telegram. The first time you use "start" you will be asked to enter your password.
+  End: The adding of movies or series has ended.
+  Title: "Enter the title:"
+  What is this?: Is this a movie or a series?
+  New: Execute a new search command
+  Next result: No, show me the next result
+  Last result: No more results to show
+  Add: Yes, add this
+  Select a path: Please select a path for the movie or series
+  Authorize: You first need to authorize this chat. What is the password?
+  Wrong password: You entered the wrong password. Try again...
+  Chatid added: "This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
+  NotAdmin: "You need to be an admin to execute this command."
+  Chatid already allowed: "This chat is already authorized."
+  Help: "Want to see this text again? Use /%{help}.\n
+    To authenticate before first use you should use /%{authenticate}.\n
+    To add a movie or series use /%{add}.\n
+    To immediatly add a movie or series you can use /%{movie} or /%{serie}.\n
+    To check which series are in Sonarr you can use /%{allseries}.\n
+    To toggle the download speed of Transmission use /%{transmission}."
+
+  messages:
+    Add: Yes, add this %{subject}
+    This: Is this the %{subject} you want to add?
+    Failed: Oops, failed to add the %{subject}. Maybe give it another try.
+    Success: "The %{subject} is added with success 🙂"
+    Exist: The %{subject} already exists 😉
+  
+  searchresults:
+    zero: No results found
+    one: One search result
+    other: "%{count} search results"
+
+  Transmission:
+    NotEnabled: "The Transmission function is not activated."
+    Speed: "Which speed do you want Transmission to use?"
+    TSL: Temporary Speed Limits
+    Normal: Normal speed
+    ChangedToTSL: "Temporary Speed Limits is enabled."
+    ChangedToNormal: "Temporary Speed Limits is disabled."

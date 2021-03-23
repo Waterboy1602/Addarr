@@ -5,7 +5,7 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Set Projects Configuration path
 CONFIG_PATH = os.path.join(ROOT_DIR, "config.yaml")
-LANG_PATH = os.path.join(ROOT_DIR, "lang.yaml")
+LANG_PATH = os.path.join(ROOT_DIR, "translations/")
 CHATID_PATH = os.path.join(ROOT_DIR, "chatid.txt")
 LOG_PATH = os.path.join(ROOT_DIR, "logs", "addarr.log")
 ADMIN_PATH = os.path.join(ROOT_DIR, "admin.txt")
