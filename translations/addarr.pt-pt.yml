@@ -1,0 +1,46 @@
+#Portuguese - Portugal
+pt-pt: 
+  Start: Início
+  Stop: Stop
+  Movie: Filme
+  Serie: Serie
+  Start chatting: Comece um chat com o Addarr no Telegram. Da primeira vez que escrever "start" deverá introduzir a password.
+  End:  A adição de filmes ou séries terminou
+  Title: "Introduza o título:"
+  What is this?: É um filme ou uma série?
+  New: Execute uma nova pesquisa
+  Next result: Não, mostre-me o resultado seguinte
+  Last result: Não há mais resultados a apresentar
+  Add: Sim, adicione este
+  Select a path: Seleccione um caminho para o filme ou série
+  Authorize: Primeiro tem de autorizar este chat. Indique a password
+  Wrong password: Introduziu a password errada. Tente novamente
+  Chatid added: "Este chat foi adicionado à lista de chats autorizados. Pode agora utilizar este bot.\nSe introduziu um comando, deverá executá-lo novamente."
+  NotAdmin: "Precisa de ser um admin para executar este comando"
+  Chatid already allowed: "Este chat já foi autorizado."
+  Help: "Para ver este texto novamente escreva /%{help}.\n
+  Para autenticar antes da primeira utilização deve escrever /%{authenticate}.\n
+  Para adicionar um filme ou série escreva /%{add}.\n
+  Para adicionar imediatamente um filme ou série pode escrever /%{movie} ou /%{serie}.\n
+  Para ver que séries existem no Sonarr, escreva /%{allseries}.\n
+  Para alterar a velocidade de download do Transmission escreva /%{transmission}."
+
+  messages:
+    Add: Sim, adicione este %{subject}
+    This: É este %{subject} que quer adicionar?
+    Failed: Oops, falha ao adicionar este /%{subject}. Tente novamente.
+    Success:  "O %{subject} foi adicionadocom sucesso 🙂"
+    Exist: O %{subject} já existe 😉
+  
+  searchresults:
+    zero: Não foram encontrados resultados
+    one: Foi encontrado um resultado
+    other: "Foram encontrados %{count} resultados"
+
+  Transmission:
+    NotEnabled: "A funcionalidade do Transmission não está activada."
+    Speed: "Que velocidade pretende que o Transmission use?"
+    TSL: Limites de velocidade temporários
+    Normal: Velocidade normal
+    ChangedToTSL: Limites de velocidade temporários activados.
+    ChangedToNormal: Limites de velocidade temporarios desactivados.
