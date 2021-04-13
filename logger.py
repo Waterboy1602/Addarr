@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import os
 import logging
+import os
+
 from definitions import LOG_PATH
 
 

@@ -1,5 +1,4 @@
 # ADDARR
-[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/waterboy1602/addarr)](https://hub.docker.com/r/waterboy1602/addarr)
 [![Docker Pulls](https://img.shields.io/docker/pulls/waterboy1602/addarr)](https://hub.docker.com/r/waterboy1602/addarr)
 
 This is a Telegram Bot made to add series to [Sonarr](https://github.com/Sonarr/Sonarr) or movies to [Radarr](https://github.com/Radarr/Radarr) with a couple of commands. You can also communicate with your [Transmission](https://transmissionbt.com/) service to change its download speed. The bot has also recently changed from a ReplyKeyboard to an InlineKeboard, as you can see in the [screenshots](#screenshots).
@@ -11,7 +10,7 @@ This is a Telegram Bot made to add series to [Sonarr](https://github.com/Sonarr/
 - Wrong login attempts are saved in `addarr.log`
 - Possibility to enable the Transmission-command only for admins
 - Possibility to change the entrypoints of the commands
-- Translated in English and Dutch
+- Translated in English, Dutch and Portuguese (Portugal)
 - Command to give an overview of all the other commands
 
 ## COMMANDS
@@ -19,8 +18,8 @@ These are the default commands:
 - `/help`: gives an overview of all the commands with their action
 - `/auth`: authenticate the chat to use this bot
 - `/start`: start adding a series or movie to Sonarr/Radarr
-- `/movie` (en)/`/film` (nl): start adding a movie to Radarr
-- `/series` (en)/`/serie` (nl): start adding a series to Sonarr
+- `/movie` (en)/`/film` (nl)/`/file` (pt-pt): start adding a movie to Radarr
+- `/series` (en)/`/serie` (nl)/`/serie` (pt-pt): start adding a series to Sonarr
 - `/allSeries`: receive a list of all the series on Sonarr
 - `/transmission`: change the down-/upload speed of Transmission from Temporary Speed Limit to normal or the other way around
 - `/stop`: stops the command you were executing. Can be used at any moment  
@@ -58,7 +57,7 @@ You can start the Transmission command with `/transmission` or `transmission`. A
 
 You can start adding series/movies with `/start` or just `start`. The next steps will be made clear by the bot. At any time you can stop the adding by sending `/stop` or `stop`.
 
-You can also start adding a series or movie with `/movie` or `/series` when the bot is running in English or `/film` or `/serie` when the bot is running in Dutch. This will skip the step of asking if the title represents a series or a movie.
+You can also start adding a series or movie with `/movie` or `/series` when the bot is running in English, `/film` or `/serie` when the bot is running in Dutch, and '/filme' or '/serie' when running in Portuguese. This will skip the step of asking if the title represents a series or a movie.
 
 Different entrypoints for all these commands can be entered in the config file, except `/movie`/`/film`/`series`/`serie`, which are defined in `lang.yaml`.
 

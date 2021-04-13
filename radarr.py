@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-import commons as commons
 import json
 import logging
+
 import requests
 
+import commons as commons
 import logger
 from config import config
 

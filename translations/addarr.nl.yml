@@ -1,0 +1,46 @@
+#Dutch
+nl: 
+  Start: Start
+  Stop: Stop
+  Movie: Film
+  Serie: Serie
+  Start chatting: Je kan nu chatten met Addarr op Telegram. De eerste keer dat je "start" gebruikt, zul je je wachtwoord moeten ingeven.
+  End: Het toevoegen van films of series is beëindigd.
+  Title: "Geef de titel:"
+  What is this?: Is dit een film of een serie?
+  New: Voer een nieuwe zoekopdracht uit
+  Next result: Nee, toon me volgend resultaat
+  Last result: Geen resultaten meer te tonen
+  Add: Ja, voeg deze toe
+  Select a path: Kies een pad voor deze film of serie
+  Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
+  Wrong password: Het wachtwoord is verkeerd. Probeer opnieuw...
+  Chatid added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
+  NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
+  Chatid already allowed: "Deze chat heeft al toestemming."
+  Help: "Wil je deze tekst nog eens zien? Gebruik dan /%{help}.\n
+    Om de eerste keer te authenticeren gebruik je /%{authenticate}.\n
+    Om een film of serie toe te voegen kun je /%{add} gebruiken.\n
+    Wil je meteen een keuze tussen film of serie maken, gebruik dan /${movie} of /%{serie}.\n
+    Om te kijken welke series al in Sonarr zitten gebruik je /%{allseries}.\n
+    Wil je de snelheidslimiet van Transmission wijzigen gebruik je /%{transmission}."
+
+  messages:
+    Add: Ja, voeg deze %{subject} toe
+    This: Is dit de %{subject} die je wilt toevoegen?
+    Failed: Oeps, mislukt om de %{subject} toe te voegen. Probeer misschien nog eens opnieuw.
+    Success: "De %{subject} is met succes toegevoegd 🙂"
+    Exist: Deze %{subject} was al toegevoegd 😉
+  
+  searchresults:
+    zero: "Er zijn geen resultaten gevonden."
+    one: Een zoekresultaat
+    other: "%{count} zoekresultaten"
+
+  Transmission:
+    NotEnabled: "De Transmission functie is niet geactiveerd."
+    Speed: "Welke snelheid wil je dat Transmission gebruikt?"
+    TSL: Tijdelijke snelheidslimiet
+    Normal: Normale snelheid
+    ChangedToTSL: "Tijdelijke snelheidslimiet staat aan."
+    ChangedToNormal: "Tijdelijke snelheidslimiet staat uit."
