@@ -16,7 +16,7 @@ from telegram.ext import (
     Filters,
 )
 
-from commons import checkId, authentication, format_bytes
+from commons import checkId, authentication, format_bytes, format_long_list_message
 from definitions import LANG_PATH
 import radarr as radarr
 import sonarr as sonarr
@@ -56,6 +56,15 @@ def main():
                             ),
                             allSeries,
                         )
+
+    allMovies_handler_command = CommandHandler(config["entrypointAllMovies"], allMovies)
+    allMovies_handler_text = MessageHandler(
+        Filters.regex(
+            re.compile(r"^" + config["entrypointAllMovies"] + "$", re.IGNORECASE)
+        ),
+        allMovies,
+    )
+
     addMovieserie_handler = ConversationHandler(
         entry_points=[
             CommandHandler(config["entrypointAdd"], startSerieMovie),
@@ -134,6 +143,8 @@ def main():
     dispatcher.add_handler(auth_handler_text)
     dispatcher.add_handler(allSeries_handler_command)
     dispatcher.add_handler(allSeries_handler_text)
+    dispatcher.add_handler(allMovies_handler_command)
+    dispatcher.add_handler(allMovies_handler_text)
     dispatcher.add_handler(addMovieserie_handler)
 
     help_handler_command = CommandHandler(config["entrypointHelp"], help)
@@ -456,61 +467,49 @@ def allSeries(update, context):
         ):  # To also stop the beginning command
             return ConversationHandler.END
     else:
+
         result = sonarr.allSeries()
-        string = ""
-        for serie in result:
-            string += "• " \
-            + serie["title"] \
-            + " (" \
-            + str(serie["year"]) \
-            + ")" \
-            + "\n" \
-            + "        status: " \
-            + serie["status"] \
-            + "\n" \
-            + "        monitored: " \
-            + str(serie["monitored"]).lower() \
-            + "\n"
-        
-        #max length of a message is 4096 chars
-        if len(string) <= 4096:
+        content = format_long_list_message(result)
+
+        if isinstance(content, str):
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=string,
+                text=content,
             )
-        #split string if longer then 4096 chars
-        else: 
-            neededSplits = math.ceil(len(string) / 4096)
-            positionNewLine = []
-            index = 0
-            while index < len(string): #Get positions of newline, so that the split will happen after a newline
-                i = string.find("\n", index)
-                if i == -1:
-                    return positionNewLine
-                positionNewLine.append(i)
-                index+=1
-
-            #split string at newline closest to maxlength
-            stringParts = []
-            lastSplit = timesSplit = 0
-            i = 4096
-            while i > 0 and len(string)>4096: 
-                if timesSplit < neededSplits:
-                    if i+lastSplit in positionNewLine:
-                        stringParts.append(string[0:i])
-                        string = string[i+1:]
-                        timesSplit+=1
-                        lastSplit = i
-                        i = 4096
-                i-=1
-            stringParts.append(string)
-
-            #print every substring
-            for subString in stringParts:
+        else:
+            # print every substring
+            for subString in content:
                 context.bot.send_message(
+                    chat_id=update.effective_message.chat_id,
+                    text=subString,
+                )
+
+        return ConversationHandler.END
+
+def allMovies(update, context):
+    if not checkId(update):
+        if (
+            authentication(update, context) == "added"
+        ):  # To also stop the beginning command
+            return ConversationHandler.END
+    else:
+
+        result = radarr.all_movies()
+        content = format_long_list_message(result)
+
+        if isinstance(content, str):
+            context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=subString,
+                text=content,
             )
+        else:
+            # print every substring
+            for subString in content:
+                context.bot.send_message(
+                    chat_id=update.effective_message.chat_id,
+                    text=subString,
+                )
+
         return ConversationHandler.END
 
 def getService(context):
@@ -532,6 +531,7 @@ def help(update, context):
             'serie',
             'movie',
             config["entrypointAllSeries"],
+            config["entrypointAllMovies"],
             config["entrypointTransmission"],
         )
     )

@@ -85,3 +85,28 @@ def getRootFolders():
     parsed_json = json.loads(req.text)
     logger.debug(f"Found Radarr paths: {parsed_json}")
     return parsed_json
+
+
+def all_movies():
+    parameters = {}
+    req = requests.get(commons.generateApiQuery("radarr", "movie", parameters))
+    parsed_json = json.loads(req.text)
+
+    if req.status_code == 200:
+        data = []
+        for movie in parsed_json:
+            if all(
+                x in movie
+                for x in ["title", "year", "monitored", "status"]
+            ):
+                data.append(
+                    {
+                        "title": movie["title"],
+                        "year": movie["year"],
+                        "monitored": movie["monitored"],
+                        "status": movie["status"]
+                    }
+                )
+        return data
+    else:
+        return False
