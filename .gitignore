@@ -7,3 +7,5 @@ __pycache__/
 config.yaml
 logs/
 env/
+venv/
+.idea/
