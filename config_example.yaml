@@ -45,6 +45,19 @@ transmission:
   username: 
   password:
 
+sabnzbd:
+  enable: true
+  onlyAdmin: true
+  server:
+    addr:
+    port: 8090 # Default is 8090
+    path: / # Default is / . If set, it must start and finish with / . Eg: /sonarr/
+    ssl: false #default false
+  auth:
+    apikey:
+    username:
+    password:
+
 # Optional settings:
 ##Language
 language: en
@@ -55,6 +68,7 @@ entrypointHelp: help #help entrypoint
 entrypointAdd: start #start or a custom entrypoint
 entrypointAllSeries: allSeries #allSeries or a custom entrypoint
 entrypointTransmission: transmission #transmission or a custom entrypoint
+entrypointSabnzbd: sabnzbd #sabnzbd or a custom entrypoint
 
 ##Restrict some commands (Transmission) to only admins 
 enableAdmin: true

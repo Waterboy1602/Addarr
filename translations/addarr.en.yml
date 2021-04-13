@@ -44,3 +44,14 @@ en:
     Normal: Normal speed
     ChangedToTSL: "Temporary Speed Limits is enabled."
     ChangedToNormal: "Temporary Speed Limits is disabled."
+
+  Sabnzbd:
+    NotEnabled: The Sabnzbd function is not activated.
+    Speed: Which speed do you want Sabnzbd to use?
+    Limit25: 25%
+    Limit50: 50%
+    Limit100: No limit
+    ChangedTo50: Limit set to 50%
+    ChangedTo25: Limit set to 25%
+    ChangedTo100: No speed limit
+    Error: Something went wrong while trying to set the speed

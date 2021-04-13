@@ -118,6 +118,32 @@ def main():
         )
         dispatcher.add_handler(changeTransmissionSpeed_handler)
 
+    if config["sabnzbd"]["enable"]:
+        import sabnzbd as sabnzbd
+        changeSabznbdSpeed_handler = ConversationHandler(
+            entry_points=[
+                CommandHandler(config["entrypointSabnzbd"], sabnzbd.sabnzbd),
+                MessageHandler(
+                    Filters.regex(
+                        re.compile(
+                            r"" + config["entrypointSabnzbd"] + "", re.IGNORECASE
+                        )
+                    ),
+                    sabnzbd.sabnzbd,
+                ),
+            ],
+            states={
+                sabnzbd.SABNZBD_SPEED_LIMIT_100: [
+                    CallbackQueryHandler(sabnzbd.changeSpeedSabnzbd),
+                ]
+            },
+            fallbacks=[
+                CommandHandler("stop", stop),
+                MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
+            ],
+        )
+        dispatcher.add_handler(changeSabznbdSpeed_handler)
+
     dispatcher.add_handler(auth_handler_command)
     dispatcher.add_handler(auth_handler_text)
     dispatcher.add_handler(allSeries_handler_command)

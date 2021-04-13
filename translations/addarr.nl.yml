@@ -44,3 +44,14 @@ nl:
     Normal: Normale snelheid
     ChangedToTSL: "Tijdelijke snelheidslimiet staat aan."
     ChangedToNormal: "Tijdelijke snelheidslimiet staat uit."
+
+  Sabnzbd:
+    NotEnabled: MISSING TRANSLATION The Sabnzbd function is not activated.
+    Speed: MISSING TRANSLATION Which speed do you want Sabnzbd to use?
+    Limit25: 25%
+    Limit50: 50%
+    Limit100: MISSING TRANSLATION No limit
+    ChangedTo50: MISSING TRANSLATION Limit set to 50%
+    ChangedTo25: MISSING TRANSLATION Limit set to 25%
+    ChangedTo100: MISSING TRANSLATION No speed limit
+    Error: MISSING TRANSLATION Something went wrong while trying to set the speed
