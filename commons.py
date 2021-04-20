@@ -1,8 +1,6 @@
 import logging
-
-import yaml
+import math
 from telegram.ext import ConversationHandler
-
 import logger
 from config import config
 from definitions import ADMIN_PATH, CHATID_PATH
@@ -120,3 +118,50 @@ def format_bytes(num, suffix='B'):
             return "%3.1f%s%s" % (num, unit, suffix)
         num /= 1024.0
     return "%.1f%s%s" % (num, 'Yi', suffix)
+
+def format_long_list_message(list):
+    string = ""
+    for item in list:
+        string += "• " \
+                  + item["title"] \
+                  + " (" \
+                  + str(item["year"]) \
+                  + ")" \
+                  + "\n" \
+                  + "        status: " \
+                  + item["status"] \
+                  + "\n" \
+                  + "        monitored: " \
+                  + str(item["monitored"]).lower() \
+                  + "\n"
+
+    # max length of a message is 4096 chars
+    if len(string) <= 4096:
+        return string
+    # split string if longer then 4096 chars
+    else:
+        neededSplits = math.ceil(len(string) / 4096)
+        positionNewLine = []
+        index = 0
+        while index < len(string):  # Get positions of newline, so that the split will happen after a newline
+            i = string.find("\n", index)
+            if i == -1:
+                return positionNewLine
+            positionNewLine.append(i)
+            index += 1
+
+        # split string at newline closest to maxlength
+        stringParts = []
+        lastSplit = timesSplit = 0
+        i = 4096
+        while i > 0 and len(string) > 4096:
+            if timesSplit < neededSplits:
+                if i + lastSplit in positionNewLine:
+                    stringParts.append(string[0:i])
+                    string = string[i + 1:]
+                    timesSplit += 1
+                    lastSplit = i
+                    i = 4096
+            i -= 1
+        stringParts.append(string)
+        return stringParts

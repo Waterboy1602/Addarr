@@ -14,6 +14,7 @@ DEFAULT_SETTINGS = {
     "entrypointAuth": "auth", #auth or a custom entrypoint
     "entrypointAdd": "start", #start or a custom entrypoint
     "entrypointAllSeries": "allSeries", #allSeries or a custom entrypoint
+    "entrypointAllMovies": "allMovies", #allSeries or a custom entrypoint
     "entrypointTransmission": "transmission", #transmission or a custom entrypoint
     "logToConsole": True,
     "debugLogging": False,
