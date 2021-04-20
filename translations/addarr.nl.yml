@@ -44,3 +44,14 @@ nl:
     Normal: Normale snelheid
     ChangedToTSL: "Tijdelijke snelheidslimiet staat aan."
     ChangedToNormal: "Tijdelijke snelheidslimiet staat uit."
+
+  Sabnzbd:
+    NotEnabled: De Sabnzbd functie is niet geactiveerd.
+    Speed: Welke snelheid wil je dat Sabnzbd gebruikt?
+    Limit25: 25%
+    Limit50: 50%
+    Limit100: Geen limiet
+    ChangedTo50: Limiet staat op 50%
+    ChangedTo25: Limiet staat op 25%
+    ChangedTo100: Geen snelheidslimiet
+    Error: Er ging iets fout tijdens het aanpassen van de snelheid

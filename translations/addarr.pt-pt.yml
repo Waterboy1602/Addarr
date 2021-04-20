@@ -29,7 +29,7 @@ pt-pt:
     Add: Sim, adicione este %{subject}
     This: É este %{subject} que quer adicionar?
     Failed: Oops, falha ao adicionar este /%{subject}. Tente novamente.
-    Success:  "O %{subject} foi adicionadocom sucesso 🙂"
+    Success:  "O %{subject} foi adicionado com sucesso 🙂"
     Exist: O %{subject} já existe 😉
   
   searchresults:
@@ -44,3 +44,14 @@ pt-pt:
     Normal: Velocidade normal
     ChangedToTSL: Limites de velocidade temporários activados.
     ChangedToNormal: Limites de velocidade temporarios desactivados.
+
+  Sabnzbd:
+    NotEnabled: A funcionalidade do Sabnzbd não está activada.
+    Speed: Que velocidade pretende que o Sabnzbd use?
+    Limit25: 25%
+    Limit50: 50%
+    Limit100: Sem limite
+    ChangedTo50: Limite definido para 50%
+    ChangedTo25: Limite definido para 25%
+    ChangedTo100: Sem limite definido
+    Error: Algo correu mal a definir o limite.
