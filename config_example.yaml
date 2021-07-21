@@ -28,6 +28,7 @@ radarr:
     password: 
   search: true
   qualityProfileId: 1
+  minimumAvailability: announced
   excludedRootFolders: # If set, must start and finish with / Eg: /mnt/Media/
     -
 
