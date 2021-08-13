@@ -71,6 +71,7 @@ def addToLibrary(tmdbId, path):
 def buildData(json, path):
     built_data = {
         "qualityProfileId": config["qualityProfileId"],
+        "minimumAvailability": config["minimumAvailability"],
         "rootFolderPath": path,  # config["rootFolder"],
         "addOptions": {"searchForMovie": config["search"]},
     }
