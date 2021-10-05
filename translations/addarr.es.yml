@@ -1,0 +1,58 @@
+#Español
+en: 
+  Start: Iniciar
+  Stop: Detener
+  Movie: Película
+  Serie: Serie
+  Start chatting: Empieza a chatear con Addarr en Telegram. La primera vez que uses "start" te pedirá introducir tu contraseña configurada.
+  End: La adición de películas o series ha finalizado.
+  Title: "Introduce el título:"
+  What is this?: Esto es una película o una serie?
+  New: Ejecuta un nuevo comando de búsqueda
+  Next result: No, muéstrame el siguiente resultado
+  Last result: No hay más resultados
+  Add: Sí, añadir
+  Select a path: Por favor elige una ruta donde guardar
+  Authorize: Necesitas autorizar este chat primero. ¿Cuál es la contraseña?
+  Wrong password: Contraseña incorrecta. Prueba otra vez...
+  Chatid added: "Este chat ha sido autorizado correctamente. Ya puedes utilizar el bot."
+  NotAdmin: "Necesitas ser admin para ejecutar este comando."
+  Chatid already allowed: "Este chat ya está autorizado."
+  Help: "Quieres volver a ver este texto? Usa /%{help}.\n
+    Para autenticarte antes del primer uso debes usar /%{authenticate}.\n
+    Para añadir una serie o película usa /%{add}.\n
+    Para añadir directamente una película o serie usa /%{movie} or /%{serie}.\n
+    Para comprobar que series hay en Sonarr usa /%{allseries}.\n
+    Para comprobar que películas hay en Radarr usa /%{allmovies}.\n
+    Para cambiar la velocidad de descarga de Transmission usa /%{transmission}."
+
+  messages:
+    Add: Sí, añade esta %{subject}
+    This: Es esta la %{subject} que quieres añadir?
+    Failed: Oops, fallo al añadir %{subject}. Prueba otra vez.
+    Success: "La %{subject} se ha añadido correctamente 🙂"
+    Exist: La %{subject} ya existe 😉
+  
+  searchresults:
+    zero: No se han encontrado resultados
+    one: Un resultado de búsqueda
+    other: "%{count} resultados de búsqueda"
+
+  Transmission:
+    NotEnabled: "La función de Transmission no está activada."
+    Speed: "Qué velocidad quieres que use Transmission?"
+    TSL: Temporary Speed Limits
+    Normal: Velocidad normal
+    ChangedToTSL: "Temporary Speed Limits está habilitado."
+    ChangedToNormal: "Temporary Speed Limits está deshabilitado."
+
+  Sabnzbd:
+    NotEnabled: La función Sabnzbd no está activada.
+    Speed: Qué velocidad quieres que use Sabnzbd?
+    Limit25: 25%
+    Limit50: 50%
+    Limit100: Sin límite
+    ChangedTo50: Límite aplicado en 50%
+    ChangedTo25: Límite aplicado en 25%
+    ChangedTo100: Ningún límite aplicado
+    Error: Algo ha fallado cuando se ha intentado cambiar la velocidad
