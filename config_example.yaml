@@ -13,7 +13,7 @@ sonarr:
   seasonFolder: true
   qualityProfileId: 1
   excludedRootFolders: # If set must start and finish with / Eg: /mnt/Media/
-    - 
+    -
 
 #Radarr Configuration
 radarr:
@@ -61,7 +61,7 @@ sabnzbd:
 
 # Optional settings:
 ##Language
-language: en
+language: en-us # en-us, es-es, it-it, nl-be, pt-pt
 
 ##Entrypoints
 entrypointAuth: auth #auth or a custom entrypoint

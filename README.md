@@ -10,7 +10,7 @@ This is a Telegram Bot made to add series to [Sonarr](https://github.com/Sonarr/
 - Wrong login attempts are saved in `addarr.log`
 - Possibility to enable the Transmission-command only for admins
 - Possibility to change the entrypoints of the commands
-- Translated in English, Dutch, Italian (Italy) and Portuguese (Portugal)
+- Translated in English (US), Dutch (Belgium), Spanish (Spain), Italian (Italy) and Portuguese (Portugal)
 - Command to give an overview of all the other commands
 
 ## COMMANDS
@@ -18,8 +18,8 @@ These are the default commands:
 - `/help`: gives an overview of all the commands with their action
 - `/auth`: authenticate the chat to use this bot
 - `/start`: start adding a series or movie to Sonarr/Radarr
-- `/movie` (en) - `/film` (nl,it-it) - `/file` (pt-pt) : start adding a movie to Radarr
-- `/series` (en) - `/serie` (nl,it-it,pt-pt) : start adding a series to Sonarr
+- `/movie` (en-us) - `/film` (nl-be, it-it) - `/file` (pt-pt) - `/Película` (es-es): start adding a movie to Radarr
+- `/series` (en-us) - `/serie` (nl-be, it-it, pt-pt, es-es) : start adding a series to Sonarr
 - `/allSeries`: receive a list of all the series on Sonarr
 - `/allMovies`: receive a list of all the movies on Radarr
 - `/transmission`: change the down-/upload speed of Transmission from Temporary Speed Limit to normal or the other way around
