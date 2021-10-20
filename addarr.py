@@ -15,7 +15,7 @@ import sonarr as sonarr
 from config import config
 from translations import i18n
 
-__version__ = "0.3"
+__version__ = "0.5"
 
 # Set up logging
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
