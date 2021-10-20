@@ -13,7 +13,6 @@ sonarr:
   seasonFolder: true
   qualityProfileId: 1
   excludedRootFolders: # If set must start and finish with / Eg: /mnt/Media/
-    -
 
 #Radarr Configuration
 radarr:
@@ -30,7 +29,6 @@ radarr:
   qualityProfileId: 1
   minimumAvailability: announced
   excludedRootFolders: # If set, must start and finish with / Eg: /mnt/Media/
-    -
 
 #Telegram Configuration
 telegram:
