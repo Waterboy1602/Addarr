@@ -165,3 +165,11 @@ def format_long_list_message(list):
             i -= 1
         stringParts.append(string)
         return stringParts
+
+def getAuthChats():
+    chats = []
+    with open(CHATID_PATH, "r") as file:
+        for line in file:
+            chats.append(line.strip("\n"))
+        file.close()
+    return chats

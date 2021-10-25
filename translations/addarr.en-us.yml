@@ -24,6 +24,10 @@ en-us:
     To immediately add a movie or series you can use /%{movie} or /%{serie}.\n
     To check which series are in Sonarr you can use /%{allseries}.\n
     To toggle the download speed of Transmission use /%{transmission}."
+  Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}. \n
+    Add these before restarting the bot."
+  Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}. \n
+    Change these before restarting the bot."
 
   messages:
     Add: Yes, add this %{subject}

@@ -4,15 +4,16 @@ import logging
 import re
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+import telegram
 from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ConversationHandler, Filters, MessageHandler,
                           Updater)
 
-from commons import checkId, authentication, format_bytes, format_long_list_message
+from commons import checkAdmin, checkId, authentication, format_bytes, format_long_list_message, getAuthChats
 import logger
 import radarr as radarr
 import sonarr as sonarr
-from config import config
+from config import checkConfigValues, config, checkConfig
 from translations import i18n
 
 __version__ = "0.5"
@@ -26,6 +27,23 @@ SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL = ra
 
 updater = Updater(config["telegram"]["token"], use_context=True)
 dispatcher = updater.dispatcher
+
+def startCheck():
+    bot = telegram.Bot(token=config["telegram"]["token"])
+    missingConfig = checkConfig()
+    wrongValues = checkConfigValues()
+    check=True
+    if missingConfig: #empty list is False
+        check = False
+        logger.error(i18n.t("addarr.Missing config", missingKeys=f"{missingConfig}"[1:-1]))
+        for chat in getAuthChats():
+            bot.send_message(chat_id=chat, text=i18n.t("addarr.Missing config", missingKeys=f"{missingConfig}"[1:-1]))
+    if wrongValues:
+        check=False
+        logger.error(i18n.t("addarr.Wrong values", wrongValues=f"{wrongValues}"[1:-1]))
+        for chat in getAuthChats():
+            bot.send_message(chat_id=chat, text=i18n.t("addarr.Wrong values", wrongValues=f"{wrongValues}"[1:-1]))
+    return check
 
 def main():
     auth_handler_command = CommandHandler(config["entrypointAuth"], authentication)
@@ -165,7 +183,6 @@ def main():
     logger.info(i18n.t("addarr.Start chatting"))
     updater.start_polling()
     updater.idle()
-
 
 def stop(update, context):
     clearUserData(context)
@@ -567,4 +584,5 @@ def clearUserData(context):
 
 
 if __name__ == "__main__":
-    main()
+    if startCheck():
+        main()
