@@ -19,7 +19,7 @@ DEFAULT_SETTINGS = {
     "entrypointSabnzbd": "sabnzbd", #sabnzbd or a custom entrypoint
     "logToConsole": True,
     "debugLogging": False,
-    "language": "en",
+    "language": "en-us",
     "transmission": { "enable": False },
     "enableAdmin": False
 }
