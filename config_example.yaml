@@ -13,6 +13,7 @@ sonarr:
   seasonFolder: true
   qualityProfileId: 1
   excludedRootFolders: # If set must start and finish with / Eg: /mnt/Media/
+    - # First excluded folder, add others with a "-" on a new line (same indentation)
 
 #Radarr Configuration
 radarr:
@@ -29,6 +30,7 @@ radarr:
   qualityProfileId: 1
   minimumAvailability: announced
   excludedRootFolders: # If set, must start and finish with / Eg: /mnt/Media/
+    - # First excluded folder, add others with a "-" on a new line (same indentation)
 
 #Telegram Configuration
 telegram:
