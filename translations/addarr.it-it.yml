@@ -25,7 +25,7 @@ it-it:
     Per vedere quali serie sono presenti in Sonarr usa /%{allSeries}.\n
     Per vedere quali film sono presenti in Radarr usa /%{allMovies}.\n
     Per cambiare la velocità di download di Transmission usa /%{transmission}.\n
-    To change the up-/download speed of Sabnzbd use /%{sabnzbd}.""
+    To change the up-/download speed of Sabnzbd use /%{sabnzbd}."
   Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}. \n
     Add these before restarting the bot."
   Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}. \n

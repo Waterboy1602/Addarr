@@ -25,7 +25,7 @@ nl-be:
     Om te kijken welke series al in Sonarr zitten, gebruik je /%{allSeries}.\n
     Om te kijken welke films al in Radarr zitten, gebruik je /%{allMovies}.\n
     Wil je de snelheidslimiet van Transmission wijzigen, gebruik dan /%{transmission}.\n
-    Wil je de snelheidslimiet van Sabnzbd wijzigen, gebruik dan /%{sabnzbd}.""
+    Wil je de snelheidslimiet van Sabnzbd wijzigen, gebruik dan /%{sabnzbd}."
   Missing config: "Je komt de volgende instelling te kort in je config.yaml-bestand: %{missingKeys}. \n
     Voeg deze eerst toe vooraleer de bot te herstarten."
   Wrong values: "De volgende instelling heeft een verkeerde waarde in je config.yaml-bestand: %{wrongValues}. \n
