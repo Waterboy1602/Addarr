@@ -22,7 +22,8 @@ pt-pt:
   Para autenticar antes da primeira utilização deve escrever /%{authenticate}.\n
   Para adicionar um filme ou série escreva /%{add}.\n
   Para adicionar imediatamente um filme ou série pode escrever /%{movie} ou /%{serie}.\n
-  Para ver que séries existem no Sonarr, escreva /%{allseries}.\n
+  Para ver que séries existem no Sonarr, escreva /%{allSeries}.\n
+  Para ver que filme existem no Radarr, escreva /%{allMovies}.\n
   Para alterar a velocidade de download do Transmission escreva /%{transmission}."
   Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}. \n
     Add these before restarting the bot."

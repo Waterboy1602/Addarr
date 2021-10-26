@@ -22,7 +22,8 @@ it-it:
     Per autenticarti usa /%{authenticate}.\n
     Per aggiungere un film o una serie usa /%{add}.\n
     Per aggiungere velocemente un film o una serie usa /%{movie} o /%{serie}.\n
-    Per vedere quali serie sono presenti in Sonarr usa /%{allseries}.\n
+    Per vedere quali serie sono presenti in Sonarr usa /%{allSeries}.\n
+    Per vedere quali film sono presenti in Radarr usa /%{allMovies}.\n
     Per cambiare la velocità di download di Transmission usa /%{transmission}."
   Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}. \n
     Add these before restarting the bot."

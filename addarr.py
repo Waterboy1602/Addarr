@@ -563,7 +563,7 @@ def help(update, context):
             add=config["entrypointAdd"],
             serie='serie',
             movie='movie',
-            allseries=config["entrypointAllSeries"],
+            allSeries=config["entrypointAllSeries"],
             allMovies=config["entrypointAllMovies"],
             transmission=config["entrypointTransmission"],
         )
