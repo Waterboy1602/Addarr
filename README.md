@@ -23,6 +23,7 @@ These are the default commands:
 - `/allSeries`: receive a list of all the series on Sonarr
 - `/allMovies`: receive a list of all the movies on Radarr
 - `/transmission`: change the down-/upload speed of Transmission from Temporary Speed Limit to normal or the other way around
+- `/sabnzbd`: change the down-/upload speed of Sabnzbd to 25%, 50% or 100% of the defined limit.
 - `/stop`: stops the command you were executing. Can be used at any moment  
 
 Every command does also work if you send a message without `/` and no other words before or after the entrypoint

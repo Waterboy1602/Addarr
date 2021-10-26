@@ -24,7 +24,8 @@ es-es:
     Para añadir directamente una película o serie usa /%{movie} or /%{serie}.\n
     Para comprobar que series hay en Sonarr usa /%{allSeries}.\n
     Para comprobar que películas hay en Radarr usa /%{allMovies}.\n
-    Para cambiar la velocidad de descarga de Transmission usa /%{transmission}."
+    Para cambiar la velocidad de descarga de Transmission usa /%{transmission}.\n
+    To change the up-/download speed of Sabnzbd use /%{sabnzbd}.""
   Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}. \n
     Add these before restarting the bot."
   Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}. \n

@@ -566,6 +566,7 @@ def help(update, context):
             allSeries=config["entrypointAllSeries"],
             allMovies=config["entrypointAllMovies"],
             transmission=config["entrypointTransmission"],
+            sabnzbd=config["entrypointSabnzbd"],
         )
     )
     return ConversationHandler.END
