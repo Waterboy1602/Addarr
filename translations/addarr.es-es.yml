@@ -3,7 +3,9 @@ es-es:
   Start: Iniciar
   Stop: Detener
   Movie: Película
+  MovieWithArticle: Película
   Serie: Serie
+  SeriesWithArticle: serie
   Start chatting: Empieza a chatear con Addarr en Telegram. La primera vez que uses "start" te pedirá introducir tu contraseña configurada.
   End: La adición de películas o series ha finalizado.
   Title: "Introduce el título:"
@@ -33,10 +35,10 @@ es-es:
 
   messages:
     Add: Sí, añade esta %{subject}
-    This: Es esta la %{subject} que quieres añadir?
-    Failed: Oops, fallo al añadir %{subject}. Prueba otra vez.
-    Success: "La %{subject} se ha añadido correctamente 🙂"
-    Exist: La %{subject} ya existe 😉
+    This: Es esta la %{subjectWithArticle} que quieres añadir?
+    Failed: Oops, fallo al añadir %{subjectWithArticle}. Prueba otra vez.
+    Success: "La %{subjectWithArticle} se ha añadido correctamente 🙂"
+    Exist: La %{subjectWithArticle} ya existe 😉
   
   searchresults:
     zero: No se han encontrado resultados

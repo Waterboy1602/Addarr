@@ -73,7 +73,7 @@ def main():
         entry_points=[
             CommandHandler(config["entrypointAdd"], startSerieMovie),
             CommandHandler(i18n.t("addarr.Movie"), startSerieMovie),
-            CommandHandler(i18n.t("addarr.Serie"), startSerieMovie),
+            CommandHandler(i18n.t("addarr.Series"), startSerieMovie),
             MessageHandler(
                 Filters.regex(
                     re.compile(r'^' + config["entrypointAdd"] + '$', re.IGNORECASE)
@@ -85,10 +85,10 @@ def main():
             SERIE_MOVIE_AUTHENTICATED: [MessageHandler(Filters.text, choiceSerieMovie)],
             READ_CHOICE: [
                 MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Serie")})$'),
+                    Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                     searchSerieMovie,
                 ),
-                CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Serie")})$')
+                CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
             ],
             GIVE_OPTION: [
                 CallbackQueryHandler(pathSerieMovie, pattern=f'({i18n.t("addarr.Add")})'),
@@ -207,7 +207,7 @@ def startSerieMovie(update : Update, context):
         return SERIE_MOVIE_AUTHENTICATED
 
     if reply[1:] in [
-        i18n.t("addarr.Serie").lower(),
+        i18n.t("addarr.Series").lower(),
         i18n.t("addarr.Movie").lower(),
     ]:
         logger.debug(
@@ -215,8 +215,8 @@ def startSerieMovie(update : Update, context):
         )
         context.user_data.update(
             {
-                "choice": i18n.t("addarr.Serie")
-                if reply[1:] == i18n.t("addarr.Serie").lower()
+                "choice": i18n.t("addarr.Series")
+                if reply[1:] == i18n.t("addarr.Series").lower()
                 else i18n.t("addarr.Movie")
             }
         )
@@ -246,7 +246,7 @@ def choiceSerieMovie(update, context):
             return SERIE_MOVIE_AUTHENTICATED
 
         if reply.lower() not in [
-            i18n.t("addarr.Serie").lower(),
+            i18n.t("addarr.Series").lower(),
             i18n.t("addarr.Movie").lower(),
         ]:
             logger.debug(
@@ -255,7 +255,7 @@ def choiceSerieMovie(update, context):
             context.user_data["title"] = reply
 
         if context.user_data.get("choice") in [
-            i18n.t("addarr.Serie"),
+            i18n.t("addarr.Series"),
             i18n.t("addarr.Movie"),
         ]:
             logger.debug(
@@ -270,8 +270,8 @@ def choiceSerieMovie(update, context):
                         callback_data=i18n.t("addarr.Movie")
                     ),
                     InlineKeyboardButton(
-                        '\U0001F4FA '+i18n.t("addarr.Serie"),
-                        callback_data=i18n.t("addarr.Serie")
+                        '\U0001F4FA '+i18n.t("addarr.Series"),
+                        callback_data=i18n.t("addarr.Series")
                     ),
                 ],
                 [ InlineKeyboardButton(
@@ -343,7 +343,7 @@ def searchSerieMovie(update, context):
     markup = InlineKeyboardMarkup(keyboard)
     context.bot.send_message(
         chat_id=update.effective_message.chat_id,
-        text=i18n.t("addarr.messages.This", subject=choice.lower()),
+        text=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr." + choice + "WithArticle").lower()),
     )
     context.bot.sendPhoto(
         chat_id=update.effective_message.chat_id,
@@ -390,7 +390,7 @@ def nextOption(update, context):
 
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.messages.This", subject=choice.lower()),
+            text=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr." + choice + "WithArticle").lower()),
         )
         context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,
@@ -474,21 +474,21 @@ def addSerieMovie(update, context):
         if service.addToLibrary(idnumber, path):
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=i18n.t("addarr.messages.Success", subject=choice.lower()),
+                text=i18n.t("addarr.messages.Success", subjectWithArticle=i18n.t("addarr." + choice + "WithArticle")),
             )
             clearUserData(context)
             return ConversationHandler.END
         else:
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=i18n.t("addarr.messages.Failed", subject=choice.lower()),
+                text=i18n.t("addarr.messages.Failed", subjectWithArticle=i18n.t("addarr." + choice + "WithArticle").lower()),
             )
             clearUserData(context)
             return ConversationHandler.END
     else:
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.messages.Exist", subject=choice.lower()),
+            text=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr." + choice + "WithArticle")),
         )
         clearUserData(context)
         return ConversationHandler.END
@@ -546,7 +546,7 @@ def allMovies(update, context):
         return ConversationHandler.END
 
 def getService(context):
-    if context.user_data.get("choice") == i18n.t("addarr.Serie"):
+    if context.user_data.get("choice") == i18n.t("addarr.Series"):
         return sonarr
     elif context.user_data.get("choice") == i18n.t("addarr.Movie"):
         return radarr

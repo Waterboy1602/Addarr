@@ -3,7 +3,9 @@ nl-be:
   Start: Start
   Stop: Stop
   Movie: Film
-  Serie: Serie
+  MovieWithArticle: De film
+  Series: Serie
+  SeriesWithArticle: De serie
   Start chatting: Je kan nu chatten met Addarr op Telegram. De eerste keer dat je "start" gebruikt, zul je je wachtwoord moeten ingeven.
   End: Het toevoegen van films of series is beëindigd.
   Title: "Geef de titel:"
@@ -33,10 +35,10 @@ nl-be:
 
   messages:
     Add: Ja, voeg deze %{subject} toe
-    This: Is dit de %{subject} die je wilt toevoegen?
-    Failed: Oeps, mislukt om de %{subject} toe te voegen. Probeer misschien nog eens opnieuw.
-    Success: "De %{subject} is met succes toegevoegd 🙂"
-    Exist: Deze %{subject} was al toegevoegd 😉
+    This: Is dit %{subjectWithArticle} die je wilt toevoegen?
+    Failed: Oeps, mislukt om %{subjectWithArticle} toe te voegen. Probeer misschien nog eens opnieuw.
+    Success: "%{subjectWithArticle} is met succes toegevoegd 🙂"
+    Exist: "%{subjectWithArticle} was al toegevoegd 😉"
   
   searchresults:
     zero: "Er zijn geen resultaten gevonden."
