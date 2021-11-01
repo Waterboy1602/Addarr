@@ -2,7 +2,7 @@
 docker-compose.yml
 Dockerfile
 *.log
-config*.yaml
+config.yaml
 admin.txt
 chatid.txt
 **/.flake8
