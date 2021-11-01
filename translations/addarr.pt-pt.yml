@@ -21,13 +21,13 @@ pt-pt:
   NotAdmin: "Precisa de ser um admin para executar este comando"
   Chatid already allowed: "Este chat já foi autorizado."
   Help: "Para ver este texto novamente escreva /%{help}.\n
-    \nPara autenticar antes da primeira utilização deve escrever /%{authenticate}.
-    \nPara adicionar um filme ou série escreva /%{add}.
-    \nPara adicionar imediatamente um filme ou série pode escrever /%{movie} ou /%{serie}.
-    \nPara ver que séries existem no Sonarr, escreva /%{allSeries}.
-    \nPara ver que filme existem no Radarr, escreva /%{allMovies}.
-    \nPara alterar a velocidade de download do Transmission escreva /%{transmission}.
-    \nTo change the up-/download speed of Sabnzbd use /%{sabnzbd}."
+    \n• Para autenticar antes da primeira utilização deve escrever /%{authenticate}.
+    \n• Para adicionar um filme ou série escreva /%{add}.
+    \n• Para adicionar imediatamente um filme ou série pode escrever /%{movie} ou /%{serie}.
+    \n• Para ver que séries existem no Sonarr, escreva /%{allSeries}.
+    \n• Para ver que filme existem no Radarr, escreva /%{allMovies}.
+    \n• Para alterar a velocidade de download do Transmission escreva /%{transmission}.
+    \n• To change the up- and download speed of Sabnzbd use /%{sabnzbd}."
   Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.
     \nAdd these before restarting the bot."
   Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.

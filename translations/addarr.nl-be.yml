@@ -21,13 +21,13 @@ nl-be:
   NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
   Chatid already allowed: "Deze chat heeft al toestemming."
   Help: "Wil je deze tekst nog eens zien? Gebruik dan /%{help}.
-    \nOm de eerste keer te authenticeren gebruik je /%{authenticate}.
-    \nOm een film of serie toe te voegen kun je /%{add} gebruiken.
-    \nWil je meteen een keuze tussen film of serie maken, gebruik dan /${movie} of /%{serie}.
-    \nOm te kijken welke series al in Sonarr zitten, gebruik je /%{allSeries}.
-    \nOm te kijken welke films al in Radarr zitten, gebruik je /%{allMovies}.
-    \nWil je de snelheidslimiet van Transmission wijzigen, gebruik dan /%{transmission}.
-    \nWil je de snelheidslimiet van Sabnzbd wijzigen, gebruik dan /%{sabnzbd}."
+    \n• Om de eerste keer te authenticeren gebruik je /%{authenticate}.
+    \n• Om een film of serie toe te voegen kun je /%{add} gebruiken.
+    \n• Wil je meteen een keuze tussen film of serie maken, gebruik dan /${movie} of /%{serie}.
+    \n• Om te kijken welke series al in Sonarr zitten, gebruik je /%{allSeries}.
+    \n• Om te kijken welke films al in Radarr zitten, gebruik je /%{allMovies}.
+    \n• Wil je de snelheidslimiet van Transmission wijzigen, gebruik dan /%{transmission}.
+    \n• Wil je de snelheidslimiet van Sabnzbd wijzigen, gebruik dan /%{sabnzbd}."
   Missing config: "Je komt de volgende instelling te kort in je config.yaml-bestand: %{missingKeys}.
     \nVoeg deze eerst toe vooraleer de bot te herstarten."
   Wrong values: "De volgende instelling heeft een verkeerde waarde in je config.yaml-bestand: %{wrongValues}.
