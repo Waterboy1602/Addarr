@@ -20,18 +20,18 @@ es-es:
   Chatid added: "Este chat ha sido autorizado correctamente. Ya puedes utilizar el bot."
   NotAdmin: "Necesitas ser admin para ejecutar este comando."
   Chatid already allowed: "Este chat ya está autorizado."
-  Help: "Quieres volver a ver este texto? Usa /%{help}.\n
-    Para autenticarte antes del primer uso debes usar /%{authenticate}.\n
-    Para añadir una serie o película usa /%{add}.\n
-    Para añadir directamente una película o serie usa /%{movie} or /%{serie}.\n
-    Para comprobar que series hay en Sonarr usa /%{allSeries}.\n
-    Para comprobar que películas hay en Radarr usa /%{allMovies}.\n
-    Para cambiar la velocidad de descarga de Transmission usa /%{transmission}.\n
-    To change the up-/download speed of Sabnzbd use /%{sabnzbd}."
-  Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}. \n
-    Add these before restarting the bot."
-  Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}. \n
-    Change these before restarting the bot."
+  Help: "Quieres volver a ver este texto? Usa /%{help}.
+    \nPara autenticarte antes del primer uso debes usar /%{authenticate}.
+    \nPara añadir una serie o película usa /%{add}.
+    \nPara añadir directamente una película o serie usa /%{movie} or /%{serie}.
+    \nPara comprobar que series hay en Sonarr usa /%{allSeries}.
+    \nPara comprobar que películas hay en Radarr usa /%{allMovies}.
+    \nPara cambiar la velocidad de descarga de Transmission usa /%{transmission}.
+    \nTo change the up-/download speed of Sabnzbd use /%{sabnzbd}."
+  Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.
+    \nAdd these before restarting the bot."
+  Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.
+    \nChange these before restarting the bot."
 
   messages:
     Add: Sí, añade esta %{subject}

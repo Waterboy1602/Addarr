@@ -20,18 +20,18 @@ en-us:
   Chatid added: "This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
   NotAdmin: "You need to be an admin to execute this command."
   Chatid already allowed: "This chat is already authorized."
-  Help: "Want to see this text again? Use /%{help}.\n
-    To authenticate before first use you should use /%{authenticate}.\n
-    To add a movie or series use /%{add}.\n
-    To immediately add a movie or series you can use /%{movie} or /%{serie}.\n
-    To check which series are in Sonarr you can use /%{allSeries}.\n
-    To check which movies are in Radarr you can use /%{allMovies}.\n
-    To toggle the up-/download speed of Transmission use /%{transmission}.\n
-    To change the up-/download speed of Sabnzbd use /%{sabnzbd}."
-  Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}. \n
-    Add these before restarting the bot."
-  Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}. \n
-    Change these before restarting the bot."
+  Help: "Want to see this text again? Use /%{help}.
+    \nTo authenticate before first use you should use /%{authenticate}.
+    \nTo add a movie or series use /%{add}.
+    \nTo immediately add a movie or series you can use /%{movie} or /%{serie}.
+    \nTo check which series are in Sonarr you can use /%{allSeries}.
+    \nTo check which movies are in Radarr you can use /%{allMovies}.
+    \nTo toggle the up-/download speed of Transmission use /%{transmission}.
+    \nTo change the up-/download speed of Sabnzbd use /%{sabnzbd}."
+  Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.
+    \nAdd these before restarting the bot."
+  Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.
+    \nChange these before restarting the bot."
 
   messages:
     Add: Yes, add this %{subject}
