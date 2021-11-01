@@ -587,3 +587,6 @@ def clearUserData(context):
 if __name__ == "__main__":
     if startCheck():
         main()
+    else:
+        import sys
+        sys.exit(0)
