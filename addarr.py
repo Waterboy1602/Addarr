@@ -343,7 +343,7 @@ def searchSerieMovie(update, context):
     markup = InlineKeyboardMarkup(keyboard)
     context.bot.send_message(
         chat_id=update.effective_message.chat_id,
-        text=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr." + choice + "WithArticle").lower()),
+        text=i18n.t("addarr.messages.This", subjectWithArticle=(i18n.t("addarr." + choice + "WithArticle")).lower()),
     )
     context.bot.sendPhoto(
         chat_id=update.effective_message.chat_id,
@@ -390,7 +390,7 @@ def nextOption(update, context):
 
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr." + choice + "WithArticle").lower()),
+            text=i18n.t("addarr.messages.This", subjectWithArticle=(i18n.t("addarr." + choice + "WithArticle")).lower()),
         )
         context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,
@@ -481,7 +481,7 @@ def addSerieMovie(update, context):
         else:
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=i18n.t("addarr.messages.Failed", subjectWithArticle=i18n.t("addarr." + choice + "WithArticle").lower()),
+                text=i18n.t("addarr.messages.Failed", subjectWithArticle=(i18n.t("addarr." + choice + "WithArticle")).lower()),
             )
             clearUserData(context)
             return ConversationHandler.END
