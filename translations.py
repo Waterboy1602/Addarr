@@ -5,3 +5,5 @@ from definitions import LANG_PATH
 
 i18n.load_path.append(LANG_PATH)
 i18n.set('locale', config["language"])
+i18n.set('fallback', 'en-us')
+
