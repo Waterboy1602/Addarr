@@ -1,0 +1,65 @@
+#Polish - Poland
+pl-pl: 
+  Start: Rozpocznij
+  Stop: Przerwij
+  Movie: Film
+  MovieWithArticle: Ten film
+  Series: Serial
+  SeriesWithArticle: Ten serial
+  Start chatting: Rozpocznij rozmowę z Addarrem na Telegramie. Przy pierwszym użyciu "start" zostaniesz poproszony o podanie hasła.
+  End: Przerwano wyszukiwanie.
+  Title: "Wpisz tytuł:"
+  What is this?: To jest film czy serial?
+  New: Szukaj jeszcze raz
+  Next result: Nie, próbuj dalej
+  Last result: Brak więcej wyników wyszukania
+  Add: Tak, to jest to!
+  Select a path: Wybierz ścieżkę dla filmu lub serialu
+  Authorize: Musisz zautoryzować ten czat. Jakie jest hasło?
+  Wrong password: Hasło nieprawidłowe. Spróbuj ponownie...
+  Chatid added: "Dodano ten czat do listy zezwolonych czatów. Teraz możesz używać tego bota. \nJeśli wpisałeś tę komendę, musisz wykonać ją ponownie."
+  NotAdmin: "Musisz być adminem, żeby wykonać tę komendę."
+  Chatid already allowed: "Ten czat już jest zautoryzowany."
+  Help: "Potrzebujesz pomocy? Użyj /%{help}!
+    \n/%{authenticate} —  autoryzacja Twojego czatu
+    \n/%{add} — dodawanie nowego filmu/serialu
+    \n/%{movie} lub /%{serie} — natychmiastowy wybór typu treści
+    \n/%{allSeries} — lista wszystkich istniejących seriali
+    \n/%{allMovies} — lista wszystkich istniejących filmów.
+    \n/%{transmission} - kontrola szybkości pobierania w Transmission.
+    \n/%{sabnzbd} - kontrola szybkości pobierania w Sabnzbd."
+  Missing config: "Brakuje kluczy configa w Twoim pliku config.yaml: %{missingKeys}.
+    \nDodaj je przed uruchomieniem bota."
+  Wrong values: "Następujace klucze configa w Twoim pliku config.yaml mają nieprawidłową wartość: %{wrongValues}.
+    \nPopraw je przed uruchomieniem bota."
+
+  messages:
+    Add: Tak, dodaj %{subject}
+    This: O %{subjectWithArticle} Ci chodzi?
+    Failed: Ups, nie udało się dodać %{subjectWithArticle}. Spróbuj innym razem.
+    Success: "Właśnie dodałem %{subjectWithArticle} 🙂"
+    Exist: "%{subjectWithArticle} już istnieje 😉"
+  
+  searchresults:
+    zero: Brak rezultatów
+    one: Jeden rezultat
+    other: "%{count} rezultatów"
+
+  Transmission:
+    NotEnabled: "Funkcja Transmission jest nieaktywna."
+    Speed: "Jaką prędkość pobierania Transmission chcesz?"
+    TSL: Tymczasowe limity pobierania
+    Normal: Normalna szybkość
+    ChangedToTSL: "Tymczasowe limity pobierania aktywne."
+    ChangedToNormal: "Permanente limity pobierania nieaktywne."
+
+  Sabnzbd:
+    NotEnabled: Funkcja Sabnzbd jest nieaktywna.
+    Speed: Jaką prędkość pobierania Transmission chcesz?
+    Limit25: 25%
+    Limit50: 50%
+    Limit100: No limit
+    ChangedTo50: Limit ustawiony do 50%
+    ChangedTo25: Limit ustawiony do 25%
+    ChangedTo100: Brak limitu prędkości pobierania
+    Error: Coś poszło nie tak podczas ustawiania limitu
