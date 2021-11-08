@@ -341,9 +341,13 @@ def searchSerieMovie(update, context):
             ],
         ]
     markup = InlineKeyboardMarkup(keyboard)
+    if choice == i18n.t("addarr.Movie"):
+        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
+    else:
+        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
     context.bot.send_message(
         chat_id=update.effective_message.chat_id,
-        text=i18n.t("addarr.messages.This", subjectWithArticle=(i18n.t("addarr." + choice + "WithArticle")).lower()),
+        text=message,
     )
     context.bot.sendPhoto(
         chat_id=update.effective_message.chat_id,
@@ -388,9 +392,13 @@ def nextOption(update, context):
             ]
         markup = InlineKeyboardMarkup(keyboard)
 
+        if choice == i18n.t("addarr.Movie"):
+            message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
+        else:
+            message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.messages.This", subjectWithArticle=(i18n.t("addarr." + choice + "WithArticle")).lower()),
+            text=message,
         )
         context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,
@@ -472,23 +480,35 @@ def addSerieMovie(update, context):
 
     if not service.inLibrary(idnumber):
         if service.addToLibrary(idnumber, path):
+            if choice == i18n.t("addarr.Movie"):
+                message=i18n.t("addarr.messages.Success", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
+            else:
+                message=i18n.t("addarr.messages.Success", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=i18n.t("addarr.messages.Success", subjectWithArticle=i18n.t("addarr." + choice + "WithArticle")),
+                text=message,
             )
             clearUserData(context)
             return ConversationHandler.END
         else:
+            if choice == i18n.t("addarr.Movie"):
+                message=i18n.t("addarr.messages.Failed", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
+            else:
+                message=i18n.t("addarr.messages.Failed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
-                text=i18n.t("addarr.messages.Failed", subjectWithArticle=(i18n.t("addarr." + choice + "WithArticle")).lower()),
+                text=message,
             )
             clearUserData(context)
             return ConversationHandler.END
     else:
+        if choice == i18n.t("addarr.Movie"):
+            message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
+        else:
+            message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr." + choice + "WithArticle")),
+            text=message,
         )
         clearUserData(context)
         return ConversationHandler.END
