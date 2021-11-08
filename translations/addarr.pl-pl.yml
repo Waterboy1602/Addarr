@@ -1,5 +1,5 @@
 #Polish - Poland
-pl-pl: 
+pl-pl:
   Start: Rozpocznij
   Stop: Przerwij
   Movie: Film
@@ -11,14 +11,14 @@ pl-pl:
   Title: "Wpisz tytuł:"
   What is this?: To jest film czy serial?
   New: Szukaj jeszcze raz
-  Next result: Nie, próbuj dalej
+  Next result: Próbuj dalej
   Last result: Brak więcej wyników wyszukania
-  Add: Tak, to jest to!
+  Add: Tak, chcę to!
   Select a path: Wybierz ścieżkę dla filmu lub serialu
   Authorize: Musisz zautoryzować ten czat. Jakie jest hasło?
   Wrong password: Hasło nieprawidłowe. Spróbuj ponownie...
-  Chatid added: "Dodano ten czat do listy zezwolonych czatów. Teraz możesz używać tego bota. \nJeśli wpisałeś tę komendę, musisz wykonać ją ponownie."
-  NotAdmin: "Musisz być adminem, żeby wykonać tę komendę."
+  Chatid added: "Ten czat został dodany do whitelisty. Teraz możesz używać tego bota."
+  NotAdmin: "Nie jesteś uprawniony do wykonania tej komendy!"
   Chatid already allowed: "Ten czat już jest zautoryzowany."
   Help: "Potrzebujesz pomocy? Użyj /%{help}!
     \n/%{authenticate} —  autoryzacja Twojego czatu
@@ -30,7 +30,7 @@ pl-pl:
     \n/%{sabnzbd} - kontrola szybkości pobierania w Sabnzbd."
   Missing config: "Brakuje kluczy configa w Twoim pliku config.yaml: %{missingKeys}.
     \nDodaj je przed uruchomieniem bota."
-  Wrong values: "Następujace klucze configa w Twoim pliku config.yaml mają nieprawidłową wartość: %{wrongValues}.
+  Wrong values: "Te klucze configa w Twoim pliku config.yaml mają nieprawidłową wartość: %{wrongValues}.
     \nPopraw je przed uruchomieniem bota."
 
   messages:
@@ -39,7 +39,7 @@ pl-pl:
     Failed: Ups, nie udało się dodać %{subjectWithArticle}. Spróbuj innym razem.
     Success: "Właśnie dodałem %{subjectWithArticle} 🙂"
     Exist: "%{subjectWithArticle} już istnieje 😉"
-  
+    
   searchresults:
     zero: Brak rezultatów
     one: Jeden rezultat
