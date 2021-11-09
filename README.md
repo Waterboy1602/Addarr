@@ -10,7 +10,7 @@ This is a Telegram Bot made to add series to [Sonarr](https://github.com/Sonarr/
 - Wrong login attempts are saved in `addarr.log`
 - Possibility to enable the Transmission-command only for admins
 - Possibility to change the entrypoints of the commands
-- Translated in English (US), Dutch (Belgium), Spanish (Spain), Italian (Italy) and Portuguese (Portugal)
+- Translated in English (US), Dutch (Belgium), Spanish (Spain), Italian (Italy), Portuguese (Portugal) and Polish (Poland)
 - Command to give an overview of all the other commands
 
 ## COMMANDS
