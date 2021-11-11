@@ -34,12 +34,12 @@ def giveTitles(parsed_json):
     for show in parsed_json:
         if all(
             x in show
-            for x in ["title", "seasonCount", "remotePoster", "year", "tvdbId"]
+            for x in ["title", "statistics", "remotePoster", "year", "tvdbId"]
         ):
             data.append(
                 {
                     "title": show["title"],
-                    "seasonCount": show["seasonCount"],
+                    "seasonCount": show["statistics"]["seasonCount"],
                     "poster": show["remotePoster"],
                     "year": show["year"],
                     "id": show["tvdbId"],
