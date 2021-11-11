@@ -370,8 +370,8 @@ def nextOption(update, context):
         keyboard = [
                 [
                     InlineKeyboardButton(
-                        '\U00002795 '+i18n.t("addarr.messages.Add", subject=choice.lower()),
-                        callback_data=i18n.t("addarr.messages.Add", subject=choice.lower())
+                        '\U00002795 '+i18n.t("addarr.Add"),
+                        callback_data=i18n.t("addarr.Add")
                     ),
                 ],[
                     InlineKeyboardButton(
