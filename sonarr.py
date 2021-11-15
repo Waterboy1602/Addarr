@@ -71,6 +71,7 @@ def addToLibrary(tvdbId, path):
 def buildData(json, path):
     built_data = {
         "qualityProfileId": config["qualityProfileId"],
+        "languageProfileId": config["languageProfileId"],
         "addOptions": {
             "ignoreEpisodesWithFiles": "true",
             "ignoreEpisodesWithoutFiles": "false",

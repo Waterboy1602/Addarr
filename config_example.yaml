@@ -12,6 +12,7 @@ sonarr:
   search: true
   seasonFolder: true
   qualityProfileId: 1
+  languageProfileId: 1
   excludedRootFolders: # If set must start and finish with / Eg: /mnt/Media/
     - # First excluded folder, add others with a "-" on a new line (same indentation)
 
