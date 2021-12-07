@@ -1,0 +1,65 @@
+#German - Germany
+de-de: 
+  Start: Start
+  Stop: Stop
+  Movie: Film
+  MovieWithArticle: Der Film
+  Series: Serie
+  SeriesWithArticle: Die Serie
+  Start chatting: Starte mit Addar auf Telegram zu chatten. Das erste Mal wenn du "start" verwendest wirst du gebeten dein Password einzugeben.
+  End: Das hinzufügen der Serie oder des Films wurde beendet.
+  Title: "Gebe den Titel ein:"
+  What is this?: Ist es eine Serie oder ein Film?
+  New: Führe einen neuen such Befehl aus
+  Next result: Nein, zeige mir das nächste Ergebnis
+  Last result: Keine weiteren Ergebnisse verfügbar
+  Add: Ja, füge dies hinzu
+  Select a path: Bitte wähle ein Pfad für die Serie oder den Film
+  Authorize: Dieser Chat muss noch autorisiert werden. Was ist dein Passwort?
+  Wrong password: Das Password ist nicht korrekt. Probiere es erneut...
+  Chatid added: "Dieser Chat würde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \befehle müssen erneut ausgeführt werden."
+  NotAdmin: "Du müsst ein Admin sein um diesen Befehl zu benutzen."
+  Chatid already allowed: "Dieser Chat ist bereits autorisiert."
+  Help: "Um diesen Text erneut zu sehen benutze /%{help}.
+    \n• Zur Authentifizierung benutze /%{authenticate}.
+    \n• Um ein Film oder eine Serie hinzuzufügen benutze /%{add}.
+    \n• Um direkt ein Film oder eine Serie hinzuzufügen benutze /%{movie} oder /%{serie}.
+    \n• Um alle Serien in Sonarr anzuzeigen benutze /%{allSeries}.
+    \n• Um alle Filme in Radarr anzuzeigen benutze /%{allMovies}.
+    \n• Um die Up- und Download Geschwindigkeit von Transmission umzuschalten benutze /%{transmission}.
+    \n• Um die up- und Download Geschwindigkeit von Sabnzbd umzuschalten benutze /%{sabnzbd}."
+  Missing config: "Die folgenden Configkeys fehlen in der config.yaml-datei: %{missingKeys}.
+    \nBitte füge sie hinzu und starte den Bot neu."
+  Wrong values: "Die folgenden Configkeys sind falsch in der config.yaml-datei: %{wrongValues}.
+    \nBitte füge sie hinzu und starte den Bot neu."
+
+  messages:
+    Add: Ja füge %{subject} hinzu
+    This: Willst du %{subjectWithArticle} hinzufügen?
+    Failed: Oops, das hinzufügen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
+    Success: "%{subjectWithArticle} würde hinzugefügt 🙂"
+    Exist: "%{subjectWithArticle} gibt es bereits 😉"
+  
+  searchresults:
+    zero: Es würden keine Ergebnisse gefunden
+    one: Ein Ergebnis gefunden
+    other: "%{count} Ergebnisse gefunden"
+
+  Transmission:
+    NotEnabled: "Die Transmission Funktion ist nicht aktiviert."
+    Speed: "Welche Geschwindigkeit willst du verwenden?"
+    TSL: Temporäre Geschwindigkeitsbegrenzung
+    Normal: Normale Geschwindigkeit
+    ChangedToTSL: "Temporäre Geschwindigkeitsbegrenzung is aktiv."
+    ChangedToNormal: "Geschwindigkeitsbegrenzung ist deaktiviert."
+
+  Sabnzbd:
+    NotEnabled: "Die Sabnzbd Funktion ist nicht aktiviert."
+    Speed: "Welche Geschwindigkeit willst du verwenden?"
+    Limit25: 25%
+    Limit50: 50%
+    Limit100: Kein Limit
+    ChangedTo50: Auf 50% limitiert
+    ChangedTo25: Auf 25% limitiert
+    ChangedTo100: Kein Geschwindigkeit Limit
+    Error: Etwas ist schief gelaufen bei der Änderung des Geschwindigkeit Limits
