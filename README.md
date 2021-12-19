@@ -1,7 +1,7 @@
 # ADDARR
 [![Docker Pulls](https://img.shields.io/docker/pulls/waterboy1602/addarr)](https://hub.docker.com/r/waterboy1602/addarr)
 
-This is a Telegram Bot made to add series to [Sonarr](https://github.com/Sonarr/Sonarr) or movies to [Radarr](https://github.com/Radarr/Radarr) with a couple of commands. You can also communicate with your [Transmission](https://transmissionbt.com/) service to change its download speed. The bot has also recently changed from a ReplyKeyboard to an InlineKeboard, as you can see in the [screenshots](#screenshots).
+This is a Telegram Bot made to add series to [Sonarr](https://github.com/Sonarr/Sonarr) or movies to [Radarr](https://github.com/Radarr/Radarr) with a couple of commands. You can also communicate with your [Transmission](https://transmissionbt.com/) service to change its download speed. The bot has also recently changed from a ReplyKeyboard to an InlineKeyboard, as you can see in the [screenshots](#screenshots).
 ## FEATURES
 - Add series/movies to Sonarr/Radarr
 - Get a list of all the series on Sonarr
