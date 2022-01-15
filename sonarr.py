@@ -61,7 +61,7 @@ def addToLibrary(tvdbId, path):
     req = requests.get(commons.generateApiQuery("sonarr", "series/lookup", parameters))
     parsed_json = json.loads(req.text)
     data = json.dumps(buildData(parsed_json, path))
-    add = requests.post(commons.generateApiQuery("sonarr", "series"), data=data)
+    add = requests.post(commons.generateApiQuery("sonarr", "series"), data=data, headers={'Content-Type': 'application/json'})
     if add.status_code == 201:
         return True
     else:
@@ -79,6 +79,7 @@ def buildData(json, path):
         },
         "rootFolderPath": path,  # config["rootFolder"],
         "seasonFolder": config["seasonFolder"],
+        "monitored": True,
     }
 
     for show in json:
