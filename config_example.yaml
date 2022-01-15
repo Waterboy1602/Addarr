@@ -13,7 +13,7 @@ sonarr:
   seasonFolder: true
   qualityProfileId: 1
   languageProfileId: 1
-  excludedRootFolders: # If set must start and finish with / Eg: /mnt/Media/
+  excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
 
 #Radarr Configuration
@@ -30,7 +30,7 @@ radarr:
   search: true
   qualityProfileId: 1
   minimumAvailability: announced
-  excludedRootFolders: # If set, must start and finish with / Eg: /mnt/Media/
+  excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
 
 #Telegram Configuration
