@@ -15,6 +15,8 @@ sonarr:
   languageProfileId: 1
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
+  excludedQualityProfiles:
+    - 
 
 #Radarr Configuration
 radarr:
@@ -32,6 +34,8 @@ radarr:
   minimumAvailability: announced
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
+  excludedQualityProfiles:
+    - 
 
 #Telegram Configuration
 telegram:
