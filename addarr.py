@@ -540,7 +540,7 @@ def addSerieMovie(update, context):
     path = context.user_data["path"]
     
     service = getService(context)
-    
+    qualityProfile = context.user_data["qualityProfile"]
     if not service.inLibrary(idnumber):
         if service.addToLibrary(idnumber, path, qualityProfile):
             if choice == i18n.t("addarr.Movie"):
