@@ -20,7 +20,9 @@ addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images"]
 
 def search(title):
     parameters = {"term": title}
-    req = requests.get(commons.generateApiQuery("radarr", "movie/lookup", parameters))
+    url = commons.generateApiQuery("radarr", "movie/lookup", parameters)
+    logger.info(url)
+    req = requests.get(url)
     parsed_json = json.loads(req.text)
 
     if req.status_code == 200 and parsed_json:
@@ -54,13 +56,13 @@ def inLibrary(tmdbId):
     return next((True for movie in parsed_json if movie["tmdbId"] == tmdbId), False)
 
 
-def addToLibrary(tmdbId, path):
+def addToLibrary(tmdbId, path, qualityProfileId):
     parameters = {"tmdbId": str(tmdbId)}
     req = requests.get(
         commons.generateApiQuery("radarr", "movie/lookup/tmdb", parameters)
     )
     parsed_json = json.loads(req.text)
-    data = json.dumps(buildData(parsed_json, path))
+    data = json.dumps(buildData(parsed_json, path, qualityProfileId))
     add = requests.post(commons.generateApiQuery("radarr", "movie"), data=data, headers={'Content-Type': 'application/json'})
     if add.status_code == 201:
         return True
@@ -68,9 +70,9 @@ def addToLibrary(tmdbId, path):
         return False
 
 
-def buildData(json, path):
+def buildData(json, path, qualityProfileId):
     built_data = {
-        "qualityProfileId": config["qualityProfileId"],
+        "qualityProfileId": qualityProfileId,
         "minimumAvailability": config["minimumAvailability"],
         "rootFolderPath": path,  # config["rootFolder"],
         "addOptions": {"searchForMovie": config["search"]},
@@ -85,7 +87,7 @@ def getRootFolders():
     parameters = {}
     req = requests.get(commons.generateApiQuery("radarr", "Rootfolder", parameters))
     parsed_json = json.loads(req.text)
-    logger.debug(f"Found Radarr paths: {parsed_json}")
+    #logger.debug(f"Found Radarr paths: {parsed_json}")
     return parsed_json
 
 
@@ -112,3 +114,10 @@ def all_movies():
         return data
     else:
         return False
+
+def getQualityProfiles():
+    parameters = {}
+    req = requests.get(commons.generateApiQuery("radarr", "qualityProfile", parameters))
+    parsed_json = json.loads(req.text)
+    #logger.debug(f"Found Radarr quality profiles: {parsed_json}")
+    return parsed_json

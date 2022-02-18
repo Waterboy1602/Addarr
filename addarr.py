@@ -23,7 +23,7 @@ logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr", logLevel, config.get("logToConsole", False))
 logger.debug(f"Addarr v{__version__} starting up...")
 
-SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL = range(5)
+SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL, GIVE_QUALITY_PROFILES = range(6)
 
 updater = Updater(config["telegram"]["token"], use_context=True)
 dispatcher = updater.dispatcher
@@ -91,6 +91,11 @@ def main():
                 CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
             ],
             GIVE_OPTION: [
+                CallbackQueryHandler(qualityProfileSerieMovie, pattern=f'({i18n.t("addarr.Select")})'),
+                MessageHandler(
+                    Filters.regex(f'^({i18n.t("addarr.Select")})$'),
+                    qualityProfileSerieMovie
+                ),
                 CallbackQueryHandler(pathSerieMovie, pattern=f'({i18n.t("addarr.Add")})'),
                 MessageHandler(
                     Filters.regex(f'^({i18n.t("addarr.Add")})$'),
@@ -108,7 +113,10 @@ def main():
                 CallbackQueryHandler(startSerieMovie, pattern=f'({i18n.t("addarr.New")})'),
             ],
             GIVE_PATHS: [
-                CallbackQueryHandler(addSerieMovie, pattern="^(Path: )(.*)$"),
+                CallbackQueryHandler(qualityProfileSerieMovie, pattern="^(Path: )(.*)$"),
+            ],
+            GIVE_QUALITY_PROFILES: [
+                CallbackQueryHandler(addSerieMovie, pattern="^(Quality profile: )(.*)$"),
             ],
         },
         fallbacks=[
@@ -434,9 +442,12 @@ def pathSerieMovie(update, context):
         # There is only 1 path, so use it!
         logger.debug("Only found 1 path, so proceeding with that one...")
         context.user_data["path"] = paths[0]["path"]
-        return addSerieMovie(update, context)
-    logger.debug("Found multiple paths: "+str(paths))
-
+        return qualityProfileSerieMovie(update, context)
+    #logger.debug("Found multiple paths: "+str(paths))
+    
+    for p in paths:
+        logger.debug(p['path'])
+        
     keyboard = []
     for p in paths:
         free = format_bytes(p['freeSpace'])
@@ -456,11 +467,7 @@ def pathSerieMovie(update, context):
     return GIVE_PATHS
 
 
-def addSerieMovie(update, context):
-    position = context.user_data["position"]
-    choice = context.user_data["choice"]
-    idnumber = context.user_data["output"][position]["id"]
-
+def qualityProfileSerieMovie(update, context):
     if not context.user_data.get("path"):
         # Path selection should be in the update message
         path = None
@@ -475,11 +482,67 @@ def addSerieMovie(update, context):
             )
             return pathSerieMovie(update, context)
 
-    path = context.user_data["path"]
     service = getService(context)
 
+    excluded_quality_profiles = service.config.get("excludedQualityProfiles", [])
+    qualityProfiles = service.getQualityProfiles()
+    qualityProfiles = [q for q in qualityProfiles]# if q["name"] not in excluded_quality_profiles]
+    for q in qualityProfiles:
+        logger.debug(q['name'])
+    
+    context.user_data.update({"qualityProfiles": [q['id'] for q in qualityProfiles]})
+    if len(qualityProfiles) == 1:
+        # There is only 1 path, so use it!
+        logger.debug("Only found 1 profile, so proceeding with that one...")
+        context.user_data["qualityProfile"] = qualityProfiles[0]['id']
+        return addSerieMovie(update, context)
+    #logger.debug("Found multiple qualityProfiles: "+str(qualityProfiles))
+
+    keyboard = []
+    for q in qualityProfiles:
+        keyboard += [[
+            InlineKeyboardButton(
+                f"Quality: {q['name']}",
+                callback_data=f"Quality profile: {q['id']}"
+            ),
+        ]]
+    markup = InlineKeyboardMarkup(keyboard)
+
+    context.bot.send_message(
+        chat_id=update.effective_message.chat_id,
+        text=i18n.t("addarr.Select a quality"),
+        reply_markup=markup,
+    )
+    return GIVE_QUALITY_PROFILES
+
+
+
+
+def addSerieMovie(update, context):
+    position = context.user_data["position"]
+    choice = context.user_data["choice"]
+    idnumber = context.user_data["output"][position]["id"]
+
+    if not context.user_data.get("qualityProfile"):
+        # Quality selection should be in the update message
+        qualityProfile = None
+        if update.callback_query is not None:
+            try_qualityProfile = update.callback_query.data.replace("Quality profile: ", "").strip()
+            if int(try_qualityProfile) in context.user_data.get("qualityProfiles", {}):
+                context.user_data["qualityProfile"] = try_qualityProfile
+                qualityProfile = int(try_qualityProfile)
+        if qualityProfile is None:
+            logger.debug(
+                f"Callback query [{update.callback_query.data.replace('Quality profile: ', '').strip()}] doesn't match any of the quality profiles. Sending quality profiles for selection..."
+            )
+            return qualityProfileSerieMovie(update, context)
+            
+    path = context.user_data["path"]
+    
+    service = getService(context)
+    
     if not service.inLibrary(idnumber):
-        if service.addToLibrary(idnumber, path):
+        if service.addToLibrary(idnumber, path, qualityProfile):
             if choice == i18n.t("addarr.Movie"):
                 message=i18n.t("addarr.messages.Success", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
             else:

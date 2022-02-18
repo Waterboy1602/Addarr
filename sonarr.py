@@ -56,11 +56,11 @@ def inLibrary(tvdbId):
     return next((True for show in parsed_json if show["tvdbId"] == tvdbId), False)
 
 
-def addToLibrary(tvdbId, path):
+def addToLibrary(tvdbId, path, qualityProfileId):
     parameters = {"term": "tvdb:" + str(tvdbId)}
     req = requests.get(commons.generateApiQuery("sonarr", "series/lookup", parameters))
     parsed_json = json.loads(req.text)
-    data = json.dumps(buildData(parsed_json, path))
+    data = json.dumps(buildData(parsed_json, path, qualityProfileId))
     add = requests.post(commons.generateApiQuery("sonarr", "series"), data=data, headers={'Content-Type': 'application/json'})
     if add.status_code == 201:
         return True
@@ -68,9 +68,9 @@ def addToLibrary(tvdbId, path):
         return False
 
 
-def buildData(json, path):
+def buildData(json, path, qualityProfileId):
     built_data = {
-        "qualityProfileId": config["qualityProfileId"],
+        "qualityProfileId": qualityProfileId,
         "languageProfileId": config["languageProfileId"],
         "addOptions": {
             "ignoreEpisodesWithFiles": "true",
@@ -124,3 +124,10 @@ def allSeries():
         return data
     else:
         return False
+
+def getQualityProfiles():
+    parameters = {}
+    req = requests.get(commons.generateApiQuery("sonarr", "qualityProfile", parameters))
+    parsed_json = json.loads(req.text)
+    logger.debug(f"Found Sonarr quality profiles: {parsed_json}")
+    return parsed_json
