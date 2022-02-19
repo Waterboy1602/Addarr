@@ -389,10 +389,7 @@ def nextOption(update, context):
     context.user_data["position"] = position
 
     choice = context.user_data["choice"]    
-    if choice == i18n.t("addarr.Movie"):
-        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
-    else:
-        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+    message=i18n.t("addarr.searchresults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
     context.bot.edit_message_text(
         message_id=context.user_data["title_update_msg"],
@@ -724,7 +721,7 @@ def clearUserData(context):
     )
     for x in [
         x
-        for x in ["choice", "title", "position", "output", "paths", "path", "qualityProfiles", "qualityProfile"]
+        for x in ["choice", "title", "position", "output", "paths", "path", "qualityProfiles", "qualityProfile", "update_msg", "title_update_msg", "photo_update_msg"]
         if x in context.user_data.keys()
     ]:
         context.user_data.pop(x)
