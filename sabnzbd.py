@@ -2,7 +2,7 @@ import requests
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler
 
-from commons import authentication, checkAdmin, checkId, generateApiQuery
+from commons import authentication, checkAllowed, checkId, generateApiQuery
 from config import config
 from translations import i18n
 import logging
@@ -20,6 +20,10 @@ SABNZBD_SPEED_LIMIT_100 = '100'
 
 
 def sabnzbd(update, context):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        return ConversationHandler.END
+        
     if not config["enable"]:
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
@@ -33,7 +37,7 @@ def sabnzbd(update, context):
         )
         return SABNZBD_SPEED_LIMIT_100
 
-    if not checkAdmin(update):
+    if not checkAllowed(update, "admin"):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),

@@ -9,7 +9,7 @@ from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ConversationHandler, Filters, MessageHandler,
                           Updater)
 
-from commons import checkAdmin, checkId, authentication, format_bytes, format_long_list_message, getAuthChats
+from commons import checkAllowed, checkId, authentication, format_bytes, format_long_list_message, getAuthChats
 import logger
 import radarr as radarr
 import sonarr as sonarr
@@ -193,6 +193,10 @@ def main():
     updater.idle()
 
 def stop(update, context):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        return ConversationHandler.END
+
     clearUserData(context)
     context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=i18n.t("addarr.End")
@@ -201,6 +205,10 @@ def stop(update, context):
 
 
 def startSerieMovie(update : Update, context):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        return ConversationHandler.END
+    
     if not checkId(update):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
@@ -443,10 +451,7 @@ def pathSerieMovie(update, context):
         logger.debug("Only found 1 path, so proceeding with that one...")
         context.user_data["path"] = paths[0]["path"]
         return qualityProfileSerieMovie(update, context)
-    #logger.debug("Found multiple paths: "+str(paths))
-    
-    for p in paths:
-        logger.debug(p['path'])
+    logger.debug("Found multiple paths: "+str(paths))
         
     keyboard = []
     for p in paths:
@@ -486,9 +491,7 @@ def qualityProfileSerieMovie(update, context):
 
     excluded_quality_profiles = service.config.get("excludedQualityProfiles", [])
     qualityProfiles = service.getQualityProfiles()
-    qualityProfiles = [q for q in qualityProfiles]# if q["name"] not in excluded_quality_profiles]
-    for q in qualityProfiles:
-        logger.debug(q['name'])
+    qualityProfiles = [q for q in qualityProfiles if q["name"] not in excluded_quality_profiles]
     
     context.user_data.update({"qualityProfiles": [q['id'] for q in qualityProfiles]})
     if len(qualityProfiles) == 1:
@@ -496,7 +499,7 @@ def qualityProfileSerieMovie(update, context):
         logger.debug("Only found 1 profile, so proceeding with that one...")
         context.user_data["qualityProfile"] = qualityProfiles[0]['id']
         return addSerieMovie(update, context)
-    #logger.debug("Found multiple qualityProfiles: "+str(qualityProfiles))
+    logger.debug("Found multiple qualityProfiles: "+str(qualityProfiles))
 
     keyboard = []
     for q in qualityProfiles:
@@ -541,8 +544,13 @@ def addSerieMovie(update, context):
     
     service = getService(context)
     qualityProfile = context.user_data["qualityProfile"]
+    #Currently not working, on development
+    #[service.createTag(dt) for dt in service.config.get("defaultTags", []) if dt not in service.getTags()]
+    tags = [int(t["id"]) for t in service.getTags() if t["label"] in service.config.get("defaultTags", [])]
+    logger.debug(f"Tags {tags} have been selected.")
+    
     if not service.inLibrary(idnumber):
-        if service.addToLibrary(idnumber, path, qualityProfile):
+        if service.addToLibrary(idnumber, path, qualityProfile, tags):
             if choice == i18n.t("addarr.Movie"):
                 message=i18n.t("addarr.messages.Success", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
             else:
@@ -577,6 +585,17 @@ def addSerieMovie(update, context):
         return ConversationHandler.END
 
 def allSeries(update, context):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        return ConversationHandler.END
+        
+    if sonarr.config.get("listOnlyAdmins") and not checkAllowed(update,"admin"):
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.NotAdmin"),
+        )
+        return ConversationHandler.END
+
     if not checkId(update):
         if (
             authentication(update, context) == "added"
@@ -603,6 +622,17 @@ def allSeries(update, context):
         return ConversationHandler.END
 
 def allMovies(update, context):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        return ConversationHandler.END
+        
+    if radarr.config.get("listOnlyAdmins") and not checkAllowed(update,"admin"):
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.NotAdmin"),
+        )
+        return ConversationHandler.END
+    
     if not checkId(update):
         if (
             authentication(update, context) == "added"
@@ -639,6 +669,10 @@ def getService(context):
         )
 
 def help(update, context):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        return ConversationHandler.END
+    
     context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Help",
             help=config["entrypointHelp"],
@@ -661,7 +695,7 @@ def clearUserData(context):
     )
     for x in [
         x
-        for x in ["choice", "title", "position", "output", "paths", "path"]
+        for x in ["choice", "title", "position", "output", "paths", "path", "qualityProfiles", "qualityProfile"]
         if x in context.user_data.keys()
     ]:
         context.user_data.pop(x)

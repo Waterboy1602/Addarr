@@ -15,7 +15,7 @@ logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", 
 
 config = config["radarr"]
 
-addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images"]
+addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images", "tags"]
 
 
 def search(title):
@@ -56,13 +56,13 @@ def inLibrary(tmdbId):
     return next((True for movie in parsed_json if movie["tmdbId"] == tmdbId), False)
 
 
-def addToLibrary(tmdbId, path, qualityProfileId):
+def addToLibrary(tmdbId, path, qualityProfileId, tags):
     parameters = {"tmdbId": str(tmdbId)}
     req = requests.get(
         commons.generateApiQuery("radarr", "movie/lookup/tmdb", parameters)
     )
     parsed_json = json.loads(req.text)
-    data = json.dumps(buildData(parsed_json, path, qualityProfileId))
+    data = json.dumps(buildData(parsed_json, path, qualityProfileId, tags))
     add = requests.post(commons.generateApiQuery("radarr", "movie"), data=data, headers={'Content-Type': 'application/json'})
     if add.status_code == 201:
         return True
@@ -70,13 +70,16 @@ def addToLibrary(tmdbId, path, qualityProfileId):
         return False
 
 
-def buildData(json, path, qualityProfileId):
+def buildData(json, path, qualityProfileId, tags):
+    logger.debug(f"Tags {tags} have been selected.")
     built_data = {
-        "qualityProfileId": qualityProfileId,
+        "qualityProfileId": int(qualityProfileId),
         "minimumAvailability": config["minimumAvailability"],
-        "rootFolderPath": path,  # config["rootFolder"],
+        "rootFolderPath": path,
         "addOptions": {"searchForMovie": config["search"]},
+        "tags": tags,
     }
+    logger.debug(f"built_data {built_data} have been selected.")
 
     for key in addMovieNeededFields:
         built_data[key] = json[key]
@@ -119,5 +122,25 @@ def getQualityProfiles():
     parameters = {}
     req = requests.get(commons.generateApiQuery("radarr", "qualityProfile", parameters))
     parsed_json = json.loads(req.text)
-    #logger.debug(f"Found Radarr quality profiles: {parsed_json}")
+    logger.debug(f"Found Radarr quality profiles: {parsed_json}")
     return parsed_json
+    
+def getTags():
+    parameters = {}
+    req = requests.get(commons.generateApiQuery("radarr", "tag", parameters))
+    parsed_json = json.loads(req.text)
+    logger.debug(f"Found Radarr tags: {parsed_json}")
+    return parsed_json
+    
+def createTag(tag):
+    data_json = {
+        "id": max([t["id"] for t in getTags()])+1,
+        "label": str(tag)
+    }
+    add = requests.post(commons.generateApiQuery("radarr", "tag"), json=data_json, headers={'Content-Type': 'application/json'})
+    logger.debug(f"Response: {add.text}")
+    if add.status_code == 200:
+        return True
+    else:
+        return False
+    

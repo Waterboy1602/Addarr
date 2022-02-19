@@ -10,6 +10,7 @@ LANG_PATH = os.path.join(ROOT_DIR, "translations/")
 CHATID_PATH = os.path.join(ROOT_DIR, "chatid.txt")
 LOG_PATH = os.path.join(ROOT_DIR, "logs", "addarr.log")
 ADMIN_PATH = os.path.join(ROOT_DIR, "admin.txt")
+ALLOWLIST_PATH = os.path.join(ROOT_DIR, "allowlist.txt")
 
 DEFAULT_SETTINGS = {
     "entrypointAuth": "auth", #auth or a custom entrypoint
