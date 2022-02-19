@@ -3,7 +3,7 @@
 import logging
 import re
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ParseMode
 import telegram
 from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ConversationHandler, Filters, MessageHandler,
@@ -121,8 +121,8 @@ def main():
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(Filters.regex("^(?i)Stop$"), stop),
-            CallbackQueryHandler(stop, pattern=f"^(?i)Stop$"),
+            MessageHandler(Filters.regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
+            CallbackQueryHandler(stop, pattern=f"^(?i)"+i18n.t("addarr.Stop")+"$"),
         ],
     )
     if config["transmission"]["enable"]:
@@ -240,9 +240,10 @@ def startSerieMovie(update : Update, context):
         logger.debug("User issued New command, so clearing user_data")
         clearUserData(context)
     
-    context.bot.send_message(
+    msg = context.bot.send_message(
         chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+i18n.t("addarr.Title")
     )
+    #context.user_data["update_msg"] = msg.message_id
     return SERIE_MOVIE_AUTHENTICATED
 
 def choiceSerieMovie(update, context):
@@ -297,7 +298,8 @@ def choiceSerieMovie(update, context):
                 ]
             ]
             markup = InlineKeyboardMarkup(keyboard)
-            update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
+            msg = update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
+            context.user_data["update_msg"] = msg.message_id
             return READ_CHOICE
 
 
@@ -318,20 +320,6 @@ def searchSerieMovie(update, context):
     service = getService(context)
 
     position = context.user_data["position"]
-
-    searchResult = service.search(title)
-    if not searchResult:
-        context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.searchresults", count=0),
-        )
-        clearUserData(context)
-        return ConversationHandler.END
-
-    context.user_data["output"] = service.giveTitles(searchResult)
-    context.bot.send_message(
-        chat_id=update.effective_message.chat_id,
-        text=i18n.t("addarr.searchresults", count=len(searchResult)),
-    )
 
     keyboard = [
             [
@@ -357,22 +345,42 @@ def searchSerieMovie(update, context):
             ],
         ]
     markup = InlineKeyboardMarkup(keyboard)
+    
+    searchResult = service.search(title)
+    if not searchResult:
+        context.bot.send_message( 
+            chat_id=update.effective_message.chat_id, 
+            text=i18n.t("addarr.searchresults", count=0),
+        )
+        clearUserData(context)
+        return ConversationHandler.END
+
+    context.user_data["output"] = service.giveTitles(searchResult)
+    message=i18n.t("addarr.searchresults", count=len(searchResult))
+    message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
+    context.bot.edit_message_text(
+        message_id=context.user_data["update_msg"],
+        chat_id=update.effective_message.chat_id,
+        text=message,
+        parse_mode=ParseMode.MARKDOWN,
+    )
+    
+    img = context.bot.sendPhoto(
+        chat_id=update.effective_message.chat_id,
+        photo=context.user_data["output"][position]["poster"],
+    )
+    context.user_data["photo_update_msg"] = img.message_id
+    
     if choice == i18n.t("addarr.Movie"):
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
     else:
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
-    context.bot.send_message(
-        chat_id=update.effective_message.chat_id,
-        text=message,
+    msg = context.bot.send_message(
+        chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
     )
-    context.bot.sendPhoto(
-        chat_id=update.effective_message.chat_id,
-        photo=context.user_data["output"][position]["poster"],
-    )
-    text = f"{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})"
-    context.bot.send_message(
-        chat_id=update.effective_message.chat_id, text=text, reply_markup=markup
-    )
+    context.user_data["title_update_msg"] = context.user_data["update_msg"]
+    context.user_data["update_msg"] = msg.message_id
+    
     return GIVE_OPTION
 
 
@@ -380,8 +388,19 @@ def nextOption(update, context):
     position = context.user_data["position"] + 1
     context.user_data["position"] = position
 
-    choice = context.user_data["choice"]
-
+    choice = context.user_data["choice"]    
+    if choice == i18n.t("addarr.Movie"):
+        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
+    else:
+        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+    message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
+    context.bot.edit_message_text(
+        message_id=context.user_data["title_update_msg"],
+        chat_id=update.effective_message.chat_id,
+        text=message,
+        parse_mode=ParseMode.MARKDOWN,
+    )
+    
     if position < len(context.user_data["output"]):
         keyboard = [
                 [
@@ -408,30 +427,35 @@ def nextOption(update, context):
             ]
         markup = InlineKeyboardMarkup(keyboard)
 
+        context.bot.delete_message(
+            message_id=context.user_data["photo_update_msg"],
+            chat_id=update.effective_message.chat_id,
+        )
+        
+        img = context.bot.sendPhoto(
+            chat_id=update.effective_message.chat_id,
+            photo=context.user_data["output"][position]["poster"],
+        )
+        context.user_data["photo_update_msg"] = img.message_id
+        
+        context.bot.delete_message(
+            message_id=context.user_data["update_msg"],
+            chat_id=update.effective_message.chat_id,
+        )
         if choice == i18n.t("addarr.Movie"):
             message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
         else:
             message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
-        context.bot.send_message(
-            chat_id=update.effective_message.chat_id,
-            text=message,
+        msg = context.bot.send_message(
+            chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
         )
-        context.bot.sendPhoto(
-            chat_id=update.effective_message.chat_id,
-            photo=context.user_data["output"][position]["poster"],
-        )
-        text = (
-            context.user_data["output"][position]["title"]
-            + " ("
-            + str(context.user_data["output"][position]["year"])
-            + ")"
-        )
-        context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=text, reply_markup=markup
-        )
+        context.user_data["update_msg"] = msg.message_id
+        
+        
         return GIVE_OPTION
     else:
-        context.bot.send_message(
+        context.bot.edit_message_text(
+            message_id=context.user_data["update_msg"],
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.Last result")
         )
@@ -464,7 +488,8 @@ def pathSerieMovie(update, context):
         ]]
     markup = InlineKeyboardMarkup(keyboard)
 
-    context.bot.send_message(
+    context.bot.edit_message_text(
+        message_id=context.user_data["update_msg"],
         chat_id=update.effective_message.chat_id,
         text=i18n.t("addarr.Select a path"),
         reply_markup=markup,
@@ -511,7 +536,8 @@ def qualityProfileSerieMovie(update, context):
         ]]
     markup = InlineKeyboardMarkup(keyboard)
 
-    context.bot.send_message(
+    context.bot.edit_message_text(
+        message_id=context.user_data["update_msg"],
         chat_id=update.effective_message.chat_id,
         text=i18n.t("addarr.Select a quality"),
         reply_markup=markup,
@@ -555,7 +581,8 @@ def addSerieMovie(update, context):
                 message=i18n.t("addarr.messages.Success", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
             else:
                 message=i18n.t("addarr.messages.Success", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
-            context.bot.send_message(
+            context.bot.edit_message_text(
+                message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
                 text=message,
             )
@@ -566,7 +593,8 @@ def addSerieMovie(update, context):
                 message=i18n.t("addarr.messages.Failed", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
             else:
                 message=i18n.t("addarr.messages.Failed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
-            context.bot.send_message(
+            context.bot.edit_message_text(
+                message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
                 text=message,
             )
@@ -577,7 +605,8 @@ def addSerieMovie(update, context):
             message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
         else:
             message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
-        context.bot.send_message(
+        context.bot.edit_message_text(
+            message_id=context.user_data["update_msg"],
             chat_id=update.effective_message.chat_id,
             text=message,
         )
