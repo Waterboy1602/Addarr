@@ -15,7 +15,7 @@ logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", 
 
 config = config["radarr"]
 
-addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images", "tags"]
+addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images"]
 
 
 def search(title):
