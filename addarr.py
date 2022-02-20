@@ -965,7 +965,7 @@ def help(update, context):
             help=config["entrypointHelp"],
             authenticate=config["entrypointAuth"],
             add=config["entrypointAdd"],
-            add=config["entrypointDelete"],
+            delete=config["entrypointDelete"],
             serie='serie',
             movie='movie',
             allSeries=config["entrypointAllSeries"],
