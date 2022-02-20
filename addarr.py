@@ -424,7 +424,7 @@ def searchSerieMovie(update, context):
 def nextOption(update, context):
     position = context.user_data["position"] + 1
     context.user_data["position"] = position
-
+    searchResult = context.user_data["output"]
     choice = context.user_data["choice"]    
     message=i18n.t("addarr.searchresults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
@@ -602,7 +602,7 @@ def selectSeasons(update, context):
     seasonNumbers = [s["seasonNumber"] for s in seasons]
     context.user_data["seasons"] = seasonNumbers
     
-    keyboard = [[InlineKeyboardButton(i18n.t("addarr.From season"),callback_data="From season: Future")]]    
+    keyboard = [[InlineKeyboardButton(i18n.t("addarr.Future seasons"),callback_data="From season: Future")]]    
     for s in seasonNumbers:
         keyboard += [[
             InlineKeyboardButton(
@@ -625,50 +625,54 @@ def addSerieMovie(update, context):
     position = context.user_data["position"]
     choice = context.user_data["choice"]
     idnumber = context.user_data["output"][position]["id"]
-
-    if not context.user_data.get("selectedSeasons"):
-        # Season selection should be in the update message
-        selectedSeasons = None
-        if update.callback_query is not None:
-            try_fromSeason = update.callback_query.data.replace("From season: ", "").strip()
-            if try_fromSeason == "Future": 
-                selectedSeasons = []
-            else:
-                selectedSeasons = [int(s) for s in context.user_data["seasons"] if int(s) >= int(try_fromSeason)]
-            context.user_data["selectedSeasons"] = selectedSeasons
-        if selectedSeasons is None:
-            logger.debug(
-                f"Callback query [{update.callback_query.data.replace('From season: ', '').strip()}] doesn't match any of the season options. Sending seasons for selection..."
-            )
-            return selectSeasons(update, context)
-            
     path = context.user_data["path"]
-    
     service = getService(context)
+    
+    if choice == i18n.t("addarr.Series"):
+        if not context.user_data.get("selectedSeasons"):
+            # Season selection should be in the update message
+            selectedSeasons = None
+            if update.callback_query is not None:
+                try_fromSeason = update.callback_query.data.replace("From season: ", "").strip()
+                if try_fromSeason == "Future": 
+                    selectedSeasons = []
+                else:
+                    selectedSeasons = [int(s) for s in context.user_data["seasons"] if int(s) >= int(try_fromSeason)]
+                context.user_data["selectedSeasons"] = selectedSeasons
+            if selectedSeasons is None:
+                logger.debug(
+                    f"Callback query [{update.callback_query.data.replace('From season: ', '').strip()}] doesn't match any of the season options. Sending seasons for selection..."
+                )
+                return selectSeasons(update, context)
+        seasons = context.user_data["seasons"]
+        selectedSeasons = context.user_data["selectedSeasons"]
+        seasonsSelected = []
+        for s in seasons:
+            monitored = False
+            if s in selectedSeasons:
+                monitored = True
+                
+            seasonsSelected.append(
+                {
+                    "seasonNumber": s,
+                    "monitored": monitored,
+                }
+            )
+        logger.debug(f"Seasons {seasonsSelected} have been selected.")
+    
     qualityProfile = context.user_data["qualityProfile"]
     #Currently not working, on development
     #[service.createTag(dt) for dt in service.config.get("defaultTags", []) if dt not in service.getTags()]
     tags = [int(t["id"]) for t in service.getTags() if t["label"] in service.config.get("defaultTags", [])]
     logger.debug(f"Tags {tags} have been selected.")
-
-    seasons = context.user_data["seasons"]
-    selectedSeasons = context.user_data["selectedSeasons"]
-    seasonsSelected = []
-    for s in seasons:
-        monitored = False
-        if s in selectedSeasons:
-            monitored = True
-            
-        seasonsSelected.append(
-            {
-                "seasonNumber": s,
-                "monitored": monitored,
-            }
-        )
-    logger.debug(f"Seasons {seasonsSelected['seasonNumber']} have been selected.")
     
     if not service.inLibrary(idnumber):
-        if service.addToLibrary(idnumber, path, qualityProfile, tags, seasonsSelected):
+        if choice == i18n.t("addarr.Movie"):
+            added = service.addToLibrary(idnumber, path, qualityProfile, tags)
+        else:
+            added = service.addToLibrary(idnumber, path, qualityProfile, tags, seasonsSelected)
+        
+        if added:
             if choice == i18n.t("addarr.Movie"):
                 message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
             else:
@@ -823,7 +827,13 @@ def delete(update : Update, context):
     
 
 def choiceDeleteSerieMovie(update, context):
-    logger.debug("Entra en el choiceDelete")
+    service = getService(context)
+    if service.config.get("adminRestrictions") and not checkAllowed(update, context, "admin"):
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.NotAdmin"),
+        )
+        return ConversationHandler.END
     if not checkId(update):
         if (
             authentication(update, context) == "added"
@@ -881,15 +891,6 @@ def choiceDeleteSerieMovie(update, context):
         return READ_DELETE_CHOICE
         
 def deleteSerieMovie(update, context):
-    service = getService(context)
-    if service.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
-        context.bot.send_message(
-            chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.NotAdmin"),
-        )
-        return ConversationHandler.END
-    title = context.user_data["title"]
-
     if not context.user_data.get("choice"):
         choice = None
         if update.message is not None:
@@ -897,14 +898,12 @@ def deleteSerieMovie(update, context):
         elif update.callback_query is not None:
             choice = update.callback_query.data
         context.user_data["choice"] = choice
-    
+        
     choice = context.user_data["choice"]
     context.user_data["position"] = 0
-
-    service = getService(context)
-
+    title = context.user_data["title"]
     position = context.user_data["position"]
-    
+    service = getService(context)
     searchResult = service.search(title)
     if not searchResult:
         context.bot.send_message( 
