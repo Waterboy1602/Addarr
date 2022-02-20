@@ -33,7 +33,7 @@ Every command does also work if you send a message without `/` and no other word
 An example of the config file (`config_example.yaml`) can be found in this repository. Change it to your configuration. After you've filled in all the necessary fields, rename it to `config.yaml`.
 
 ## ADMIN    
-There is a functionality to only let admins use the `transmission` command, list all series  from `sonarr`or all movies from `radarr`. Before you can use this, you should enable each variable in the config file `config.yaml`. Then you need to add the admins to `admin.txt`. You can add the `username` or `id` of the user. Every added user should be on a new line to prevent errors.
+There is a functionality to only let admins use the `transmission` command, list or delete series/movies from `sonarr`/`radarr`. Before you can use this, you should enable each variable in the config file `config.yaml`. Then you need to add the admins to `admin.txt`. You can add the `username` or `id` of the user. Every added user should be on a new line to prevent errors.
 
 ## ALLOWLIST   
 There is a very restrictive functionality to only reply to already approbed users. You can enable it in the config file `config.yaml`. Then you need to add the users to `allowlist.txt`. You can add the `username` or `id` of the user. Every added user should be on a new line to prevent errors.
