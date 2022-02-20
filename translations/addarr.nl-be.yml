@@ -41,8 +41,11 @@ nl-be:
     Add: Ja, voeg deze %{subject} toe
     This: Is dit %{subjectWithArticle} die je wilt toevoegen?
     Failed: Oeps, mislukt om %{subjectWithArticle} toe te voegen. Probeer misschien nog eens opnieuw.
-    Success: "%{subjectWithArticle} is met succes toegevoegd 🙂"
+    DeleteFailed: Oeps, %{subjectWithArticle} verwijderen mislukt. Probeer misschien nog eens opnieuw.
+    AddSuccess: "%{subjectWithArticle} is met succes toegevoegd 🙂"
+    DeleteSuccess: "%{subjectWithArticle} is met succes verwijderd 🙂"
     Exist: "%{subjectWithArticle} was al toegevoegd 😉"
+    NoExist: "%{subjectWithArticle} bestaat niet"
   
   searchresults:
     zero: "Er zijn geen resultaten gevonden."

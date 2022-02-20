@@ -40,9 +40,12 @@ it-it:
   messages:
     Add: Si, aggiungi %{subject}
     This: Vuoi aggiungere questa/o %{subjectWithArticle}?
-    Failed: Ops, non sono riuscito ad aggiungere la/il %{subjectWithArticle}. Riprova.
-    Success: "%{subjectWithArticle} aggiunta/o correttamente 🙂"
+    AddFailed: Ops, non sono riuscito ad aggiungere la/il %{subjectWithArticle}. Riprova.
+    DeleteFailed: Oops, non è riuscito a eliminare %{subjectWithArticle}. Riprova.
+    AddSuccess: "%{subjectWithArticle} aggiunta/o correttamente 🙂"
+    DeleteSuccess: "%{subjectWithArticle} è stato rimosso con successo 🙂 "
     Exist: "%{subjectWithArticle} già esistente 😉"
+    NoExist: "%{subjectWithArticle} non esiste."
   
   searchresults:
     zero: Nessun risultato

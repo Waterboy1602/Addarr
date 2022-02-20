@@ -18,7 +18,7 @@ sonarr:
     - 
   defaultTags: # If set must be existing tags
     - telegram
-  listOnlyAdmins: false
+  adminRestrictions: false
 
 #Radarr Configuration
 radarr:
@@ -39,7 +39,7 @@ radarr:
     - 
   defaultTags: # If set must be existing tags
     - telegram
-  listOnlyAdmins: false
+  adminRestrictions: false
   
 #Telegram Configuration
 telegram:

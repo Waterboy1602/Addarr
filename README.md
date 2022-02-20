@@ -18,6 +18,7 @@ These are the default commands:
 - `/help`: gives an overview of all the commands with their action
 - `/auth`: authenticate the chat to use this bot
 - `/start`: start adding a series or movie to Sonarr/Radarr
+- `/delete`: remove a series or movie from Sonarr/Radarr
 - `/movie` (en-us) - `/film` (nl-be, it-it, de-de) - `/file` (pt-pt) - `/Película` (es-es): start adding a movie to Radarr
 - `/series` (en-us) - `/serie` (nl-be, it-it, pt-pt, es-es, de-de) : start adding a series to Sonarr
 - `/allSeries`: receive a list of all the series on Sonarr

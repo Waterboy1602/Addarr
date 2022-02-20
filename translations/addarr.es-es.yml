@@ -38,10 +38,13 @@ es-es:
   messages:
     Add: Si, añade esta %{subject}
     This: Es esta la %{subjectWithArticle} que quieres añadir?
-    Failed: Oops, fallo al añadir %{subjectWithArticle}. Prueba otra vez.
-    Success: "La %{subjectWithArticle} se ha añadido correctamente 🙂"
+    AddFailed: Oops, fallo al añadir %{subjectWithArticle}. Prueba otra vez.
+    DeleteFailed: Oops, fallo al eliminar %{subjectWithArticle}. Prueba otra vez.
+    AddSuccess: "La %{subjectWithArticle} se ha añadido correctamente 🙂"
+    DeleteSuccess: "La %{subjectWithArticle} se ha eliminado correctamente 🙂"
     Exist: La %{subjectWithArticle} ya existe 😉
-  
+    NoExist: La %{subjectWithArticle} no existe
+    
   searchresults:
     zero: No se han encontrado resultados.
     one: Se ha encontrado un resultado. 

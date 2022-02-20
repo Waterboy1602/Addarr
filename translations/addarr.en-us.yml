@@ -40,9 +40,12 @@ en-us:
   messages:
     Add: Yes, add this %{subject}
     This: Is this %{subjectWithArticle} you want to add?
-    Failed: Oops, failed to add %{subjectWithArticle}. Maybe give it another try.
-    Success: "%{subjectWithArticle} is added with success 🙂"
+    AddFailed: Oops, failed to add %{subjectWithArticle}. Maybe give it another try.
+    DeleteFailed: Oops, failed to delete %{subjectWithArticle}. Maybe give it another try.
+    AddSuccess: "%{subjectWithArticle} is added with success 🙂"
+    DeleteSuccess: "%{subjectWithArticle} is deleted with success 🙂"
     Exist: "%{subjectWithArticle} already exists 😉"
+    NoExist: "%{subjectWithArticle} does not exist"
   
   searchresults:
     zero: No results found

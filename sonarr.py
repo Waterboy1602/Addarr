@@ -67,6 +67,19 @@ def addToLibrary(tvdbId, path, qualityProfileId, tags, seasonsSelected):
     else:
         return False
 
+
+def removeFromLibrary(tvdbId):
+    parameters = { 
+        "deleteFiles": str(True)
+    }
+    dbId = getDbIdFromImdbId(tvdbId)
+    delete = requests.delete(commons.generateApiQuery("sonarr", f"series/{dbId}", parameters))
+    if delete.status_code == 200:
+        return True
+    else:
+        return False
+
+
 def buildData(json, path, qualityProfileId, tags, seasonsSelected):
     built_data = {
         "qualityProfileId": qualityProfileId,
@@ -161,3 +174,9 @@ def getSeasons(tvdbId):
     req = requests.get(commons.generateApiQuery("sonarr", "series/lookup", parameters))
     parsed_json = json.loads(req.text)
     return parsed_json[0]["seasons"]
+
+def getDbIdFromImdbId(tvdbId):
+    req = requests.get(commons.generateApiQuery("sonarr", "series", {}))
+    parsed_json = json.loads(req.text)
+    dbId = [f["id"] for f in parsed_json if f["tvdbId"] == tvdbId]
+    return dbId[0]

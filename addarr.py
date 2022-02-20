@@ -24,6 +24,8 @@ logger = logger.getLogger("addarr", logLevel, config.get("logToConsole", False))
 logger.debug(f"Addarr v{__version__} starting up...")
 
 SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL, GIVE_QUALITY_PROFILES, GIVE_SEASONS = range(7)
+SERIE_MOVIE_DELETE, READ_DELETE_CHOICE = 0,1
+
 
 updater = Updater(config["telegram"]["token"], use_context=True)
 dispatcher = updater.dispatcher
@@ -69,6 +71,32 @@ def main():
         allMovies,
     )
 
+    deleteMovieserie_handler = ConversationHandler(
+        entry_points=[
+            CommandHandler(config["entrypointDelete"], delete),
+            MessageHandler(
+                Filters.regex(
+                    re.compile(r'^' + config["entrypointDelete"] + '$', re.IGNORECASE)
+                ),
+                delete,
+            ),
+        ],
+        states={
+            SERIE_MOVIE_DELETE: [MessageHandler(Filters.text, choiceSerieMovie)],
+            READ_DELETE_CHOICE: [
+                MessageHandler(
+                    Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                    deleteSerieMovie,
+                ),
+                CallbackQueryHandler(deleteSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
+            ],
+        },
+        fallbacks=[
+            CommandHandler("stop", stop),
+            MessageHandler(Filters.regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
+            CallbackQueryHandler(stop, pattern=f"^(?i)"+i18n.t("addarr.Stop")+"$"),
+        ],
+    )
     addMovieserie_handler = ConversationHandler(
         entry_points=[
             CommandHandler(config["entrypointAdd"], startSerieMovie),
@@ -187,6 +215,7 @@ def main():
     dispatcher.add_handler(allMovies_handler_command)
     dispatcher.add_handler(allMovies_handler_text)
     dispatcher.add_handler(addMovieserie_handler)
+    dispatcher.add_handler(deleteMovieserie_handler)
 
     help_handler_command = CommandHandler(config["entrypointHelp"], help)
     dispatcher.add_handler(help_handler_command)
@@ -199,13 +228,18 @@ def stop(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         return ConversationHandler.END
-
+    if not checkId(update):
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
+        )
+        return SERIE_MOVIE_AUTHENTICATED
+        
     clearUserData(context)
     context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=i18n.t("addarr.End")
     )
     return ConversationHandler.END
-
+    
 
 def startSerieMovie(update : Update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
@@ -302,7 +336,8 @@ def choiceSerieMovie(update, context):
             markup = InlineKeyboardMarkup(keyboard)
             msg = update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
             context.user_data["update_msg"] = msg.message_id
-            return READ_CHOICE
+
+        return READ_CHOICE
 
 
 def searchSerieMovie(update, context):
@@ -635,9 +670,9 @@ def addSerieMovie(update, context):
     if not service.inLibrary(idnumber):
         if service.addToLibrary(idnumber, path, qualityProfile, tags, seasonsSelected):
             if choice == i18n.t("addarr.Movie"):
-                message=i18n.t("addarr.messages.Success", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
+                message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
             else:
-                message=i18n.t("addarr.messages.Success", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+                message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
             context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
@@ -647,9 +682,9 @@ def addSerieMovie(update, context):
             return ConversationHandler.END
         else:
             if choice == i18n.t("addarr.Movie"):
-                message=i18n.t("addarr.messages.Failed", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
+                message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
             else:
-                message=i18n.t("addarr.messages.Failed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+                message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
             context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
@@ -675,7 +710,7 @@ def allSeries(update, context):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         return ConversationHandler.END
         
-    if sonarr.config.get("listOnlyAdmins") and not checkAllowed(update,"admin"):
+    if sonarr.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),
@@ -712,7 +747,7 @@ def allMovies(update, context):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         return ConversationHandler.END
         
-    if radarr.config.get("listOnlyAdmins") and not checkAllowed(update,"admin"):
+    if radarr.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),
@@ -744,6 +779,171 @@ def allMovies(update, context):
 
         return ConversationHandler.END
 
+
+def delete(update : Update, context):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        return ConversationHandler.END
+    
+    if not checkId(update):
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
+        )
+        return SERIE_MOVIE_DELETE
+    
+    if update.message is not None:
+        reply = update.message.text.lower()
+    elif update.callback_query is not None:
+        reply = update.callback_query.data.lower()
+    else:
+        return SERIE_MOVIE_DELETE
+
+    if reply[1:] in [
+        i18n.t("addarr.Series").lower(),
+        i18n.t("addarr.Movie").lower(),
+    ]:
+        logger.debug(
+            f"User issued {reply} command, so setting user_data[choice] accordingly"
+        )
+        context.user_data.update(
+            {
+                "choice": i18n.t("addarr.Series")
+                if reply[1:] == i18n.t("addarr.Series").lower()
+                else i18n.t("addarr.Movie")
+            }
+        )
+    elif reply == i18n.t("addarr.New").lower():
+        logger.debug("User issued New command, so clearing user_data")
+        clearUserData(context)
+    
+    msg = context.bot.send_message(
+        chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+i18n.t("addarr.Title")
+    )
+    return SERIE_MOVIE_DELETE
+    
+
+def choiceDeleteSerieMovie(update, context):
+    logger.debug("Entra en el choiceDelete")
+    if not checkId(update):
+        if (
+            authentication(update, context) == "added"
+        ):  # To also stop the beginning command
+            return ConversationHandler.END
+    elif update.message.text.lower() == "/stop".lower() or update.message.text.lower() == "stop".lower():
+        return stop(update, context)
+    else:
+        if update.message is not None:
+            reply = update.message.text
+        elif update.callback_query is not None:
+            reply = update.callback_query.data
+        else:
+            return SERIE_MOVIE_DELETE
+
+        if reply.lower() not in [
+            i18n.t("addarr.Series").lower(),
+            i18n.t("addarr.Movie").lower(),
+        ]:
+            logger.debug(
+                f"User entered a title {reply}"
+            )
+            context.user_data["title"] = reply
+
+        if context.user_data.get("choice") in [
+            i18n.t("addarr.Series"),
+            i18n.t("addarr.Movie"),
+        ]:
+            logger.debug(
+                f"user_data[choice] is {context.user_data['choice']}, skipping step of selecting movie/series"
+            )
+            return deleteSerieMovie(update, context)
+        else:
+            keyboard = [
+                [
+                    InlineKeyboardButton(
+                        '\U0001F3AC '+i18n.t("addarr.Movie"),
+                        callback_data=i18n.t("addarr.Movie")
+                    ),
+                    InlineKeyboardButton(
+                        '\U0001F4FA '+i18n.t("addarr.Series"),
+                        callback_data=i18n.t("addarr.Series")
+                    ),
+                ],
+                [ InlineKeyboardButton(
+                        '\U0001F50D '+i18n.t("addarr.New"),
+                        callback_data=i18n.t("addarr.New")
+                    ),
+                ]
+            ]
+            markup = InlineKeyboardMarkup(keyboard)
+            msg = update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
+            context.user_data["update_msg"] = msg.message_id
+
+        return READ_DELETE_CHOICE
+        
+def deleteSerieMovie(update, context):
+    service = getService(context)
+    if service.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.NotAdmin"),
+        )
+        return ConversationHandler.END
+    title = context.user_data["title"]
+
+    if not context.user_data.get("choice"):
+        choice = None
+        if update.message is not None:
+            choice = update.message.text
+        elif update.callback_query is not None:
+            choice = update.callback_query.data
+        context.user_data["choice"] = choice
+    
+    choice = context.user_data["choice"]
+    context.user_data["position"] = 0
+
+    service = getService(context)
+
+    position = context.user_data["position"]
+    
+    searchResult = service.search(title)
+    if not searchResult:
+        context.bot.send_message( 
+            chat_id=update.effective_message.chat_id, 
+            text=i18n.t("addarr.searchresults", count=0),
+        )
+        clearUserData(context)
+        return ConversationHandler.END
+        
+    context.user_data["output"] = service.giveTitles(searchResult)
+    idnumber = context.user_data["output"][position]["id"]
+    
+    if service.inLibrary(idnumber):
+        if service.removeFromLibrary(idnumber):
+            if choice == i18n.t("addarr.Movie"):
+                message=i18n.t("addarr.messages.DeleteSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
+            else:
+                message=i18n.t("addarr.messages.DeleteSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+            context.bot.edit_message_text(
+                message_id=context.user_data["update_msg"],
+                chat_id=update.effective_message.chat_id,
+                text=message,
+            )
+            clearUserData(context)
+            return ConversationHandler.END
+    else:
+        if choice == i18n.t("addarr.Movie"):
+            message=i18n.t("addarr.messages.NoExist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
+        else:
+            message=i18n.t("addarr.messages.NoExist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+        context.bot.edit_message_text(
+            message_id=context.user_data["update_msg"],
+            chat_id=update.effective_message.chat_id,
+            text=message,
+        )
+        clearUserData(context)
+        return ConversationHandler.END
+
+
 def getService(context):
     if context.user_data.get("choice") == i18n.t("addarr.Series"):
         return sonarr
@@ -753,6 +953,7 @@ def getService(context):
         raise ValueError(
             f"Cannot determine service based on unknown or missing choice: {context.user_data.get('choice')}."
         )
+
 
 def help(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
@@ -764,6 +965,7 @@ def help(update, context):
             help=config["entrypointHelp"],
             authenticate=config["entrypointAuth"],
             add=config["entrypointAdd"],
+            add=config["entrypointDelete"],
             serie='serie',
             movie='movie',
             allSeries=config["entrypointAllSeries"],

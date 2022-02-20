@@ -40,9 +40,12 @@ de-de:
   messages:
     Add: Ja füge %{subject} hinzu
     This: Willst du %{subjectWithArticle} hinzufügen?
-    Failed: Oops, das hinzufügen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
-    Success: "%{subjectWithArticle} würde hinzugefügt 🙂"
+    AddFailed: Oops, das hinzufügen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
+    DeleteFailed: Oops, das löschen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
+    AddSuccess: "%{subjectWithArticle} würde hinzugefügt 🙂"
+    DeleteSuccess: "%{subjectWithArticle} würde erfolgreich entfernt 🙂"
     Exist: "%{subjectWithArticle} gibt es bereits 😉"
+    NoExist: "%{subjectWithArticle} existiert nicht."
   
   searchresults:
     zero: Es würden keine Ergebnisse gefunden

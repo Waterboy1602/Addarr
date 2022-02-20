@@ -70,6 +70,18 @@ def addToLibrary(tmdbId, path, qualityProfileId, tags):
         return False
 
 
+def removeFromLibrary(tmdbId):
+    parameters = { 
+        "deleteFiles": str(True)
+    }
+    dbId = getDbIdFromImdbId(tmdbId)
+    delete = requests.delete(commons.generateApiQuery("radarr", f"movie/{dbId}", parameters))
+    if delete.status_code == 200:
+        return True
+    else:
+        return False
+
+
 def buildData(json, path, qualityProfileId, tags):
     built_data = {
         "qualityProfileId": int(qualityProfileId),
@@ -138,3 +150,8 @@ def createTag(tag):
     else:
         return False
     
+def getDbIdFromImdbId(tmdbId):
+    req = requests.get(commons.generateApiQuery("radarr", "movie", {}))
+    parsed_json = json.loads(req.text)
+    dbId = [f["id"] for f in parsed_json if f["tmdbId"] == tmdbId]
+    return dbId[0]

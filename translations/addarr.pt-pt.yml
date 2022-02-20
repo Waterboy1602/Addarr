@@ -40,9 +40,12 @@ pt-pt:
   messages:
     Add: Sim, adicione este %{subject}
     This: É este %{subjectWithArticle} que quer adicionar?
-    Failed: Oops, falha ao adicionar este %{subjectWithArticle}. Tente novamente.
-    Success:  "O %{subjectWithArticle} foi adicionado com sucesso 🙂"
+    AddFailed: Oops, falha ao adicionar este %{subjectWithArticle}. Tente novamente.
+    DeleteFailed: Oops, não apagou %{subjectWithArticle}. Tente novamente.
+    AddSuccess:  "O %{subjectWithArticle} foi adicionado com sucesso 🙂"
+    DeleteSuccess: "O %{subjectWithArticle} foi removido com sucesso 🙂"
     Exist: O %{subjectWithArticle} já existe 😉
+    NoExist: O %{subjectWithArticle} não existe
   
   searchresults:
     zero: Não foram encontrados resultados
