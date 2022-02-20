@@ -56,19 +56,18 @@ def inLibrary(tvdbId):
     return next((True for show in parsed_json if show["tvdbId"] == tvdbId), False)
 
 
-def addToLibrary(tvdbId, path, qualityProfileId, tags):
+def addToLibrary(tvdbId, path, qualityProfileId, tags, seasonsSelected):
     parameters = {"term": "tvdb:" + str(tvdbId)}
     req = requests.get(commons.generateApiQuery("sonarr", "series/lookup", parameters))
     parsed_json = json.loads(req.text)
-    data = json.dumps(buildData(parsed_json, path, qualityProfileId, tags))
+    data = json.dumps(buildData(parsed_json, path, qualityProfileId, tags, seasonsSelected))
     add = requests.post(commons.generateApiQuery("sonarr", "series"), data=data, headers={'Content-Type': 'application/json'})
     if add.status_code == 201:
         return True
     else:
         return False
 
-
-def buildData(json, path, qualityProfileId, tags):
+def buildData(json, path, qualityProfileId, tags, seasonsSelected):
     built_data = {
         "qualityProfileId": qualityProfileId,
         "languageProfileId": getLanguageProfileId(config["languageProfile"]),
@@ -77,16 +76,18 @@ def buildData(json, path, qualityProfileId, tags):
             "ignoreEpisodesWithoutFiles": "false",
             "searchForMissingEpisodes": config["search"],
         },
-        "rootFolderPath": path,  # config["rootFolder"],
+        "rootFolderPath": path,
         "seasonFolder": config["seasonFolder"],
         "monitored": True,
         "tags": tags,
+        "seasons": seasonsSelected,
     }
-
     for show in json:
         for key, value in show.items():
             if key in addSerieNeededFields:
                 built_data[key] = value
+            if key == "seasons": built_data["seasons"] = seasonsSelected
+    logger.debug(f"Query endpoint is: {commons.generateApiQuery('sonarr', 'series')}")
     return built_data
 
 
@@ -99,7 +100,6 @@ def getRootFolders():
         item for item in parsed_json if item.get("unmappedFolders") is not None
     ]:
         item.pop("unmappedFolders")
-    logger.debug(f"Found sonarr paths: {parsed_json}")
     return parsed_json
 
 def allSeries():
@@ -130,14 +130,12 @@ def getQualityProfiles():
     parameters = {}
     req = requests.get(commons.generateApiQuery("sonarr", "qualityProfile", parameters))
     parsed_json = json.loads(req.text)
-    logger.debug(f"Found Sonarr quality profiles: {parsed_json}")
     return parsed_json
     
 def getTags():
     parameters = {}
     req = requests.get(commons.generateApiQuery("sonarr", "tag", parameters))
     parsed_json = json.loads(req.text)
-    logger.debug(f"Found Sonarr tags: {parsed_json}")
     return parsed_json
     
 def createTag(tag):
@@ -146,16 +144,20 @@ def createTag(tag):
         "label": str(tag)
     }
     add = requests.post(commons.generateApiQuery("sonarr", "tag"), json=data_json, headers={'Content-Type': 'application/json'})
-    logger.debug(f"Response: {add.text}")
     if add.status_code == 200:
         return True
     else:
         return False
-        
+
 def getLanguageProfileId(language):
     parameters = {}
     req = requests.get(commons.generateApiQuery("sonarr", "languageProfile", parameters))
     parsed_json = json.loads(req.text)
     languageId = [l["id"] for l in parsed_json if l["name"] == language]
-    logger.debug(f"Language profile selected is: {languageId[0]}")
     return languageId[0]
+    
+def getSeasons(tvdbId):
+    parameters = {"term": "tvdb:" + str(tvdbId)}
+    req = requests.get(commons.generateApiQuery("sonarr", "series/lookup", parameters))
+    parsed_json = json.loads(req.text)
+    return parsed_json[0]["seasons"]

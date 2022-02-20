@@ -17,6 +17,8 @@ en-us:
   Select: Yes, select this
   Select a path: Please select a path for the movie or series
   Select a quality: Please select a quality profile for the movie or series
+  Select from which season: From which season?
+  Future seasons: Future seasons
   Authorize: You first need to authorize this chat. What is the password?
   Wrong password: You entered the wrong password. Try again...
   Chatid added: "This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."

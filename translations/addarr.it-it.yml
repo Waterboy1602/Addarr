@@ -17,6 +17,8 @@ it-it:
   Select: Sì, seleziona questo
   Select a path: Per favore scegli una cartella per il film o per la serie
   Select a quality: Per favore seleziona un profilo di qualità per il film o la serie
+  Select from which season: Da quale stagione?
+  Future seasons: Stagioni future
   Authorize: Devi prima autenticare questa chat. Qual'è la password?
   Wrong password: La password è sbagliata. Riprova...
   Chatid added: "Questa chat è stata aggiunta alla lista delle chat autorizzate. Ora puoi utilizzare il bot. \nSe avevi inviato un comando, dovrai inviarlo di nuovo."

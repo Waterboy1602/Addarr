@@ -15,7 +15,7 @@ logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", 
 
 config = config["radarr"]
 
-addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images", "tags"]
+addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images"]
 
 
 def search(title):
@@ -71,7 +71,6 @@ def addToLibrary(tmdbId, path, qualityProfileId, tags):
 
 
 def buildData(json, path, qualityProfileId, tags):
-    logger.debug(f"Tags {tags} have been selected.")
     built_data = {
         "qualityProfileId": int(qualityProfileId),
         "minimumAvailability": config["minimumAvailability"],
@@ -79,7 +78,6 @@ def buildData(json, path, qualityProfileId, tags):
         "addOptions": {"searchForMovie": config["search"]},
         "tags": tags,
     }
-    logger.debug(f"built_data {built_data} have been selected.")
 
     for key in addMovieNeededFields:
         built_data[key] = json[key]
@@ -90,7 +88,6 @@ def getRootFolders():
     parameters = {}
     req = requests.get(commons.generateApiQuery("radarr", "Rootfolder", parameters))
     parsed_json = json.loads(req.text)
-    #logger.debug(f"Found Radarr paths: {parsed_json}")
     return parsed_json
 
 
@@ -122,14 +119,12 @@ def getQualityProfiles():
     parameters = {}
     req = requests.get(commons.generateApiQuery("radarr", "qualityProfile", parameters))
     parsed_json = json.loads(req.text)
-    logger.debug(f"Found Radarr quality profiles: {parsed_json}")
     return parsed_json
     
 def getTags():
     parameters = {}
     req = requests.get(commons.generateApiQuery("radarr", "tag", parameters))
     parsed_json = json.loads(req.text)
-    logger.debug(f"Found Radarr tags: {parsed_json}")
     return parsed_json
     
 def createTag(tag):
@@ -138,7 +133,6 @@ def createTag(tag):
         "label": str(tag)
     }
     add = requests.post(commons.generateApiQuery("radarr", "tag"), json=data_json, headers={'Content-Type': 'application/json'})
-    logger.debug(f"Response: {add.text}")
     if add.status_code == 200:
         return True
     else:
