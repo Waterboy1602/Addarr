@@ -28,6 +28,7 @@ pl-pl:
   Help: "Potrzebujesz pomocy? Użyj /%{help}!
     \n/%{authenticate} —  autoryzacja Twojego czatu
     \n/%{add} — dodawanie nowego filmu/serialu
+    \n/%{delete} - usuwanie nowego filmu/serialu
     \n/%{movie} lub /%{serie} — natychmiastowy wybór typu treści
     \n/%{allSeries} — lista wszystkich istniejących seriali
     \n/%{allMovies} — lista wszystkich istniejących filmów.

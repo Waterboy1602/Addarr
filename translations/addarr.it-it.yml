@@ -28,6 +28,7 @@ it-it:
   Help: "Per leggere questo messaggio, usa /%{help}.
     \n• Per autenticarti usa /%{authenticate}.
     \n• Per aggiungere un film o una serie usa /%{add}.
+    \n• Per cancellare una serie o un film usa /%{delete}.
     \n• Per aggiungere velocemente un film o una serie usa /%{movie} o /%{serie}.
     \n• Per vedere quali serie sono presenti in Sonarr usa /%{allSeries}.
     \n• Per vedere quali film sono presenti in Radarr usa /%{allMovies}.

@@ -28,6 +28,7 @@ es-es:
   Help: "Quieres volver a ver este texto? Usa /%{help}.
     \n• Para autenticarte antes del primer uso debes usar /%{authenticate}.
     \n• Para añadir una serie o película usa /%{add}.
+    \n• Para eliminar una serie o película usa /%{delete}.
     \n• Para añadir directamente una película o serie usa /%{movie} or /%{serie}.
     \n• Para comprobar que series hay en Sonarr usa /%{allSeries}.
     \n• Para comprobar que películas hay en Radarr usa /%{allMovies}."

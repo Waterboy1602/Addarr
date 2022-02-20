@@ -28,6 +28,7 @@ pt-pt:
   Help: "Para ver este texto novamente escreva /%{help}.\n
     \n• Para autenticar antes da primeira utilização deve escrever /%{authenticate}.
     \n• Para adicionar um filme ou série escreva /%{add}.
+    \n• Para apagar uma série ou uso de filme /%{delete}.
     \n• Para adicionar imediatamente um filme ou série pode escrever /%{movie} ou /%{serie}.
     \n• Para ver que séries existem no Sonarr, escreva /%{allSeries}.
     \n• Para ver que filme existem no Radarr, escreva /%{allMovies}.

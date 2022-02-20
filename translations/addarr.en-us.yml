@@ -28,6 +28,7 @@ en-us:
   Help: "Want to see this text again? Use /%{help}.
     \n• To authenticate before first use you should use /%{authenticate}.
     \n• To add a movie or series use /%{add}.
+    \n• To delete a movie or series use /%{add}.
     \n• To immediately add a movie or series you can use /%{movie} or /%{serie}.
     \n• To check which series are in Sonarr you can use /%{allSeries}.
     \n• To check which movies are in Radarr you can use /%{allMovies}.

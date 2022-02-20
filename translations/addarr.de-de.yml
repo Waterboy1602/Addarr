@@ -28,6 +28,7 @@ de-de:
   Help: "Um diesen Text erneut zu sehen benutze /%{help}.
     \n• Zur Authentifizierung benutze /%{authenticate}.
     \n• Um ein Film oder eine Serie hinzuzufügen benutze /%{add}.
+    \n• Um eine Serie oder einen Film zu löschen, verwenden Sie /%{delete}.
     \n• Um direkt ein Film oder eine Serie hinzuzufügen benutze /%{movie} oder /%{serie}.
     \n• Um alle Serien in Sonarr anzuzeigen benutze /%{allSeries}.
     \n• Um alle Filme in Radarr anzuzeigen benutze /%{allMovies}.

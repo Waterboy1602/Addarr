@@ -28,6 +28,7 @@ nl-be:
   Help: "Wil je deze tekst nog eens zien? Gebruik dan /%{help}.
     \n• Om de eerste keer te authenticeren gebruik je /%{authenticate}.
     \n• Om een film of serie toe te voegen kun je /%{add} gebruiken.
+    \n• Om een serie of film te verwijderen gebruikt u /%{delete}.
     \n• Wil je meteen een keuze tussen film of serie maken, gebruik dan /${movie} of /%{serie}.
     \n• Om te kijken welke series al in Sonarr zitten, gebruik je /%{allSeries}.
     \n• Om te kijken welke films al in Radarr zitten, gebruik je /%{allMovies}.
