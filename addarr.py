@@ -116,7 +116,12 @@ def main():
                     Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                     searchSerieMovie,
                 ),
-                CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
+                CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                MessageHandler(
+                    Filters.regex(f'^({i18n.t("addarr.New")})$'),
+                    startSerieMovie
+                ),
+                CallbackQueryHandler(startSerieMovie, pattern=f'({i18n.t("addarr.New")})'),
             ],
             GIVE_OPTION: [
                 CallbackQueryHandler(qualityProfileSerieMovie, pattern=f'({i18n.t("addarr.Select")})'),
