@@ -116,12 +116,7 @@ def main():
                     Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                     searchSerieMovie,
                 ),
-                CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
-                MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.New")})$'),
-                    startSerieMovie
-                ),
-                CallbackQueryHandler(startSerieMovie, pattern=f'({i18n.t("addarr.New")})'),
+                CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
             ],
             GIVE_OPTION: [
                 CallbackQueryHandler(qualityProfileSerieMovie, pattern=f'({i18n.t("addarr.Select")})'),
@@ -298,6 +293,7 @@ def choiceSerieMovie(update, context):
     else:
         if update.message is not None:
             reply = update.message.text
+            logger.debug(f"reply is {reply}")
         elif update.callback_query is not None:
             reply = update.callback_query.data
         else:
@@ -400,12 +396,17 @@ def searchSerieMovie(update, context):
     context.user_data["output"] = service.giveTitles(searchResult)
     message=i18n.t("addarr.searchresults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
-    context.bot.edit_message_text(
-        message_id=context.user_data["update_msg"],
-        chat_id=update.effective_message.chat_id,
-        text=message,
-        parse_mode=ParseMode.MARKDOWN,
-    )
+    
+    if "update_msg" in context.user_data:
+        context.bot.edit_message_text(
+            message_id=context.user_data["update_msg"],
+            chat_id=update.effective_message.chat_id,
+            text=message,
+            parse_mode=ParseMode.MARKDOWN,
+        )
+    else:
+        msg = context.bot.send_message(chat_id=update.effective_message.chat_id, text=message,parse_mode=ParseMode.MARKDOWN,)
+        context.user_data["update_msg"] = msg.message_id
     
     img = context.bot.sendPhoto(
         chat_id=update.effective_message.chat_id,
@@ -561,7 +562,7 @@ def qualityProfileSerieMovie(update, context):
         # There is only 1 path, so use it!
         logger.debug("Only found 1 profile, so proceeding with that one...")
         context.user_data["qualityProfile"] = qualityProfiles[0]['id']
-        return selectSeasons(update, context)
+        return addSerieMovie(update, context)
 
     keyboard = []
     for q in qualityProfiles:
@@ -807,21 +808,7 @@ def delete(update : Update, context):
     else:
         return SERIE_MOVIE_DELETE
 
-    if reply[1:] in [
-        i18n.t("addarr.Series").lower(),
-        i18n.t("addarr.Movie").lower(),
-    ]:
-        logger.debug(
-            f"User issued {reply} command, so setting user_data[choice] accordingly"
-        )
-        context.user_data.update(
-            {
-                "choice": i18n.t("addarr.Series")
-                if reply[1:] == i18n.t("addarr.Series").lower()
-                else i18n.t("addarr.Movie")
-            }
-        )
-    elif reply == i18n.t("addarr.New").lower():
+    if reply == i18n.t("addarr.New").lower():
         logger.debug("User issued New command, so clearing user_data")
         clearUserData(context)
     
