@@ -14,7 +14,12 @@ de-de:
   Next result: Nein, zeige mir das nächste Ergebnis
   Last result: Keine weiteren Ergebnisse verfügbar
   Add: Ja, füge dies hinzu
+  Select: Ja, wählen Sie dies
   Select a path: Bitte wähle ein Pfad für die Serie oder den Film
+  Select a quality: Bitte wählen Sie ein Qualitätsprofil für den Film oder die Serie
+  Select from which season: Seit welcher Saison?
+  From season: From season
+  Future seasons: Künftige Saisons
   Authorize: Dieser Chat muss noch autorisiert werden. Was ist dein Passwort?
   Wrong password: Das Password ist nicht korrekt. Probiere es erneut...
   Chatid added: "Dieser Chat würde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \befehle müssen erneut ausgeführt werden."
@@ -23,6 +28,7 @@ de-de:
   Help: "Um diesen Text erneut zu sehen benutze /%{help}.
     \n• Zur Authentifizierung benutze /%{authenticate}.
     \n• Um ein Film oder eine Serie hinzuzufügen benutze /%{add}.
+    \n• Um eine Serie oder einen Film zu löschen, verwenden Sie /%{delete}.
     \n• Um direkt ein Film oder eine Serie hinzuzufügen benutze /%{movie} oder /%{serie}.
     \n• Um alle Serien in Sonarr anzuzeigen benutze /%{allSeries}.
     \n• Um alle Filme in Radarr anzuzeigen benutze /%{allMovies}.
@@ -36,9 +42,12 @@ de-de:
   messages:
     Add: Ja füge %{subject} hinzu
     This: Willst du %{subjectWithArticle} hinzufügen?
-    Failed: Oops, das hinzufügen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
-    Success: "%{subjectWithArticle} würde hinzugefügt 🙂"
+    AddFailed: Oops, das hinzufügen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
+    DeleteFailed: Oops, das löschen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
+    AddSuccess: "%{subjectWithArticle} würde hinzugefügt 🙂"
+    DeleteSuccess: "%{subjectWithArticle} würde erfolgreich entfernt 🙂"
     Exist: "%{subjectWithArticle} gibt es bereits 😉"
+    NoExist: "%{subjectWithArticle} existiert nicht."
   
   searchresults:
     zero: Es würden keine Ergebnisse gefunden

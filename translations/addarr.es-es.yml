@@ -2,64 +2,71 @@
 es-es: 
   Start: Iniciar
   Stop: Detener
-  Movie: Película
-  MovieWithArticle: Película
-  Serie: Serie
+  Movie: Pelicula
+  MovieWithArticle: pelicula
+  Series: Serie
   SeriesWithArticle: serie
-  Start chatting: Empieza a chatear con Addarr en Telegram. La primera vez que uses "start" te pedirá introducir tu contraseña configurada.
-  End: La adición de películas o series ha finalizado.
-  Title: "Introduce el título:"
-  What is this?: Esto es una película o una serie?
-  New: Ejecuta un nuevo comando de búsqueda
-  Next result: No, muéstrame el siguiente resultado
+  Start chatting: Empieza a chatear con Addarr en Telegram. La primera vez que uses "start" te pedira introducir tu contraseña configurada.
+  End: La adicion de peliculas o series ha finalizado.
+  Title: "Introduce el titulo:"
+  What is this?: Esto es una pelicula o una serie?
+  New: Ejecuta un nuevo comando de busqueda
+  Next result: No, muestrame el siguiente resultado
   Last result: No hay más resultados
-  Add: Sí, añadir
+  Add: Si, añadir
+  Select: Si, selecciona esto
   Select a path: Por favor elige una ruta donde guardar
+  Select a quality: Por favor, seleccione la calidad para la pelicula o serie
+  Select from which season: Desde que temporada?
+  From season: Desde la temporada
+  Future seasons: Futuras temporadas
   Authorize: Necesitas autorizar este chat primero. ¿Cuál es la contraseña?
   Wrong password: Contraseña incorrecta. Prueba otra vez...
   Chatid added: "Este chat ha sido autorizado correctamente. Ya puedes utilizar el bot."
   NotAdmin: "Necesitas ser admin para ejecutar este comando."
-  Chatid already allowed: "Este chat ya está autorizado."
+  Chatid already allowed: "Este chat ya esta autorizado."
   Help: "Quieres volver a ver este texto? Usa /%{help}.
     \n• Para autenticarte antes del primer uso debes usar /%{authenticate}.
     \n• Para añadir una serie o película usa /%{add}.
+    \n• Para eliminar una serie o película usa /%{delete}.
     \n• Para añadir directamente una película o serie usa /%{movie} or /%{serie}.
     \n• Para comprobar que series hay en Sonarr usa /%{allSeries}.
-    \n• Para comprobar que películas hay en Radarr usa /%{allMovies}.
-    \n• Para cambiar la velocidad de descarga de Transmission usa /%{transmission}.
-    \n• To change the up- and download speed of Sabnzbd use /%{sabnzbd}."
-  Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.
-    \nAdd these before restarting the bot."
-  Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.
-    \nChange these before restarting the bot."
+    \n• Para comprobar que películas hay en Radarr usa /%{allMovies}."
+  Missing config: "Te faltan las siguientes keys en tu config.yaml-file: %{missingKeys}.
+    \nAñadelas antes de reiniciar el bot."
+  Wrong values: "Te faltan las siguientes keys tienen un valor incorrecto en tu config.yaml-file: %{wrongValues}.
+    \nCambialas antes de reiniciar el bot."
 
   messages:
-    Add: Sí, añade esta %{subject}
+    Add: Si, añade esta %{subject}
     This: Es esta la %{subjectWithArticle} que quieres añadir?
-    Failed: Oops, fallo al añadir %{subjectWithArticle}. Prueba otra vez.
-    Success: "La %{subjectWithArticle} se ha añadido correctamente 🙂"
+    AddFailed: Oops, fallo al añadir %{subjectWithArticle}. Prueba otra vez.
+    DeleteFailed: Oops, fallo al eliminar %{subjectWithArticle}. Prueba otra vez.
+    AddSuccess: "La %{subjectWithArticle} se ha añadido correctamente 🙂"
+    DeleteSuccess: "La %{subjectWithArticle} se ha eliminado correctamente 🙂"
     Exist: La %{subjectWithArticle} ya existe 😉
-  
+    NoExist: La %{subjectWithArticle} no existe
+    
   searchresults:
-    zero: No se han encontrado resultados
-    one: Un resultado de búsqueda
-    other: "%{count} resultados de búsqueda"
+    zero: No se han encontrado resultados.
+    one: Se ha encontrado un resultado. 
+    other: "Se han encontrado %{count} resultados. "
 
   Transmission:
-    NotEnabled: "La función de Transmission no está activada."
-    Speed: "Qué velocidad quieres que use Transmission?"
+    NotEnabled: "La funcion de Transmission no esta activada."
+    Speed: "Que velocidad quieres que use Transmission?"
     TSL: Temporary Speed Limits
     Normal: Velocidad normal
     ChangedToTSL: "Temporary Speed Limits está habilitado."
     ChangedToNormal: "Temporary Speed Limits está deshabilitado."
 
   Sabnzbd:
-    NotEnabled: La función Sabnzbd no está activada.
-    Speed: Qué velocidad quieres que use Sabnzbd?
+    NotEnabled: La funcion Sabnzbd no esta activada.
+    Speed: Que velocidad quieres que use Sabnzbd?
     Limit25: 25%
     Limit50: 50%
-    Limit100: Sin límite
-    ChangedTo50: Límite aplicado en 50%
-    ChangedTo25: Límite aplicado en 25%
-    ChangedTo100: Ningún límite aplicado
+    Limit100: Sin limite
+    ChangedTo50: Limite aplicado en 50%
+    ChangedTo25: Limite aplicado en 25%
+    ChangedTo100: Ningun limite aplicado
     Error: Algo ha fallado cuando se ha intentado cambiar la velocidad

@@ -14,7 +14,12 @@ pl-pl:
   Next result: Próbuj dalej
   Last result: Brak więcej wyników wyszukania
   Add: Tak, chcę to!
+  Select: Wybierz: Tak, wybierz to
   Select a path: Wybierz ścieżkę dla filmu lub serialu
+  Select a quality: Proszę wybrać profil jakościowy dla filmu lub serialu
+  Select from which season: Od którego sezonu?
+  From season: From season
+  Future seasons: Przyszłe sezony
   Authorize: Musisz zautoryzować ten czat. Jakie jest hasło?
   Wrong password: Hasło nieprawidłowe. Spróbuj ponownie...
   Chatid added: "Ten czat został dodany do whitelisty. Teraz możesz używać tego bota."
@@ -23,6 +28,7 @@ pl-pl:
   Help: "Potrzebujesz pomocy? Użyj /%{help}!
     \n/%{authenticate} —  autoryzacja Twojego czatu
     \n/%{add} — dodawanie nowego filmu/serialu
+    \n/%{delete} - usuwanie nowego filmu/serialu
     \n/%{movie} lub /%{serie} — natychmiastowy wybór typu treści
     \n/%{allSeries} — lista wszystkich istniejących seriali
     \n/%{allMovies} — lista wszystkich istniejących filmów.
@@ -36,9 +42,12 @@ pl-pl:
   messages:
     Add: Tak, dodaj %{subject}
     This: O %{subjectWithArticle} Ci chodzi?
-    Failed: Ups, nie udało się dodać %{subjectWithArticle}. Spróbuj innym razem.
-    Success: "Właśnie dodałem %{subjectWithArticle} 🙂"
+    AddFailed: Ups, nie udało się dodać %{subjectWithArticle}. Spróbuj innym razem.
+    DeleteFailed: Oops, nie udało się usunąć %{subjectWithArticle}. Spróbuj innym razem.
+    AddSuccess: "Właśnie dodałem %{subjectWithArticle} 🙂"
+    DeleteSuccess: "%{subjectWithArticle} has been successfully removed 🙂"
     Exist: "%{subjectWithArticle} już istnieje 😉"
+    NoExist: "%{subjectWithArticle} nie istnieje"
     
   searchresults:
     zero: Brak rezultatów

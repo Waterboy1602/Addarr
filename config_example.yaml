@@ -11,10 +11,14 @@ sonarr:
     password:
   search: true
   seasonFolder: true
-  qualityProfileId: 1
-  languageProfileId: 1
+  languageProfile: English
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
+  excludedQualityProfiles:
+    - 
+  defaultTags: # If set must be existing tags
+    - telegram
+  adminRestrictions: false
 
 #Radarr Configuration
 radarr:
@@ -28,11 +32,15 @@ radarr:
     username:
     password: 
   search: true
-  qualityProfileId: 1
   minimumAvailability: announced
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
-
+  excludedQualityProfiles:
+    - 
+  defaultTags: # If set must be existing tags
+    - telegram
+  adminRestrictions: false
+  
 #Telegram Configuration
 telegram:
   token:
@@ -73,8 +81,9 @@ entrypointAllMovies: allMovies #allMovies or a custom entrypoint
 entrypointTransmission: transmission #transmission or a custom entrypoint
 entrypointSabnzbd: sabnzbd #sabnzbd or a custom entrypoint
 
-##Restrict some commands (Transmission) to only admins 
-enableAdmin: true
+##Restrict some commands to only admins and/or provide extra authorization by usernames
+enableAdmin: false #Check admin.txt
+enableAllowlist: false #Check allowlist.txt - very restrictive!
 
 ##Logging
 logToConsole: true

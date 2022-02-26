@@ -7,14 +7,21 @@ nl-be:
   Series: Serie
   SeriesWithArticle: De serie
   Start chatting: Je kan nu chatten met Addarr op Telegram. De eerste keer dat je "start" gebruikt, zul je je wachtwoord moeten ingeven.
-  End: Het toevoegen van films of series is beëindigd.
+  End: Het commando is beëindigd.
   Title: "Geef de titel:"
   What is this?: Is dit een film of een serie?
   New: Voer een nieuwe zoekopdracht uit
   Next result: Nee, toon me volgend resultaat
   Last result: Geen resultaten meer te tonen
   Add: Ja, voeg deze toe
+  Delete: Ja, verwijder deze
+  StopDelete: Nee, ik wil deze niet verwijderen
+  Select: Ja, selecteer dit
   Select a path: Kies een pad voor deze film of serie
+  Select a quality: Kies een kwaliteitsprofiel voor de film of serie
+  Select from which season: Sinds welk seizoen?
+  From season: From season
+  Future seasons: Toekomstige seizoenen
   Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
   Wrong password: Het wachtwoord is verkeerd. Probeer opnieuw...
   Chatid added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
@@ -23,6 +30,7 @@ nl-be:
   Help: "Wil je deze tekst nog eens zien? Gebruik dan /%{help}.
     \n• Om de eerste keer te authenticeren gebruik je /%{authenticate}.
     \n• Om een film of serie toe te voegen kun je /%{add} gebruiken.
+    \n• Om een serie of film te verwijderen gebruikt u /%{delete}.
     \n• Wil je meteen een keuze tussen film of serie maken, gebruik dan /${movie} of /%{serie}.
     \n• Om te kijken welke series al in Sonarr zitten, gebruik je /%{allSeries}.
     \n• Om te kijken welke films al in Radarr zitten, gebruik je /%{allMovies}.
@@ -36,9 +44,13 @@ nl-be:
   messages:
     Add: Ja, voeg deze %{subject} toe
     This: Is dit %{subjectWithArticle} die je wilt toevoegen?
+    ThisDelete:  Is dit %{subjectWithArticle} die je wilt verwijderen?
     Failed: Oeps, mislukt om %{subjectWithArticle} toe te voegen. Probeer misschien nog eens opnieuw.
-    Success: "%{subjectWithArticle} is met succes toegevoegd 🙂"
+    DeleteFailed: Oeps, %{subjectWithArticle} verwijderen mislukt. Probeer misschien nog eens opnieuw.
+    AddSuccess: "%{subjectWithArticle} is met succes toegevoegd 🙂"
+    DeleteSuccess: "%{subjectWithArticle} is met succes verwijderd 🙂"
     Exist: "%{subjectWithArticle} was al toegevoegd 😉"
+    NoExist: "%{subjectWithArticle} bestaat niet"
   
   searchresults:
     zero: "Er zijn geen resultaten gevonden."

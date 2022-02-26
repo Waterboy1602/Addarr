@@ -3,7 +3,7 @@ import math
 from telegram.ext import ConversationHandler
 import logger
 from config import config
-from definitions import ADMIN_PATH, CHATID_PATH
+from definitions import ADMIN_PATH, CHATID_PATH, ALLOWLIST_PATH
 from translations import i18n
 
 # Set up logging
@@ -65,6 +65,10 @@ def checkId(update):
             return False
 
 def authentication(update, context):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        return ConversationHandler.END
+        
     chatid = update.effective_message.chat_id
     with open(CHATID_PATH, "r") as file:
         if(str(chatid) in file.read()):
@@ -96,11 +100,13 @@ def authentication(update, context):
                 )
                 return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
 
-# Check if user is an admin, only used by transmission at the moment
-def checkAdmin(update):
+# Check if user is an admin or an allowed user
+def checkAllowed(update, mode):
+    if mode == "admin": path = ADMIN_PATH
+    else: path = path = ALLOWLIST_PATH
     admin = False
     user = update.message.from_user
-    with open(ADMIN_PATH, "r") as file:
+    with open(path, "r") as file:
         for line in file:
             if line.strip("\n") == str(user["username"]) or line.strip("\n") == str(
                 user["id"]

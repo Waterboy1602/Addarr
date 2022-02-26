@@ -7,14 +7,21 @@ en-us:
   Series: Series
   SeriesWithArticle: The series
   Start chatting: Start chatting with Addarr in Telegram. The first time you use "start" you will be asked to enter your password.
-  End: The adding of movies or series has ended.
+  End: The command has been ended
   Title: "Enter the title:"
   What is this?: Is this a movie or a series?
   New: Execute a new search command
   Next result: No, show me the next result
   Last result: No more results to show
   Add: Yes, add this
+  Delete: Yes, delete this
+  StopDelete: No, I don't want to delete this
+  Select: Yes, select this
   Select a path: Please select a path for the movie or series
+  Select a quality: Please select a quality profile for the movie or series
+  Select from which season: From which season?
+  From season: From season
+  Future seasons: Future seasons
   Authorize: You first need to authorize this chat. What is the password?
   Wrong password: You entered the wrong password. Try again...
   Chatid added: "This chat is successfully added to the list of allowed chats. Now you can start using this bot. \nIf you entered a command, you need to execute it again."
@@ -23,6 +30,7 @@ en-us:
   Help: "Want to see this text again? Use /%{help}.
     \n• To authenticate before first use you should use /%{authenticate}.
     \n• To add a movie or series use /%{add}.
+    \n• To delete a movie or series use /%{add}.
     \n• To immediately add a movie or series you can use /%{movie} or /%{serie}.
     \n• To check which series are in Sonarr you can use /%{allSeries}.
     \n• To check which movies are in Radarr you can use /%{allMovies}.
@@ -36,9 +44,14 @@ en-us:
   messages:
     Add: Yes, add this %{subject}
     This: Is this %{subjectWithArticle} you want to add?
-    Failed: Oops, failed to add %{subjectWithArticle}. Maybe give it another try.
-    Success: "%{subjectWithArticle} is added with success 🙂"
+    ThisDelete: Is this %{subjectWithArticle} you want to delete?
+    AddFailed: Oops, failed to add %{subjectWithArticle}. Maybe give it another try.
+    DeleteFailed: Oops, failed to delete %{subjectWithArticle}. Maybe give it another try.
+    AddSuccess: "%{subjectWithArticle} is added with success 🙂"
+    DeleteSuccess: "%{subjectWithArticle} is deleted with success 🙂"
     Exist: "%{subjectWithArticle} already exists 😉"
+    NoExist: "%{subjectWithArticle} does not exist or you haven't added it before"
+
   
   searchresults:
     zero: No results found

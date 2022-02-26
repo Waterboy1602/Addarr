@@ -20,7 +20,9 @@ addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images"]
 
 def search(title):
     parameters = {"term": title}
-    req = requests.get(commons.generateApiQuery("radarr", "movie/lookup", parameters))
+    url = commons.generateApiQuery("radarr", "movie/lookup", parameters)
+    logger.info(url)
+    req = requests.get(url)
     parsed_json = json.loads(req.text)
 
     if req.status_code == 200 and parsed_json:
@@ -54,13 +56,13 @@ def inLibrary(tmdbId):
     return next((True for movie in parsed_json if movie["tmdbId"] == tmdbId), False)
 
 
-def addToLibrary(tmdbId, path):
+def addToLibrary(tmdbId, path, qualityProfileId, tags):
     parameters = {"tmdbId": str(tmdbId)}
     req = requests.get(
         commons.generateApiQuery("radarr", "movie/lookup/tmdb", parameters)
     )
     parsed_json = json.loads(req.text)
-    data = json.dumps(buildData(parsed_json, path))
+    data = json.dumps(buildData(parsed_json, path, qualityProfileId, tags))
     add = requests.post(commons.generateApiQuery("radarr", "movie"), data=data, headers={'Content-Type': 'application/json'})
     if add.status_code == 201:
         return True
@@ -68,12 +70,25 @@ def addToLibrary(tmdbId, path):
         return False
 
 
-def buildData(json, path):
+def removeFromLibrary(tmdbId):
+    parameters = { 
+        "deleteFiles": str(True)
+    }
+    dbId = getDbIdFromImdbId(tmdbId)
+    delete = requests.delete(commons.generateApiQuery("radarr", f"movie/{dbId}", parameters))
+    if delete.status_code == 200:
+        return True
+    else:
+        return False
+
+
+def buildData(json, path, qualityProfileId, tags):
     built_data = {
-        "qualityProfileId": config["qualityProfileId"],
+        "qualityProfileId": int(qualityProfileId),
         "minimumAvailability": config["minimumAvailability"],
-        "rootFolderPath": path,  # config["rootFolder"],
+        "rootFolderPath": path,
         "addOptions": {"searchForMovie": config["search"]},
+        "tags": tags,
     }
 
     for key in addMovieNeededFields:
@@ -85,7 +100,6 @@ def getRootFolders():
     parameters = {}
     req = requests.get(commons.generateApiQuery("radarr", "Rootfolder", parameters))
     parsed_json = json.loads(req.text)
-    logger.debug(f"Found Radarr paths: {parsed_json}")
     return parsed_json
 
 
@@ -112,3 +126,32 @@ def all_movies():
         return data
     else:
         return False
+
+def getQualityProfiles():
+    parameters = {}
+    req = requests.get(commons.generateApiQuery("radarr", "qualityProfile", parameters))
+    parsed_json = json.loads(req.text)
+    return parsed_json
+    
+def getTags():
+    parameters = {}
+    req = requests.get(commons.generateApiQuery("radarr", "tag", parameters))
+    parsed_json = json.loads(req.text)
+    return parsed_json
+    
+def createTag(tag):
+    data_json = {
+        "id": max([t["id"] for t in getTags()])+1,
+        "label": str(tag)
+    }
+    add = requests.post(commons.generateApiQuery("radarr", "tag"), json=data_json, headers={'Content-Type': 'application/json'})
+    if add.status_code == 200:
+        return True
+    else:
+        return False
+    
+def getDbIdFromImdbId(tmdbId):
+    req = requests.get(commons.generateApiQuery("radarr", "movie", {}))
+    parsed_json = json.loads(req.text)
+    dbId = [f["id"] for f in parsed_json if f["tmdbId"] == tmdbId]
+    return dbId[0]

@@ -14,7 +14,12 @@ it-it:
   Next result: No, mostra il prossimo risultato
   Last result: Non ci sono altri risultati
   Add: Sì, aggiungilo
+  Select: Sì, seleziona questo
   Select a path: Per favore scegli una cartella per il film o per la serie
+  Select a quality: Per favore seleziona un profilo di qualità per il film o la serie
+  Select from which season: Da quale stagione?
+  From season: From season
+  Future seasons: Stagioni future
   Authorize: Devi prima autenticare questa chat. Qual'è la password?
   Wrong password: La password è sbagliata. Riprova...
   Chatid added: "Questa chat è stata aggiunta alla lista delle chat autorizzate. Ora puoi utilizzare il bot. \nSe avevi inviato un comando, dovrai inviarlo di nuovo."
@@ -23,6 +28,7 @@ it-it:
   Help: "Per leggere questo messaggio, usa /%{help}.
     \n• Per autenticarti usa /%{authenticate}.
     \n• Per aggiungere un film o una serie usa /%{add}.
+    \n• Per cancellare una serie o un film usa /%{delete}.
     \n• Per aggiungere velocemente un film o una serie usa /%{movie} o /%{serie}.
     \n• Per vedere quali serie sono presenti in Sonarr usa /%{allSeries}.
     \n• Per vedere quali film sono presenti in Radarr usa /%{allMovies}.
@@ -36,9 +42,12 @@ it-it:
   messages:
     Add: Si, aggiungi %{subject}
     This: Vuoi aggiungere questa/o %{subjectWithArticle}?
-    Failed: Ops, non sono riuscito ad aggiungere la/il %{subjectWithArticle}. Riprova.
-    Success: "%{subjectWithArticle} aggiunta/o correttamente 🙂"
+    AddFailed: Ops, non sono riuscito ad aggiungere la/il %{subjectWithArticle}. Riprova.
+    DeleteFailed: Oops, non è riuscito a eliminare %{subjectWithArticle}. Riprova.
+    AddSuccess: "%{subjectWithArticle} aggiunta/o correttamente 🙂"
+    DeleteSuccess: "%{subjectWithArticle} è stato rimosso con successo 🙂 "
     Exist: "%{subjectWithArticle} già esistente 😉"
+    NoExist: "%{subjectWithArticle} non esiste."
   
   searchresults:
     zero: Nessun risultato

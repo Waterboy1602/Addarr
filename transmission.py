@@ -4,7 +4,7 @@ import yaml
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler
 
-from commons import authentication, checkAdmin, checkId
+from commons import authentication, checkAllowed, checkId
 from config import config
 from translations import i18n
 
@@ -14,6 +14,10 @@ TSL_LIMIT = 'limited'
 TSL_NORMAL = 'normal'
 
 def transmission(update, context):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        return ConversationHandler.END
+    
     if not config["enable"]:
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
@@ -27,7 +31,7 @@ def transmission(update, context):
         )
         return TSL_NORMAL
 
-    if not checkAdmin(update):
+    if not checkAllowed(update, "admin"):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),
