@@ -86,9 +86,21 @@ def main():
             READ_DELETE_CHOICE: [
                 MessageHandler(
                     Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
-                    deleteSerieMovie,
+                    confirmDelete,
                 ),
-                CallbackQueryHandler(deleteSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
+                CallbackQueryHandler(confirmDelete, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
+            ],
+            GIVE_OPTION: [
+                CallbackQueryHandler(deleteSerieMovie, pattern=f'({i18n.t("addarr.Delete")})'),
+                MessageHandler(
+                    Filters.regex(f'^({i18n.t("addarr.Delete")})$'),
+                    deleteSerieMovie
+                ),
+                MessageHandler(
+                    Filters.regex(f'^({i18n.t("addarr.New")})$'),
+                    delete
+                ),
+                CallbackQueryHandler(delete, pattern=f'({i18n.t("addarr.New")})'),
             ],
         },
         fallbacks=[
@@ -881,8 +893,11 @@ def choiceDeleteSerieMovie(update, context):
             context.user_data["update_msg"] = msg.message_id
 
         return READ_DELETE_CHOICE
-        
-def deleteSerieMovie(update, context):
+
+
+def confirmDelete(update, context):
+    title = context.user_data["title"]
+
     if not context.user_data.get("choice"):
         choice = None
         if update.message is not None:
@@ -890,12 +905,14 @@ def deleteSerieMovie(update, context):
         elif update.callback_query is not None:
             choice = update.callback_query.data
         context.user_data["choice"] = choice
-        
+    
     choice = context.user_data["choice"]
     context.user_data["position"] = 0
-    title = context.user_data["title"]
-    position = context.user_data["position"]
+
     service = getService(context)
+
+    position = context.user_data["position"]
+
     searchResult = service.search(title)
     if not searchResult:
         context.bot.send_message( 
@@ -907,20 +924,56 @@ def deleteSerieMovie(update, context):
         
     context.user_data["output"] = service.giveTitles(searchResult)
     idnumber = context.user_data["output"][position]["id"]
-    
+
     if service.inLibrary(idnumber):
-        if service.removeFromLibrary(idnumber):
-            if choice == i18n.t("addarr.Movie"):
-                message=i18n.t("addarr.messages.DeleteSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
-            else:
-                message=i18n.t("addarr.messages.DeleteSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+        keyboard = [
+                [
+                    InlineKeyboardButton(
+                        '\U00002795 '+i18n.t("addarr.Delete"),
+                        callback_data=i18n.t("addarr.Delete")
+                    ),
+                ],[
+                    InlineKeyboardButton(
+                        '\U000023ED '+i18n.t("addarr.StopDelete"),
+                        callback_data=i18n.t("addarr.Stop")
+                    ),
+                ],[ 
+                    InlineKeyboardButton(
+                        '\U0001F50D '+i18n.t("addarr.New"),
+                        callback_data=i18n.t("addarr.New")
+                    ),
+                ]
+            ]
+        markup = InlineKeyboardMarkup(keyboard)
+        
+        message = f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
+        
+        if "update_msg" in context.user_data:
             context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
                 text=message,
+                parse_mode=ParseMode.MARKDOWN,
             )
-            clearUserData(context)
-            return ConversationHandler.END
+        else:
+            msg = context.bot.send_message(chat_id=update.effective_message.chat_id, text=message,parse_mode=ParseMode.MARKDOWN,)
+            context.user_data["update_msg"] = msg.message_id
+        
+        img = context.bot.sendPhoto(
+            chat_id=update.effective_message.chat_id,
+            photo=context.user_data["output"][position]["poster"],
+        )
+        context.user_data["photo_update_msg"] = img.message_id
+        
+        if choice == i18n.t("addarr.Movie"):
+            message=i18n.t("addarr.messages.ThisDelete", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
+        else:
+            message=i18n.t("addarr.messages.ThisDelete", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+        msg = context.bot.send_message(
+            chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
+        )
+        context.user_data["title_update_msg"] = context.user_data["update_msg"]
+        context.user_data["update_msg"] = msg.message_id
     else:
         if choice == i18n.t("addarr.Movie"):
             message=i18n.t("addarr.messages.NoExist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
@@ -933,7 +986,31 @@ def deleteSerieMovie(update, context):
         )
         clearUserData(context)
         return ConversationHandler.END
+    return GIVE_OPTION
 
+def deleteSerieMovie(update, context):  
+    choice = context.user_data["choice"]  
+    position = context.user_data["position"]
+    service = getService(context)
+    idnumber = context.user_data["output"][position]["id"]
+
+    if service.removeFromLibrary(idnumber):
+        if choice == i18n.t("addarr.Movie"):
+            message=i18n.t("addarr.messages.DeleteSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
+        else:
+            message=i18n.t("addarr.messages.DeleteSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+    else:
+        if choice == i18n.t("addarr.Movie"):
+            message=i18n.t("addarr.messages.DeleteFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
+        else:
+            message=i18n.t("addarr.messages.DeleteFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+    context.bot.edit_message_text(
+            message_id=context.user_data["update_msg"],
+            chat_id=update.effective_message.chat_id,
+            text=message,
+    )
+    clearUserData(context)
+    return ConversationHandler.END
 
 def getService(context):
     if context.user_data.get("choice") == i18n.t("addarr.Series"):
