@@ -574,7 +574,7 @@ def qualityProfileSerieMovie(update, context):
         # There is only 1 path, so use it!
         logger.debug("Only found 1 profile, so proceeding with that one...")
         context.user_data["qualityProfile"] = qualityProfiles[0]['id']
-        return addSerieMovie(update, context)
+        return selectSeasons(update, context)
 
     keyboard = []
     for q in qualityProfiles:
