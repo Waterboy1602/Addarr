@@ -72,6 +72,7 @@ def authentication(update, context):
     chatid = update.effective_message.chat_id
     with open(CHATID_PATH, "r") as file:
         if(str(chatid) in file.read()):
+            print("gelukt")
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
                 text=i18n.t("addarr.Chatid already allowed"),
@@ -84,7 +85,7 @@ def authentication(update, context):
                 password = password.replace("/auth ", "")
             if password == config["telegram"]["password"]:
                 with open(CHATID_PATH, "a") as file:
-                    file.write(str(chatid) + "\n")
+                    file.write(getChatName(context, chatid))
                     context.bot.send_message(
                         chat_id=update.effective_message.chat_id,
                         text=i18n.t("addarr.Chatid added"),
@@ -99,6 +100,27 @@ def authentication(update, context):
                     chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Wrong password")
                 )
                 return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
+
+def getChatName(context, chatid):
+    chat = context.bot.get_chat(chatid)
+    if chat.username:
+        chatName = str(chat.username)
+    elif chat.title:
+        chatName = str(chat.title)
+    elif chat.last_name and chat.first_name:
+        chatName = str(chat.lastname) + str(chat.first_name)
+    elif chat.first_name:
+        chatName = str(chat.first_name)
+    elif chat.last_name:
+        chatName = str(chat.lastname)
+    else:
+        chatName = None
+
+    if chatName is not None:
+        chatAuth = str(chatid) + " - " + str(chatName) + "\n"
+    else:
+        chatAuth = str(chatid) + "\n"
+    return chatAuth
 
 # Check if user is an admin or an allowed user
 def checkAllowed(update, mode):
