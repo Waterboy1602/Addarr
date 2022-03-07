@@ -56,7 +56,8 @@ def checkId(update):
         file.close()
     with open(CHATID_PATH, "r") as file:
         for line in file:
-            if line.strip("\n") == str(update.effective_message.chat_id):
+            chatId = line.strip("\n").split(" - ")[0]
+            if chatId == str(update.effective_message.chat_id):
                 authorize = True
         file.close()
         if authorize:
@@ -72,7 +73,6 @@ def authentication(update, context):
     chatid = update.effective_message.chat_id
     with open(CHATID_PATH, "r") as file:
         if(str(chatid) in file.read()):
-            print("gelukt")
             context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
                 text=i18n.t("addarr.Chatid already allowed"),
@@ -132,9 +132,8 @@ def checkAllowed(update, mode):
     user = update.message.from_user
     with open(path, "r") as file:
         for line in file:
-            if line.strip("\n") == str(user["username"]) or line.strip("\n") == str(
-                user["id"]
-            ):
+            chatId = line.strip("\n").split(" - ")[0]
+            if chatId == str(user["username"]) or chatId == str(user["id"]):
                 admin = True
         file.close()
         if admin:
