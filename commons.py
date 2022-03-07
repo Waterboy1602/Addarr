@@ -124,8 +124,10 @@ def getChatName(context, chatid):
 
 # Check if user is an admin or an allowed user
 def checkAllowed(update, mode):
-    if mode == "admin": path = ADMIN_PATH
-    else: path = path = ALLOWLIST_PATH
+    if mode == "admin": 
+        path = ADMIN_PATH
+    else: 
+        path = ALLOWLIST_PATH
     admin = False
     user = update.message.from_user
     with open(path, "r") as file:
