@@ -740,7 +740,7 @@ def allSeries(update, context):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
-        
+
     if sonarr.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
@@ -816,6 +816,13 @@ def delete(update : Update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
+        return ConversationHandler.END
+
+    if not checkAllowed(update, "admin"):
+        context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.NotAdmin"),
+        )
         return ConversationHandler.END
     
     if not checkId(update):
