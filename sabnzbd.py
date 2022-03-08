@@ -37,7 +37,7 @@ def sabnzbd(update, context):
         )
         return SABNZBD_SPEED_LIMIT_100
 
-    if not checkAllowed(update, "admin"):
+    if config["onlyAdmin"] and not checkAllowed(update, "admin"):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),
