@@ -12,4 +12,4 @@ COPY . /app
 # Install ans build Addarr requirements, make symlink to redirect logs to stdout
 RUN	pip install --no-cache-dir -r requirements.txt --upgrade
 
-ENTRYPOINT ["python", "/app/addarr.py"]
+ENTRYPOINT ["python", "/app/src/addarr.py"]
