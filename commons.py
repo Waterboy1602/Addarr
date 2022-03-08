@@ -129,7 +129,7 @@ def checkAllowed(update, mode):
     else: 
         path = ALLOWLIST_PATH
     admin = False
-    user = update.message.from_user
+    user = update.effective_user
     with open(path, "r") as file:
         for line in file:
             chatId = line.strip("\n").split(" - ")[0]
