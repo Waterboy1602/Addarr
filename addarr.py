@@ -244,7 +244,9 @@ def main():
 def stop(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        logger.debug("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
+        
     if not checkId(update):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
@@ -261,6 +263,7 @@ def stop(update, context):
 def startSerieMovie(update : Update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        logger.debug("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
     
     if not checkId(update):
@@ -735,6 +738,7 @@ def addSerieMovie(update, context):
 def allSeries(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        logger.debug("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
         
     if sonarr.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
@@ -772,6 +776,7 @@ def allSeries(update, context):
 def allMovies(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        logger.debug("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
         
     if radarr.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
@@ -810,6 +815,7 @@ def allMovies(update, context):
 def delete(update : Update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        logger.debug("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
     
     if not checkId(update):
@@ -1031,6 +1037,7 @@ def getService(context):
 def help(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        logger.debug("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
     
     context.bot.send_message(
