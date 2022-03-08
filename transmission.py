@@ -1,12 +1,17 @@
 import os
 
-import yaml
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler
 
 from commons import authentication, checkAllowed, checkId
 from config import config
 from translations import i18n
+import logging
+import logger
+
+# Set up logging
+logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
+logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", False))
 
 config = config["transmission"]
 
@@ -16,6 +21,7 @@ TSL_NORMAL = 'normal'
 def transmission(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
     
     if not config["enable"]:
@@ -31,7 +37,7 @@ def transmission(update, context):
         )
         return TSL_NORMAL
 
-    if not checkAllowed(update, "admin"):
+    if config["onlyAdmin"] and not checkAllowed(update, "admin"):
         context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),
