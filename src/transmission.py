@@ -15,8 +15,8 @@ logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", 
 
 config = config["transmission"]
 
-TSL_LIMIT = 'limited'
-TSL_NORMAL = 'normal'
+TSL_LIMIT, TSL_NORMAL = range(2)
+
 
 def transmission(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):

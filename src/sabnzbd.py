@@ -14,9 +14,7 @@ logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", 
 
 config = config["sabnzbd"]
 
-SABNZBD_SPEED_LIMIT_25 = '25'
-SABNZBD_SPEED_LIMIT_50 = '50'
-SABNZBD_SPEED_LIMIT_100 = '100'
+SABNZBD_SPEED_LIMIT_25, SABNZBD_SPEED_LIMIT_50, SABNZBD_SPEED_LIMIT_100 = range(3)
 
 
 def sabnzbd(update, context):

@@ -10,6 +10,7 @@ from translations import i18n
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.commons", logLevel, config.get("logToConsole", False))
 
+
 def generateServerAddr(app):
     try:
         if config[app]["server"]["ssl"]:
@@ -46,6 +47,7 @@ def generateApiQuery(app, endpoint, parameters={}):
     except Exception as e:
         logger.warn(f"Generate of APIQUERY failed: {e}.")
 
+
 # Check if Id is authenticated
 def checkId(update):
     authorize = False
@@ -64,6 +66,7 @@ def checkId(update):
             return True
         else:
             return False
+
 
 def authentication(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
@@ -102,6 +105,7 @@ def authentication(update, context):
                 )
                 return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
 
+
 def getChatName(context, chatid):
     chat = context.bot.get_chat(chatid)
     if chat.username:
@@ -123,6 +127,7 @@ def getChatName(context, chatid):
         chatAuth = str(chatid) + "\n"
     return chatAuth
 
+
 # Check if user is an admin or an allowed user
 def checkAllowed(update, mode):
     if mode == "admin": 
@@ -142,12 +147,14 @@ def checkAllowed(update, mode):
         else:
             return False
 
+
 def format_bytes(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
         if abs(num) < 1024.0:
             return "%3.1f%s%s" % (num, unit, suffix)
         num /= 1024.0
     return "%.1f%s%s" % (num, 'Yi', suffix)
+
 
 def format_long_list_message(list):
     string = ""
@@ -195,6 +202,7 @@ def format_long_list_message(list):
             i -= 1
         stringParts.append(string)
         return stringParts
+
 
 def getAuthChats():
     chats = []

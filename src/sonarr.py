@@ -49,6 +49,7 @@ def giveTitles(parsed_json):
             )
     return data
 
+
 def inLibrary(tvdbId):
     parameters = {}
     req = requests.get(commons.generateApiQuery("sonarr", "series", parameters))
@@ -115,6 +116,7 @@ def getRootFolders():
         item.pop("unmappedFolders")
     return parsed_json
 
+
 def allSeries():
     parameters = {}
     req = requests.get(commons.generateApiQuery("sonarr", "series", parameters))
@@ -139,18 +141,21 @@ def allSeries():
     else:
         return False
 
+
 def getQualityProfiles():
     parameters = {}
     req = requests.get(commons.generateApiQuery("sonarr", "qualityProfile", parameters))
     parsed_json = json.loads(req.text)
     return parsed_json
-    
+
+
 def getTags():
     parameters = {}
     req = requests.get(commons.generateApiQuery("sonarr", "tag", parameters))
     parsed_json = json.loads(req.text)
     return parsed_json
-    
+
+
 def createTag(tag):
     data_json = {
         "id": max([t["id"] for t in getTags()])+1,
@@ -162,18 +167,21 @@ def createTag(tag):
     else:
         return False
 
+
 def getLanguageProfileId(language):
     parameters = {}
     req = requests.get(commons.generateApiQuery("sonarr", "languageProfile", parameters))
     parsed_json = json.loads(req.text)
     languageId = [l["id"] for l in parsed_json if l["name"] == language]
     return languageId[0]
-    
+
+
 def getSeasons(tvdbId):
     parameters = {"term": "tvdb:" + str(tvdbId)}
     req = requests.get(commons.generateApiQuery("sonarr", "series/lookup", parameters))
     parsed_json = json.loads(req.text)
     return parsed_json[0]["seasons"]
+
 
 def getDbIdFromImdbId(tvdbId):
     req = requests.get(commons.generateApiQuery("sonarr", "series", {}))

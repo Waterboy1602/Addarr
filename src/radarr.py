@@ -127,18 +127,21 @@ def all_movies():
     else:
         return False
 
+
 def getQualityProfiles():
     parameters = {}
     req = requests.get(commons.generateApiQuery("radarr", "qualityProfile", parameters))
     parsed_json = json.loads(req.text)
     return parsed_json
-    
+
+
 def getTags():
     parameters = {}
     req = requests.get(commons.generateApiQuery("radarr", "tag", parameters))
     parsed_json = json.loads(req.text)
     return parsed_json
-    
+
+
 def createTag(tag):
     data_json = {
         "id": max([t["id"] for t in getTags()])+1,
@@ -149,7 +152,8 @@ def createTag(tag):
         return True
     else:
         return False
-    
+
+
 def getDbIdFromImdbId(tmdbId):
     req = requests.get(commons.generateApiQuery("radarr", "movie", {}))
     parsed_json = json.loads(req.text)
