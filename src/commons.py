@@ -113,11 +113,11 @@ def getChatName(context, chatid):
     elif chat.title:
         chatName = str(chat.title)
     elif chat.last_name and chat.first_name:
-        chatName = str(chat.lastname) + str(chat.first_name)
+        chatName = str(chat.last_name) + str(chat.first_name)
     elif chat.first_name:
         chatName = str(chat.first_name)
     elif chat.last_name:
-        chatName = str(chat.lastname)
+        chatName = str(chat.last_name)
     else:
         chatName = None
 
