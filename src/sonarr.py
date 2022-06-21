@@ -173,8 +173,10 @@ def getLanguageProfileId(language):
     req = requests.get(commons.generateApiQuery("sonarr", "languageProfile", parameters))
     parsed_json = json.loads(req.text)
     languageId = [l["id"] for l in parsed_json if l["name"] == language]
+    if len(languageId) == 0:
+        languageId = [l["id"] for l in parsed_json]
+        logger.debug("Didn't find a match with languageProfile from the config file. Took instead the first languageId from languageProfile-API response")
     return languageId[0]
-
 
 def getSeasons(tvdbId):
     parameters = {"term": "tvdb:" + str(tvdbId)}
