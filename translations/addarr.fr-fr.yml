@@ -1,0 +1,78 @@
+#French - France
+fr-fr:
+  Start: Start
+  Stop: Stop
+  Movie: Film
+  MovieWithArticle: Le film
+  Series: Série
+  SeriesWithArticle: La série
+  Start chatting: Commencez à chatter avec Addarr sur Télégram. La première fois que vous utiliserez "start" il vous sera demandé de saisir un mot de passe.
+  End: La commande est terminée
+  Title: "Entrez le titre:"
+  What is this?: Est-ce un film ou une série ?
+  New: Exécuter une nouvelle commande de recherche
+  Next result: Non, montrez moi le prochain résultat
+  Last result: Plus de résultats à afficher
+  Add: Oui, ajoutez ceci
+  Delete: Oui, supprimez ceci
+  StopDelete: Non, je ne veux pas supprimer ceci
+  Select: Oui, sélectionnez ceci
+  Select a path: Veuillez sélectionner un chemin d'accès pour le film ou la série
+  Select a quality: Veuillez sélectionner un profil de qualité pour le film ou la série
+  Select from which season: De quelle saison ?
+  From season: De la saison
+  Future seasons: Saison future
+  Authorize: Vous devez d'abord autoriser ce chat. Quel est le mot de passe?
+  Wrong password: Vous avez entré le mauvais mot de passe. Réessayer...
+  Chatid added: "Ce chat a été ajouté avec succès à la liste des chats autorisés. Vous pouvez maintenant commencer à utiliser ce bot. \nSi vous avez entré une commande, vous devez l'exécuter à nouveau."
+  NotAdmin: "Vous devez être un administrateur pour exécuter cette commande."
+  Chatid already allowed: "Ce chat est déjà autorisé."
+  Help: "Vous voulez revoir ce texte ? Utilisez /%{help}.
+    \n• Pour vous authentifier avant la première utilisation, vous devez utiliser /%{authenticate}.
+    \n• Pour ajouter un film ou une série, utilisez /%{add}.
+    \n• Pour supprimer un film ou une série, utilisez /%{delete}.
+    \n• Pour ajouter immédiatement un film ou une série, vous pouvez utiliser /%{movie} ou /%{serie}.
+    \n• Pour vérifier quelles séries sont dans Sonarr, vous pouvez utiliser /%{allSeries}.
+    \n• Pour vérifier quels films sont dans Radarr, vous pouvez utiliser /%{allMovies}.
+    \n• Pour basculer la vitesse montante et descendante de Transmission, utilisez /%{transmission}.
+    \n• Pour modifier la vitesse de chargement et de téléchargement de Sabnzbd, utilisez /%{sabnzbd}."
+  Missing config: "Il vous manque les clés de configuration suivantes dans votre fichier config.yaml : %{missingKeys}.
+    \nAjoutez-les avant de redémarrer le bot."
+  Wrong values: "Les clés de configuration suivantes ont une valeur incorrecte dans votre fichier config.yaml : %{wrongValues}.
+    \nModifiez-les avant de redémarrer le bot."
+
+  messages:
+    Add: Oui, ajoutez ce %{subject}
+    This: Est-ce %{subjectWithArticle} que vous souhaitez ajouter ?
+    ThisDelete: Ce %{subjectWithArticle} est-il à supprimer ?
+    AddFailed: Oups, impossible d'ajouter %{subjectWithArticle}. Peut-être faire un nouvel essai.
+    DeleteFailed: Oups, impossible de supprimer %{subjectWithArticle}. Peut-être faire un nouvel essai.
+    AddSuccess: "%{subjectWithArticle} est ajouté avec succès 🙂"
+    DeleteSuccess: "%{subjectWithArticle} a été supprimé avec succès 🙂"
+    Exist: "%{subjectWithArticle} existe déjà 😉"
+    NoExist: "%{subjectWithArticle} n'existe pas ou vous ne l'avez pas ajouté auparavant"
+
+
+  searchresults:
+    zero: Aucun résultat trouvé
+    one: Un seul résultat de recherche
+    other: "%{count} résultats de recherche"
+
+  Transmission:
+    NotEnabled: "La fonction Transmission n'est pas activée."
+    Speed: «Quelle vitesse voulez-vous que Transmission utilise ?»
+    TSL: Limites de vitesse temporaires
+    Normal: Vitesse normale
+    ChangedToTSL: "La limite de vitesse temporaire est activée."
+    ChangedToNormal: "La limite de vitesse temporaire est désactivée."
+
+  Sabnzbd:
+    NotEnabled: La fonction Sabnzbd n'est pas activée.
+    Speed: Quelle vitesse voulez-vous que Sabnzbd utilise ?
+    Limit25: 25%
+    Limit50: 50%
+    Limit100: Pas de limite
+    ChangedTo50: Limite réglée à 50%
+    ChangedTo25: Limite réglée à 25%
+    ChangedTo100: Pas de limite de vitesse
+    Error: Une erreur s'est produite lors de la tentative de réglage de la vitesse
