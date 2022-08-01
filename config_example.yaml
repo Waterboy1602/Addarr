@@ -70,7 +70,7 @@ sabnzbd:
 
 # Optional settings:
 ##Language
-language: en-us # en-us, es-es, it-it, nl-be, pt-pt
+language: en-us # en-us, es-es, it-it, nl-be, pt-pt, fr-fr, ru-ru
 
 ##Entrypoints
 entrypointAuth: auth #auth or a custom entrypoint
