@@ -12,7 +12,6 @@ en-us:
   What is this?: Is this a movie or a series?
   New: Execute a new search command
   Next result: No, show me the next result
-  Last result: No more results to show
   Add: Yes, add this
   Delete: Yes, delete this
   StopDelete: No, I don't want to delete this
@@ -49,7 +48,7 @@ en-us:
     DeleteFailed: Oops, failed to delete %{subjectWithArticle}. Maybe give it another try.
     AddSuccess: "%{subjectWithArticle} is added with success 🙂"
     DeleteSuccess: "%{subjectWithArticle} is deleted with success 🙂"
-    Exist: "%{subjectWithArticle} already exists 😉"
+    Exist: "%{subjectWithArticle} has already been added 😉"
     NoExist: "%{subjectWithArticle} does not exist or you haven't added it before"
 
   
