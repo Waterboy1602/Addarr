@@ -384,31 +384,6 @@ def searchSerieMovie(update, context):
     service = getService(context)
 
     position = context.user_data["position"]
-
-    keyboard = [
-            [
-                InlineKeyboardButton(
-                    '\U00002795 '+i18n.t("addarr.Add"),
-                    callback_data=i18n.t("addarr.Add")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U000023ED '+i18n.t("addarr.Next result"),
-                    callback_data=i18n.t("addarr.Next result")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U0001F5D1 '+i18n.t("addarr.New"),
-                    callback_data=i18n.t("addarr.New")
-                ),
-            ],[
-                InlineKeyboardButton(
-                    '\U0001F6D1 '+i18n.t("addarr.Stop"),
-                    callback_data=i18n.t("addarr.Stop")
-                ),
-            ],
-        ]
-    markup = InlineKeyboardMarkup(keyboard)
     
     searchResult = service.search(title)
     if not searchResult:
@@ -434,12 +409,62 @@ def searchSerieMovie(update, context):
         msg = context.bot.send_message(chat_id=update.effective_message.chat_id, text=message,parse_mode=ParseMode.MARKDOWN,)
         context.user_data["update_msg"] = msg.message_id
     
-    img = context.bot.sendPhoto(
-        chat_id=update.effective_message.chat_id,
-        photo=context.user_data["output"][position]["poster"],
-    )
-    context.user_data["photo_update_msg"] = img.message_id
+
+    try:
+        img = context.bot.sendPhoto(
+            chat_id=update.effective_message.chat_id,
+            photo=context.user_data["output"][position]["poster"],
+        )
+    except:
+        context.user_data["photo_update_msg"] = None
+    else:
+        context.user_data["photo_update_msg"] = img.message_id
     
+    if len(searchResult) == 1:
+        keyboard = [
+            [
+                InlineKeyboardButton(
+                    '\U00002795 '+i18n.t("addarr.Add"),
+                    callback_data=i18n.t("addarr.Add")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U0001F5D1 '+i18n.t("addarr.New"),
+                    callback_data=i18n.t("addarr.New")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U0001F6D1 '+i18n.t("addarr.Stop"),
+                    callback_data=i18n.t("addarr.Stop")
+                ),
+            ],
+        ]
+    else: 
+        keyboard = [
+            [
+                InlineKeyboardButton(
+                    '\U00002795 '+i18n.t("addarr.Add"),
+                    callback_data=i18n.t("addarr.Add")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U000023ED '+i18n.t("addarr.Next result"),
+                    callback_data=i18n.t("addarr.Next result")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U0001F5D1 '+i18n.t("addarr.New"),
+                    callback_data=i18n.t("addarr.New")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U0001F6D1 '+i18n.t("addarr.Stop"),
+                    callback_data=i18n.t("addarr.Stop")
+                ),
+            ],
+        ]
+    markup = InlineKeyboardMarkup(keyboard)
+
     if choice == i18n.t("addarr.Movie"):
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
     else:
@@ -467,7 +492,7 @@ def nextOption(update, context):
         parse_mode=ParseMode.MARKDOWN,
     )
     
-    if position < len(context.user_data["output"]):
+    if position < len(context.user_data["output"]) - 1:
         keyboard = [
                 [
                     InlineKeyboardButton(
@@ -491,41 +516,57 @@ def nextOption(update, context):
                     ),
                 ],
             ]
-        markup = InlineKeyboardMarkup(keyboard)
+    else:
+        keyboard = [
+            [
+                InlineKeyboardButton(
+                    '\U00002795 '+i18n.t("addarr.Add"),
+                    callback_data=i18n.t("addarr.Add")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U0001F5D1 '+i18n.t("addarr.New"),
+                    callback_data=i18n.t("addarr.New")
+                ),
+            ],[
+                InlineKeyboardButton(
+                    '\U0001F6D1 '+i18n.t("addarr.Stop"),
+                    callback_data=i18n.t("addarr.Stop")
+                ),
+            ],
+        ]
+    markup = InlineKeyboardMarkup(keyboard)
 
+    if context.user_data["photo_update_msg"]:
         context.bot.delete_message(
             message_id=context.user_data["photo_update_msg"],
             chat_id=update.effective_message.chat_id,
         )
-        
+    
+    try:
         img = context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,
             photo=context.user_data["output"][position]["poster"],
         )
-        context.user_data["photo_update_msg"] = img.message_id
-        
-        context.bot.delete_message(
-            message_id=context.user_data["update_msg"],
-            chat_id=update.effective_message.chat_id,
-        )
-        if choice == i18n.t("addarr.Movie"):
-            message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
-        else:
-            message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
-        msg = context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
-        )
-        context.user_data["update_msg"] = msg.message_id
-        return GIVE_OPTION
+    except:
+        context.user_data["photo_update_msg"] = None
     else:
-        context.bot.edit_message_text(
-            message_id=context.user_data["update_msg"],
-            chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.Last result")
-        )
-        clearUserData(context)
-        return ConversationHandler.END
-
+        context.user_data["photo_update_msg"] = img.message_id
+    
+    context.bot.delete_message(
+        message_id=context.user_data["update_msg"],
+        chat_id=update.effective_message.chat_id,
+    )
+    if choice == i18n.t("addarr.Movie"):
+        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
+    else:
+        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+    msg = context.bot.send_message(
+        chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
+    )
+    context.user_data["update_msg"] = msg.message_id
+    return GIVE_OPTION
+    
 
 def pathSerieMovie(update, context):
     service = getService(context)
