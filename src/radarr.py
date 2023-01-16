@@ -4,6 +4,7 @@ import json
 import logging
 
 import requests
+from requests.auth import HTTPBasicAuth
 
 import commons as commons
 import logger
@@ -22,7 +23,13 @@ def search(title):
     parameters = {"term": title}
     url = commons.generateApiQuery("radarr", "movie/lookup", parameters)
     logger.info(url)
-    req = requests.get(url)
+    username = config["auth"].get("username",None)
+    if username:
+        password = config["auth"].get("password",None)
+        my_auth = HTTPBasicAuth(username, password)
+    else:
+        my_auth = dict()
+    req = requests.get(url,auth=my_auth)
     parsed_json = json.loads(req.text)
 
     if req.status_code == 200 and parsed_json:
