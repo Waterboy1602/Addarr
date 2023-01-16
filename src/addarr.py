@@ -3,11 +3,10 @@
 import logging
 import re
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
-from telegram.constants import ParseMode
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ParseMode
 import telegram
 from telegram.ext import (CallbackQueryHandler, CommandHandler,
-                          ConversationHandler, filters, MessageHandler,
+                          ConversationHandler, Filters, MessageHandler,
                           Updater)
 
 from commons import checkAllowed, checkId, authentication, format_bytes, getAuthChats
@@ -54,14 +53,14 @@ def startCheck():
 def main():
     auth_handler_command = CommandHandler(config["entrypointAuth"], authentication)
     auth_handler_text = MessageHandler(
-                            filters.regex(
+                            Filters.regex(
                                 re.compile(r"^" + config["entrypointAuth"] + "$", re.IGNORECASE)
                             ),
                             authentication,
                         )
     allSeries_handler_command = CommandHandler(config["entrypointAllSeries"], all.allSeries)
     allSeries_handler_text = MessageHandler(
-                            filters.regex(
+                            Filters.regex(
                                 re.compile(r"^" + config["entrypointAllSeries"] + "$", re.IGNORECASE)
                             ),
                             all.allSeries,
@@ -69,7 +68,7 @@ def main():
 
     allMovies_handler_command = CommandHandler(config["entrypointAllMovies"], all.allMovies)
     allMovies_handler_text = MessageHandler(
-        filters.regex(
+        Filters.regex(
             re.compile(r"^" + config["entrypointAllMovies"] + "$", re.IGNORECASE)
         ),
         all.allMovies,
@@ -79,17 +78,17 @@ def main():
         entry_points=[
             CommandHandler(config["entrypointDelete"], delete),
             MessageHandler(
-                filters.regex(
+                Filters.regex(
                     re.compile(r'^' + config["entrypointDelete"] + '$', re.IGNORECASE)
                 ),
                 delete.delete,
             ),
         ],
         states={
-            SERIE_MOVIE_DELETE: [MessageHandler(filters.text, choiceSerieMovie)],
+            SERIE_MOVIE_DELETE: [MessageHandler(Filters.text, choiceSerieMovie)],
             READ_DELETE_CHOICE: [
                 MessageHandler(
-                    filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                    Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                     delete.confirmDelete,
                 ),
                 CallbackQueryHandler(delete.confirmDelete, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
@@ -97,11 +96,11 @@ def main():
             GIVE_OPTION: [
                 CallbackQueryHandler(delete.deleteSerieMovie, pattern=f'({i18n.t("addarr.Delete")})'),
                 MessageHandler(
-                    filters.regex(f'^({i18n.t("addarr.Delete")})$'),
+                    Filters.regex(f'^({i18n.t("addarr.Delete")})$'),
                     delete.deleteSerieMovie
                 ),
                 MessageHandler(
-                    filters.regex(f'^({i18n.t("addarr.New")})$'),
+                    Filters.regex(f'^({i18n.t("addarr.New")})$'),
                     delete
                 ),
                 CallbackQueryHandler(delete, pattern=f'({i18n.t("addarr.New")})'),
@@ -109,7 +108,7 @@ def main():
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(filters.regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
+            MessageHandler(Filters.regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
             CallbackQueryHandler(stop, pattern=f"^(?i)"+i18n.t("addarr.Stop")+"$"),
         ],
     )
@@ -120,22 +119,22 @@ def main():
             CommandHandler(i18n.t("addarr.Movie"), startSerieMovie),
             CommandHandler(i18n.t("addarr.Series"), startSerieMovie),
             MessageHandler(
-                filters.regex(
+                Filters.regex(
                     re.compile(r'^' + config["entrypointAdd"] + '$', re.IGNORECASE)
                 ),
                 startSerieMovie,
             ),
         ],
         states={
-            SERIE_MOVIE_AUTHENTICATED: [MessageHandler(filters.text, choiceSerieMovie)],
+            SERIE_MOVIE_AUTHENTICATED: [MessageHandler(Filters.text, choiceSerieMovie)],
             READ_CHOICE: [
                 MessageHandler(
-                    filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                    Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                     searchSerieMovie,
                 ),
                 CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                 MessageHandler(
-                    filters.regex(f'^({i18n.t("addarr.New")})$'),
+                    Filters.regex(f'^({i18n.t("addarr.New")})$'),
                     startSerieMovie
                 ),
                 CallbackQueryHandler(startSerieMovie, pattern=f'({i18n.t("addarr.New")})'),
@@ -143,21 +142,21 @@ def main():
             GIVE_OPTION: [
                 CallbackQueryHandler(qualityProfileSerieMovie, pattern=f'({i18n.t("addarr.Select")})'),
                 MessageHandler(
-                    filters.regex(f'^({i18n.t("addarr.Select")})$'),
+                    Filters.regex(f'^({i18n.t("addarr.Select")})$'),
                     qualityProfileSerieMovie
                 ),
                 CallbackQueryHandler(pathSerieMovie, pattern=f'({i18n.t("addarr.Add")})'),
                 MessageHandler(
-                    filters.regex(f'^({i18n.t("addarr.Add")})$'),
+                    Filters.regex(f'^({i18n.t("addarr.Add")})$'),
                     pathSerieMovie
                 ),
                 CallbackQueryHandler(nextOption, pattern=f'({i18n.t("addarr.Next result")})'),
                 MessageHandler(
-                    filters.regex(f'^({i18n.t("addarr.Next result")})$'),
+                    Filters.regex(f'^({i18n.t("addarr.Next result")})$'),
                     nextOption
                 ),
                 MessageHandler(
-                    filters.regex(f'^({i18n.t("addarr.New")})$'),
+                    Filters.regex(f'^({i18n.t("addarr.New")})$'),
                     startSerieMovie
                 ),
                 CallbackQueryHandler(startSerieMovie, pattern=f'({i18n.t("addarr.New")})'),
@@ -174,7 +173,7 @@ def main():
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(filters.regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
+            MessageHandler(Filters.regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
             CallbackQueryHandler(stop, pattern=f"^(?i)"+i18n.t("addarr.Stop")+"$"),
         ],
     )
@@ -184,7 +183,7 @@ def main():
             entry_points=[
                 CommandHandler(config["entrypointTransmission"], transmission.transmission),
                 MessageHandler(
-                    filters.regex(
+                    Filters.regex(
                         re.compile(
                             r"" + config["entrypointTransmission"] + "", re.IGNORECASE
                         )
@@ -199,7 +198,7 @@ def main():
             },
             fallbacks=[
                 CommandHandler("stop", stop),
-                MessageHandler(filters.regex("^(Stop|stop)$"), stop),
+                MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
             ],
         )
         dispatcher.add_handler(changeTransmissionSpeed_handler)
@@ -210,7 +209,7 @@ def main():
             entry_points=[
                 CommandHandler(config["entrypointSabnzbd"], sabnzbd.sabnzbd),
                 MessageHandler(
-                    filters.regex(
+                    Filters.regex(
                         re.compile(
                             r"" + config["entrypointSabnzbd"] + "", re.IGNORECASE
                         )
@@ -225,7 +224,7 @@ def main():
             },
             fallbacks=[
                 CommandHandler("stop", stop),
-                MessageHandler(filters.regex("^(Stop|stop)$"), stop),
+                MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
             ],
         )
         dispatcher.add_handler(changeSabznbdSpeed_handler)
