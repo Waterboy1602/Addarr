@@ -1,4 +1,4 @@
-python-telegram-bot
+python-telegram-bot==13.5
 pyyaml
 requests
 python-i18n
