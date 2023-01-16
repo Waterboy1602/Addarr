@@ -21,7 +21,11 @@ def generateServerAddr(app):
             addr = config[app]["server"]["addr"]
             port = config[app]["server"]["port"]
             path = config[app]["server"]["path"]
-            return http + addr + ":" + str(port) + path
+            # if port is not specified, then there might be a reverse proxy
+            if port in [0,None,""]:
+                return http + addr + path
+            else:
+                return http + addr + ":" + str(port) + path
         except Exception:
             logger.warn("No ip or port defined.")
     except Exception as e:
