@@ -43,7 +43,7 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm
           file: ./Dockerfile
           push: true
-          tags: ${{env.REPO}}:latest
+          tags: koetsuji/addarr:latest
 
       - 
         name: Image digest
