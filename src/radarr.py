@@ -23,13 +23,8 @@ def search(title):
     parameters = {"term": title}
     url = commons.generateApiQuery("radarr", "movie/lookup", parameters)
     logger.info(url)
-    username = config["auth"].get("username",None)
-    if username:
-        password = config["auth"].get("password",None)
-        my_auth = HTTPBasicAuth(username, password)
-    else:
-        my_auth = dict()
-    req = requests.get(url,auth=my_auth)
+    
+    req = get_req(url)
     parsed_json = json.loads(req.text)
 
     if req.status_code == 200 and parsed_json:
@@ -58,19 +53,23 @@ def giveTitles(parsed_json):
 
 def inLibrary(tmdbId):
     parameters = {}
-    req = requests.get(commons.generateApiQuery("radarr", "movie", parameters))
+    url = commons.generateApiQuery("radarr", "movie", parameters)
+
+    req = get_req(url)
     parsed_json = json.loads(req.text)
     return next((True for movie in parsed_json if movie["tmdbId"] == tmdbId), False)
 
 
 def addToLibrary(tmdbId, path, qualityProfileId, tags):
     parameters = {"tmdbId": str(tmdbId)}
-    req = requests.get(
-        commons.generateApiQuery("radarr", "movie/lookup/tmdb", parameters)
-    )
+    url = commons.generateApiQuery("radarr", "movie/lookup/tmdb", parameters)
+
+    req = get_req(url)
+    
     parsed_json = json.loads(req.text)
     data = json.dumps(buildData(parsed_json, path, qualityProfileId, tags))
-    add = requests.post(commons.generateApiQuery("radarr", "movie"), data=data, headers={'Content-Type': 'application/json'})
+    url = commons.generateApiQuery("radarr", "movie")
+    add = requests.post(url, data=data, headers={'Content-Type': 'application/json'})
     if add.status_code == 201:
         return True
     else:
@@ -82,8 +81,12 @@ def removeFromLibrary(tmdbId):
         "deleteFiles": str(True)
     }
     dbId = getDbIdFromImdbId(tmdbId)
-    delete = requests.delete(commons.generateApiQuery("radarr", f"movie/{dbId}", parameters))
-    if delete.status_code == 200:
+    url = commons.generateApiQuery("radarr", f"movie/{dbId}", parameters)
+  
+    req = delete_req(url)
+
+    
+    if req.status_code == 200:
         return True
     else:
         return False
@@ -105,14 +108,19 @@ def buildData(json, path, qualityProfileId, tags):
 
 def getRootFolders():
     parameters = {}
-    req = requests.get(commons.generateApiQuery("radarr", "Rootfolder", parameters))
+    url = commons.generateApiQuery("radarr", "Rootfolder", parameters)
+
+    req = get_req(url)
+
     parsed_json = json.loads(req.text)
     return parsed_json
 
 
 def all_movies():
     parameters = {}
-    req = requests.get(commons.generateApiQuery("radarr", "movie", parameters))
+    url=commons.generateApiQuery("radarr", "movie", parameters)
+    
+    req = get_req(url)
     parsed_json = json.loads(req.text)
 
     if req.status_code == 200:
@@ -137,14 +145,14 @@ def all_movies():
 
 def getQualityProfiles():
     parameters = {}
-    req = requests.get(commons.generateApiQuery("radarr", "qualityProfile", parameters))
+    req = get_req(commons.generateApiQuery("radarr", "qualityProfile", parameters))
     parsed_json = json.loads(req.text)
     return parsed_json
 
 
 def getTags():
     parameters = {}
-    req = requests.get(commons.generateApiQuery("radarr", "tag", parameters))
+    req = get_req(commons.generateApiQuery("radarr", "tag", parameters))
     parsed_json = json.loads(req.text)
     return parsed_json
 
@@ -154,7 +162,7 @@ def createTag(tag):
         "id": max([t["id"] for t in getTags()])+1,
         "label": str(tag)
     }
-    add = requests.post(commons.generateApiQuery("radarr", "tag"), json=data_json, headers={'Content-Type': 'application/json'})
+    add = post_req(commons.generateApiQuery("radarr", "tag"), json=data_json, headers={'Content-Type': 'application/json'})
     if add.status_code == 200:
         return True
     else:
@@ -162,7 +170,31 @@ def createTag(tag):
 
 
 def getDbIdFromImdbId(tmdbId):
-    req = requests.get(commons.generateApiQuery("radarr", "movie", {}))
+    req = get_req(commons.generateApiQuery("radarr", "movie", {}))
     parsed_json = json.loads(req.text)
     dbId = [f["id"] for f in parsed_json if f["tmdbId"] == tmdbId]
     return dbId[0]
+
+def get_req(url,**kwargs):
+    my_auth = get_auth()
+    req = requests.get(url,auth=my_auth,**kwargs)
+    return req
+
+def delete_req(url,**kwargs):
+    my_auth = get_auth()
+    req = requests.delete(url,auth=my_auth,**kwargs)
+    return req
+    
+def post_req(url,**kwargs):
+    my_auth = get_auth()
+    req = requests.post(url,auth=my_auth,**kwargs)
+    return req
+    
+def get_auth():
+    username = config["auth"].get("username",None)
+    if username:
+        password = config["auth"].get("password",None)
+        my_auth = HTTPBasicAuth(username, password)
+    else:
+        my_auth = dict()
+    return my_auth
