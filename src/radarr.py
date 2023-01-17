@@ -69,7 +69,7 @@ def addToLibrary(tmdbId, path, qualityProfileId, tags):
     parsed_json = json.loads(req.text)
     data = json.dumps(buildData(parsed_json, path, qualityProfileId, tags))
     url = commons.generateApiQuery("radarr", "movie")
-    add = requests.post(url, data=data, headers={'Content-Type': 'application/json'})
+    add = post_req(url, data=data, headers={'Content-Type': 'application/json'})
     if add.status_code == 201:
         return True
     else:
