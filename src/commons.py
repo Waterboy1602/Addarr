@@ -6,6 +6,9 @@ from config import config
 from definitions import ADMIN_PATH, CHATID_PATH, ALLOWLIST_PATH
 from translations import i18n
 
+import requests
+from requests.auth import HTTPBasicAuth
+
 # Set up logging
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.commons", logLevel, config.get("logToConsole", False))
@@ -215,3 +218,29 @@ def getAuthChats():
             chats.append(line.strip("\n"))
         file.close()
     return chats
+
+
+def get_req(app,url,**kwargs):
+    my_auth = get_auth(app)
+    req = requests.get(url,auth=my_auth,**kwargs)
+    return req
+
+def delete_req(app,url,**kwargs):
+    my_auth = get_auth(app)
+    req = requests.delete(url,auth=my_auth,**kwargs)
+    return req
+    
+def post_req(app,url,**kwargs):
+    my_auth = get_auth(app)
+    req = requests.post(url,auth=my_auth,**kwargs)
+    return req
+    
+def get_auth(app):
+    config[app]
+    username = config[app]["auth"].get("username",None)
+    if username:
+        password = config[app]["auth"].get("password",None)
+        my_auth = HTTPBasicAuth(username, password)
+    else:
+        my_auth = dict()
+    return my_auth

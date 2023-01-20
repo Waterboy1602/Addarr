@@ -177,26 +177,18 @@ def getDbIdFromImdbId(tmdbId):
     dbId = [f["id"] for f in parsed_json if f["tmdbId"] == tmdbId]
     return dbId[0]
 
-def get_req(url,**kwargs):
-    my_auth = get_auth()
-    req = requests.get(url,auth=my_auth,**kwargs)
+# re route the requests through common
+def get_req(app,url,**kwargs):
+    app = "radarr"
+    req = commons.get_req(app,url,auth=my_auth,**kwargs)
     return req
 
-def delete_req(url,**kwargs):
-    my_auth = get_auth()
-    req = requests.delete(url,auth=my_auth,**kwargs)
+def delete_req(app,url,**kwargs):
+    app = "radarr"
+    req = commons.delete_req(app,url,auth=my_auth,**kwargs)
     return req
-    
-def post_req(url,**kwargs):
-    my_auth = get_auth()
-    req = requests.post(url,auth=my_auth,**kwargs)
+
+def post_req(app,url,**kwargs):
+    app = "radarr"
+    req = commons.post_req(app,url,auth=my_auth,**kwargs)
     return req
-    
-def get_auth():
-    username = config["auth"].get("username",None)
-    if username:
-        password = config["auth"].get("password",None)
-        my_auth = HTTPBasicAuth(username, password)
-    else:
-        my_auth = dict()
-    return my_auth
