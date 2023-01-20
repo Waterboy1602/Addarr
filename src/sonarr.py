@@ -194,15 +194,15 @@ def getDbIdFromImdbId(tvdbId):
 # re route the requests through common
 def get_req(app,url,**kwargs):
     app = "sonarr"
-    req = commons.get_req(app,url,auth=my_auth,**kwargs)
+    req = commons.get_req(app,url,**kwargs)
     return req
 
 def delete_req(app,url,**kwargs):
     app = "sonarr"
-    req = commons.delete_req(app,url,auth=my_auth,**kwargs)
+    req = commons.delete_req(app,url,**kwargs)
     return req
 
 def post_req(app,url,**kwargs):
     app = "sonarr"
-    req = commons.post_req(app,url,auth=my_auth,**kwargs)
+    req = commons.post_req(app,url,**kwargs)
     return req

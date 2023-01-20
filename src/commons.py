@@ -222,16 +222,22 @@ def getAuthChats():
 
 def get_req(app,url,**kwargs):
     my_auth = get_auth(app)
+    logging.debug(f"get request url : {url}")
+    logging.debug("parameters",kwargs)
     req = requests.get(url,auth=my_auth,**kwargs)
     return req
 
 def delete_req(app,url,**kwargs):
     my_auth = get_auth(app)
+    logging.debug(f"delete request url : {url}")
+    logging.debug("parameters",kwargs)
     req = requests.delete(url,auth=my_auth,**kwargs)
     return req
     
 def post_req(app,url,**kwargs):
     my_auth = get_auth(app)
+    logging.debug(f"post request url : {url}")
+    logging.debug("parameters",kwargs)
     req = requests.post(url,auth=my_auth,**kwargs)
     return req
     
