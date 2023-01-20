@@ -178,17 +178,17 @@ def getDbIdFromImdbId(tmdbId):
     return dbId[0]
 
 # re route the requests through common
-def get_req(app,url,**kwargs):
+def get_req(url,**kwargs):
     app = "radarr"
     req = commons.get_req(app,url,**kwargs)
     return req
 
-def delete_req(app,url,**kwargs):
+def delete_req(url,**kwargs):
     app = "radarr"
     req = commons.delete_req(app,url,**kwargs)
     return req
 
-def post_req(app,url,**kwargs):
+def post_req(url,**kwargs):
     app = "radarr"
     req = commons.post_req(app,url,**kwargs)
     return req
