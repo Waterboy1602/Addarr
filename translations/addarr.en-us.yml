@@ -27,17 +27,17 @@ en-us:
   NotAdmin: "You need to be an admin to execute this command."
   Chatid already allowed: "This chat is already authorized."
   Help: "Want to see this text again? Use /%{help}.
-    \n• To authenticate before first use you should use /%{authenticate}.
+    \n• To authenticate before your first use, you should use /%{authenticate}.
     \n• To add a movie or series use /%{add}.
     \n• To delete a movie or series use /%{delete}.
     \n• To immediately add a movie or series you can use /%{movie} or /%{serie}.
-    \n• To check which series are in Sonarr you can use /%{allSeries}.
-    \n• To check which movies are in Radarr you can use /%{allMovies}.
+    \n• To check which series are added to Sonarr you can use /%{allSeries}.
+    \n• To check which movies are added to Radarr you can use /%{allMovies}.
     \n• To toggle the up- and download speed of Transmission use /%{transmission}.
     \n• To change the up- and download speed of Sabnzbd use /%{sabnzbd}."
   Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.
     \nAdd these before restarting the bot."
-  Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.
+  Wrong values: "The following configkeys have a wrong value in your config.yaml-file: %{wrongValues}.
     \nChange these before restarting the bot."
 
   messages:
@@ -46,10 +46,10 @@ en-us:
     ThisDelete: Is this %{subjectWithArticle} you want to delete?
     AddFailed: Oops, failed to add %{subjectWithArticle}. Maybe give it another try.
     DeleteFailed: Oops, failed to delete %{subjectWithArticle}. Maybe give it another try.
-    AddSuccess: "%{subjectWithArticle} is added with success 🙂"
-    DeleteSuccess: "%{subjectWithArticle} is deleted with success 🙂"
+    AddSuccess: "%{subjectWithArticle} has been added with success 🙂"
+    DeleteSuccess: "%{subjectWithArticle} has been deleted with success 🙂"
     Exist: "%{subjectWithArticle} has already been added 😉"
-    NoExist: "%{subjectWithArticle} does not exist or you haven't added it before"
+    NoExist: "%{subjectWithArticle} does not exist or you have never added it"
 
   
   searchresults:
