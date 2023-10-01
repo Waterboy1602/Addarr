@@ -22,7 +22,7 @@ from config import checkConfigValues, config, checkConfig
 from translations import i18n
 from warnings import filterwarnings
 
-__version__ = "0.6"
+__version__ = "0.7"
 
 # Set up logging
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
