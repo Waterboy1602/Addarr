@@ -17,27 +17,27 @@ config = config["sabnzbd"]
 SABNZBD_SPEED_LIMIT_25, SABNZBD_SPEED_LIMIT_50, SABNZBD_SPEED_LIMIT_100 = range(3)
 
 
-def sabnzbd(update, context):
+async def sabnzbd(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
         
     if not config["enable"]:
-        context.bot.send_message(
+        await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.Sabnzbd.NotEnabled"),
         )
         return ConversationHandler.END
 
     if not checkId(update):
-        context.bot.send_message(
+        await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
         )
         return SABNZBD_SPEED_LIMIT_100
 
     if config["onlyAdmin"] and not checkAllowed(update, "admin"):
-        context.bot.send_message(
+        await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),
         )
@@ -64,10 +64,10 @@ def sabnzbd(update, context):
     return SABNZBD_SPEED_LIMIT_100
 
 
-def changeSpeedSabnzbd(update, context):
+async def changeSpeedSabnzbd(update, context):
     if not checkId(update):
         if (
-                authentication(update, context) == "added"
+                await authentication(update, context) == "added"
         ):  # To also stop the beginning command
             return ConversationHandler.END
 
@@ -89,7 +89,7 @@ def changeSpeedSabnzbd(update, context):
     else:
         message = i18n.t("addarr.Sabnzbd.Error")
 
-    context.bot.send_message(
+    await context.bot.send_message(
         chat_id=update.effective_message.chat_id,
         text=message,
     )

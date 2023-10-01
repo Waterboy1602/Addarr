@@ -13,14 +13,14 @@ logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", False))
 
 
-def allSeries(update, context):
+async def allSeries(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
 
     if sonarr.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
-        context.bot.send_message(
+        await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),
         )
@@ -28,7 +28,7 @@ def allSeries(update, context):
 
     if not checkId(update):
         if (
-            authentication(update, context) == "added"
+            await authentication(update, context) == "added"
         ):  # To also stop the beginning command
             return ConversationHandler.END
     else:
@@ -36,28 +36,28 @@ def allSeries(update, context):
         content = format_long_list_message(result)
 
         if isinstance(content, str):
-            context.bot.send_message(
+            await context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
                 text=content,
             )
         else:
             # print every substring
             for subString in content:
-                context.bot.send_message(
+                await context.bot.send_message(
                     chat_id=update.effective_message.chat_id,
                     text=subString,
                 )
         return ConversationHandler.END
 
 
-def allMovies(update, context):
+async def allMovies(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
         
     if radarr.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
-        context.bot.send_message(
+        await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),
         )
@@ -65,7 +65,7 @@ def allMovies(update, context):
     
     if not checkId(update):
         if (
-            authentication(update, context) == "added"
+            await authentication(update, context) == "added"
         ):  # To also stop the beginning command
             return ConversationHandler.END
     else:
@@ -73,14 +73,14 @@ def allMovies(update, context):
         content = format_long_list_message(result)
 
         if isinstance(content, str):
-            context.bot.send_message(
+            await context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
                 text=content,
             )
         else:
             # print every substring
             for subString in content:
-                context.bot.send_message(
+                await context.bot.send_message(
                     chat_id=update.effective_message.chat_id,
                     text=subString,
                 )

@@ -3,11 +3,14 @@
 import logging
 import re
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, ParseMode
+
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 import telegram
+from telegram.constants import ParseMode
 from telegram.ext import (CallbackQueryHandler, CommandHandler,
-                          ConversationHandler, Filters, MessageHandler,
-                          Updater)
+                          ConversationHandler, filters, MessageHandler,
+                          Application)
+from telegram.warnings import PTBUserWarning
 
 from commons import checkAllowed, checkId, authentication, format_bytes, getAuthChats
 import logger
@@ -17,6 +20,7 @@ import delete as delete
 import all as all
 from config import checkConfigValues, config, checkConfig
 from translations import i18n
+from warnings import filterwarnings
 
 __version__ = "0.6"
 
@@ -28,11 +32,9 @@ logger.debug(f"Addarr v{__version__} starting up...")
 SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL, GIVE_QUALITY_PROFILES, GIVE_SEASONS = range(7)
 SERIE_MOVIE_DELETE, READ_DELETE_CHOICE = 0,1
 
-updater = Updater(config["telegram"]["token"], use_context=True)
-dispatcher = updater.dispatcher
+application = Application.builder().token(config["telegram"]["token"]).build()
 
-
-def startCheck():
+async def startCheck():
     bot = telegram.Bot(token=config["telegram"]["token"])
     missingConfig = checkConfig()
     wrongValues = checkConfigValues()
@@ -41,26 +43,28 @@ def startCheck():
         check = False
         logger.error(i18n.t("addarr.Missing config", missingKeys=f"{missingConfig}"[1:-1]))
         for chat in getAuthChats():
-            bot.send_message(chat_id=chat, text=i18n.t("addarr.Missing config", missingKeys=f"{missingConfig}"[1:-1]))
+            await bot.send_message(chat_id=chat, text=i18n.t("addarr.Missing config", missingKeys=f"{missingConfig}"[1:-1]))
     if wrongValues:
         check=False
         logger.error(i18n.t("addarr.Wrong values", wrongValues=f"{wrongValues}"[1:-1]))
         for chat in getAuthChats():
-            bot.send_message(chat_id=chat, text=i18n.t("addarr.Wrong values", wrongValues=f"{wrongValues}"[1:-1]))
+            await bot.send_message(chat_id=chat, text=i18n.t("addarr.Wrong values", wrongValues=f"{wrongValues}"[1:-1]))
     return check
 
 
 def main():
+    filterwarnings(action="ignore", message=r".*CallbackQueryHandler", category=PTBUserWarning)
+
     auth_handler_command = CommandHandler(config["entrypointAuth"], authentication)
     auth_handler_text = MessageHandler(
-                            Filters.regex(
+                            filters.Regex(
                                 re.compile(r"^" + config["entrypointAuth"] + "$", re.IGNORECASE)
                             ),
                             authentication,
                         )
     allSeries_handler_command = CommandHandler(config["entrypointAllSeries"], all.allSeries)
     allSeries_handler_text = MessageHandler(
-                            Filters.regex(
+                            filters.Regex(
                                 re.compile(r"^" + config["entrypointAllSeries"] + "$", re.IGNORECASE)
                             ),
                             all.allSeries,
@@ -68,7 +72,7 @@ def main():
 
     allMovies_handler_command = CommandHandler(config["entrypointAllMovies"], all.allMovies)
     allMovies_handler_text = MessageHandler(
-        Filters.regex(
+        filters.Regex(
             re.compile(r"^" + config["entrypointAllMovies"] + "$", re.IGNORECASE)
         ),
         all.allMovies,
@@ -76,19 +80,19 @@ def main():
 
     deleteMovieserie_handler = ConversationHandler(
         entry_points=[
-            CommandHandler(config["entrypointDelete"], delete),
+            CommandHandler(config["entrypointDelete"], delete.delete),
             MessageHandler(
-                Filters.regex(
+                filters.Regex(
                     re.compile(r'^' + config["entrypointDelete"] + '$', re.IGNORECASE)
                 ),
                 delete.delete,
             ),
         ],
         states={
-            SERIE_MOVIE_DELETE: [MessageHandler(Filters.text, choiceSerieMovie)],
+            SERIE_MOVIE_DELETE: [MessageHandler(filters.TEXT, choiceSerieMovie)],
             READ_DELETE_CHOICE: [
                 MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                     delete.confirmDelete,
                 ),
                 CallbackQueryHandler(delete.confirmDelete, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
@@ -96,11 +100,11 @@ def main():
             GIVE_OPTION: [
                 CallbackQueryHandler(delete.deleteSerieMovie, pattern=f'({i18n.t("addarr.Delete")})'),
                 MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.Delete")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.Delete")})$'),
                     delete.deleteSerieMovie
                 ),
                 MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.New")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.New")})$'),
                     delete
                 ),
                 CallbackQueryHandler(delete, pattern=f'({i18n.t("addarr.New")})'),
@@ -108,7 +112,7 @@ def main():
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(Filters.regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
+            MessageHandler(filters.Regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
             CallbackQueryHandler(stop, pattern=f"^(?i)"+i18n.t("addarr.Stop")+"$"),
         ],
     )
@@ -119,22 +123,22 @@ def main():
             CommandHandler(i18n.t("addarr.Movie"), startSerieMovie),
             CommandHandler(i18n.t("addarr.Series"), startSerieMovie),
             MessageHandler(
-                Filters.regex(
+                filters.Regex(
                     re.compile(r'^' + config["entrypointAdd"] + '$', re.IGNORECASE)
                 ),
                 startSerieMovie,
             ),
         ],
         states={
-            SERIE_MOVIE_AUTHENTICATED: [MessageHandler(Filters.text, choiceSerieMovie)],
+            SERIE_MOVIE_AUTHENTICATED: [MessageHandler(filters.TEXT, choiceSerieMovie)],
             READ_CHOICE: [
                 MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                     searchSerieMovie,
                 ),
                 CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                 MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.New")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.New")})$'),
                     startSerieMovie
                 ),
                 CallbackQueryHandler(startSerieMovie, pattern=f'({i18n.t("addarr.New")})'),
@@ -142,21 +146,21 @@ def main():
             GIVE_OPTION: [
                 CallbackQueryHandler(qualityProfileSerieMovie, pattern=f'({i18n.t("addarr.Select")})'),
                 MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.Select")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.Select")})$'),
                     qualityProfileSerieMovie
                 ),
                 CallbackQueryHandler(pathSerieMovie, pattern=f'({i18n.t("addarr.Add")})'),
                 MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.Add")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.Add")})$'),
                     pathSerieMovie
                 ),
                 CallbackQueryHandler(nextOption, pattern=f'({i18n.t("addarr.Next result")})'),
                 MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.Next result")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.Next result")})$'),
                     nextOption
                 ),
                 MessageHandler(
-                    Filters.regex(f'^({i18n.t("addarr.New")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.New")})$'),
                     startSerieMovie
                 ),
                 CallbackQueryHandler(startSerieMovie, pattern=f'({i18n.t("addarr.New")})'),
@@ -173,7 +177,7 @@ def main():
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(Filters.regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
+            MessageHandler(filters.Regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
             CallbackQueryHandler(stop, pattern=f"^(?i)"+i18n.t("addarr.Stop")+"$"),
         ],
     )
@@ -183,7 +187,7 @@ def main():
             entry_points=[
                 CommandHandler(config["entrypointTransmission"], transmission.transmission),
                 MessageHandler(
-                    Filters.regex(
+                    filters.Regex(
                         re.compile(
                             r"" + config["entrypointTransmission"] + "", re.IGNORECASE
                         )
@@ -198,10 +202,10 @@ def main():
             },
             fallbacks=[
                 CommandHandler("stop", stop),
-                MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
+                MessageHandler(filters.Regex("^(Stop|stop)$"), stop),
             ],
         )
-        dispatcher.add_handler(changeTransmissionSpeed_handler)
+        application.add_handler(changeTransmissionSpeed_handler)
 
     if config["sabnzbd"]["enable"]:
         import sabnzbd as sabnzbd
@@ -209,7 +213,7 @@ def main():
             entry_points=[
                 CommandHandler(config["entrypointSabnzbd"], sabnzbd.sabnzbd),
                 MessageHandler(
-                    Filters.regex(
+                    filters.Regex(
                         re.compile(
                             r"" + config["entrypointSabnzbd"] + "", re.IGNORECASE
                         )
@@ -224,55 +228,53 @@ def main():
             },
             fallbacks=[
                 CommandHandler("stop", stop),
-                MessageHandler(Filters.regex("^(Stop|stop)$"), stop),
+                MessageHandler(filters.Regex("^(Stop|stop)$"), stop),
             ],
         )
-        dispatcher.add_handler(changeSabznbdSpeed_handler)
+        application.add_handler(changeSabznbdSpeed_handler)
 
-    dispatcher.add_handler(auth_handler_command)
-    dispatcher.add_handler(auth_handler_text)
-    dispatcher.add_handler(allSeries_handler_command)
-    dispatcher.add_handler(allSeries_handler_text)
-    dispatcher.add_handler(allMovies_handler_command)
-    dispatcher.add_handler(allMovies_handler_text)
-    dispatcher.add_handler(addMovieserie_handler)
-    dispatcher.add_handler(deleteMovieserie_handler)
+    application.add_handler(auth_handler_command)
+    application.add_handler(auth_handler_text)
+    application.add_handler(allSeries_handler_command)
+    application.add_handler(allSeries_handler_text)
+    application.add_handler(allMovies_handler_command)
+    application.add_handler(allMovies_handler_text)
+    application.add_handler(addMovieserie_handler)
+    application.add_handler(deleteMovieserie_handler)
 
     help_handler_command = CommandHandler(config["entrypointHelp"], help)
-    dispatcher.add_handler(help_handler_command)
+    application.add_handler(help_handler_command)
 
     logger.info(i18n.t("addarr.Start chatting"))
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
 
-
-def stop(update, context):
+async def stop(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
 
     if not checkId(update):
-        context.bot.send_message(
+        await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
         )
         return SERIE_MOVIE_AUTHENTICATED
         
     clearUserData(context)
-    context.bot.send_message(
+    await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=i18n.t("addarr.End")
     )
     return ConversationHandler.END
     
 
-def startSerieMovie(update : Update, context):
+async def startSerieMovie(update : Update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
     
     if not checkId(update):
-        context.bot.send_message(
+        await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
         )
         return SERIE_MOVIE_AUTHENTICATED
@@ -302,20 +304,20 @@ def startSerieMovie(update : Update, context):
         logger.debug("User issued New command, so clearing user_data")
         clearUserData(context)
     
-    msg = context.bot.send_message(
+    await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+i18n.t("addarr.Title")
     )
     return SERIE_MOVIE_AUTHENTICATED
 
 
-def choiceSerieMovie(update, context):
+async def choiceSerieMovie(update, context):
     if not checkId(update):
         if (
-            authentication(update, context) == "added"
+            await authentication(update, context) == "added"
         ):  # To also stop the beginning command
             return ConversationHandler.END
     elif update.message.text.lower() == "/stop".lower() or update.message.text.lower() == "stop".lower():
-        return stop(update, context)
+        return await stop(update, context)
     else:
         if update.message is not None:
             reply = update.message.text
@@ -341,7 +343,7 @@ def choiceSerieMovie(update, context):
             logger.debug(
                 f"user_data[choice] is {context.user_data['choice']}, skipping step of selecting movie/series"
             )
-            return searchSerieMovie(update, context)
+            return await searchSerieMovie(update, context)
         else:
             keyboard = [
                 [
@@ -361,13 +363,12 @@ def choiceSerieMovie(update, context):
                 ]
             ]
             markup = InlineKeyboardMarkup(keyboard)
-            msg = update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
+            msg = await update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
             context.user_data["update_msg"] = msg.message_id
-
         return READ_CHOICE
 
 
-def searchSerieMovie(update, context):
+async def searchSerieMovie(update, context):
     title = context.user_data["title"]
 
     if not context.user_data.get("choice"):
@@ -387,7 +388,7 @@ def searchSerieMovie(update, context):
     
     searchResult = service.search(title)
     if not searchResult:
-        context.bot.send_message( 
+        await context.bot.send_message( 
             chat_id=update.effective_message.chat_id, 
             text=i18n.t("addarr.searchresults", count=0),
         )
@@ -399,19 +400,19 @@ def searchSerieMovie(update, context):
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
     
     if "update_msg" in context.user_data:
-        context.bot.edit_message_text(
+        await context.bot.edit_message_text(
             message_id=context.user_data["update_msg"],
             chat_id=update.effective_message.chat_id,
             text=message,
             parse_mode=ParseMode.MARKDOWN,
         )
     else:
-        msg = context.bot.send_message(chat_id=update.effective_message.chat_id, text=message,parse_mode=ParseMode.MARKDOWN,)
+        msg = await context.bot.send_message(chat_id=update.effective_message.chat_id, text=message,parse_mode=ParseMode.MARKDOWN,)
         context.user_data["update_msg"] = msg.message_id
     
 
     try:
-        img = context.bot.sendPhoto(
+        img = await context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,
             photo=context.user_data["output"][position]["poster"],
         )
@@ -469,7 +470,7 @@ def searchSerieMovie(update, context):
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
     else:
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
-    msg = context.bot.send_message(
+    msg = await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
     )
     context.user_data["title_update_msg"] = context.user_data["update_msg"]
@@ -478,14 +479,14 @@ def searchSerieMovie(update, context):
     return GIVE_OPTION
 
 
-def nextOption(update, context):
+async def nextOption(update, context):
     position = context.user_data["position"] + 1
     context.user_data["position"] = position
     searchResult = context.user_data["output"]
     choice = context.user_data["choice"]    
     message=i18n.t("addarr.searchresults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
-    context.bot.edit_message_text(
+    await context.bot.edit_message_text(
         message_id=context.user_data["title_update_msg"],
         chat_id=update.effective_message.chat_id,
         text=message,
@@ -538,13 +539,13 @@ def nextOption(update, context):
     markup = InlineKeyboardMarkup(keyboard)
 
     if context.user_data["photo_update_msg"]:
-        context.bot.delete_message(
+        await context.bot.delete_message(
             message_id=context.user_data["photo_update_msg"],
             chat_id=update.effective_message.chat_id,
         )
     
     try:
-        img = context.bot.sendPhoto(
+        img = await context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,
             photo=context.user_data["output"][position]["poster"],
         )
@@ -553,7 +554,7 @@ def nextOption(update, context):
     else:
         context.user_data["photo_update_msg"] = img.message_id
     
-    context.bot.delete_message(
+    await context.bot.delete_message(
         message_id=context.user_data["update_msg"],
         chat_id=update.effective_message.chat_id,
     )
@@ -561,14 +562,14 @@ def nextOption(update, context):
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
     else:
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
-    msg = context.bot.send_message(
+    msg = await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
     )
     context.user_data["update_msg"] = msg.message_id
     return GIVE_OPTION
     
 
-def pathSerieMovie(update, context):
+async def pathSerieMovie(update, context):
     service = getService(context)
     paths = service.getRootFolders()
     excluded_root_folders = service.config.get("excludedRootFolders", [])
@@ -579,7 +580,7 @@ def pathSerieMovie(update, context):
         # There is only 1 path, so use it!
         logger.debug("Only found 1 path, so proceeding with that one...")
         context.user_data["path"] = paths[0]["path"]
-        return qualityProfileSerieMovie(update, context)
+        return await qualityProfileSerieMovie(update, context)
         
     keyboard = []
     for p in paths:
@@ -592,7 +593,7 @@ def pathSerieMovie(update, context):
         ]]
     markup = InlineKeyboardMarkup(keyboard)
 
-    context.bot.edit_message_text(
+    await context.bot.edit_message_text(
         message_id=context.user_data["update_msg"],
         chat_id=update.effective_message.chat_id,
         text=i18n.t("addarr.Select a path"),
@@ -601,7 +602,7 @@ def pathSerieMovie(update, context):
     return GIVE_PATHS
 
 
-def qualityProfileSerieMovie(update, context):
+async def qualityProfileSerieMovie(update, context):
     if not context.user_data.get("path"):
         # Path selection should be in the update message
         path = None
@@ -614,7 +615,7 @@ def qualityProfileSerieMovie(update, context):
             logger.debug(
                 f"Callback query [{update.callback_query.data.replace('Path: ', '').strip()}] doesn't match any of the paths. Sending paths for selection..."
             )
-            return pathSerieMovie(update, context)
+            return await pathSerieMovie(update, context)
 
     service = getService(context)
 
@@ -627,7 +628,7 @@ def qualityProfileSerieMovie(update, context):
         # There is only 1 path, so use it!
         logger.debug("Only found 1 profile, so proceeding with that one...")
         context.user_data["qualityProfile"] = qualityProfiles[0]['id']
-        return selectSeasons(update, context)
+        return await selectSeasons(update, context)
 
     keyboard = []
     for q in qualityProfiles:
@@ -639,7 +640,7 @@ def qualityProfileSerieMovie(update, context):
         ]]
     markup = InlineKeyboardMarkup(keyboard)
 
-    context.bot.edit_message_text(
+    await context.bot.edit_message_text(
         message_id=context.user_data["update_msg"],
         chat_id=update.effective_message.chat_id,
         text=i18n.t("addarr.Select a quality"),
@@ -648,7 +649,7 @@ def qualityProfileSerieMovie(update, context):
     return GIVE_QUALITY_PROFILES
 
 
-def selectSeasons(update, context):
+async def selectSeasons(update, context):
     if not context.user_data.get("qualityProfile"):
         # Quality selection should be in the update message
         qualityProfile = None
@@ -661,11 +662,11 @@ def selectSeasons(update, context):
             logger.debug(
                 f"Callback query [{update.callback_query.data.replace('Quality profile: ', '').strip()}] doesn't match any of the quality profiles. Sending quality profiles for selection..."
             )
-            return qualityProfileSerieMovie(update, context)
+            return await qualityProfileSerieMovie(update, context)
 
     service = getService(context)
     if service == radarr:
-        return addSerieMovie(update, context)
+        return await addSerieMovie(update, context)
     
     position = context.user_data["position"]
     idnumber = context.user_data["output"][position]["id"]
@@ -683,7 +684,7 @@ def selectSeasons(update, context):
         ]]
     markup = InlineKeyboardMarkup(keyboard)
 
-    context.bot.edit_message_text(
+    await context.bot.edit_message_text(
         message_id=context.user_data["update_msg"],
         chat_id=update.effective_message.chat_id,
         text=i18n.t("addarr.Select from which season"),
@@ -692,7 +693,7 @@ def selectSeasons(update, context):
     return GIVE_SEASONS
 
 
-def addSerieMovie(update, context):
+async def addSerieMovie(update, context):
     position = context.user_data["position"]
     choice = context.user_data["choice"]
     idnumber = context.user_data["output"][position]["id"]
@@ -714,7 +715,7 @@ def addSerieMovie(update, context):
                 logger.debug(
                     f"Callback query [{update.callback_query.data.replace('From season: ', '').strip()}] doesn't match any of the season options. Sending seasons for selection..."
                 )
-                return selectSeasons(update, context)
+                return await selectSeasons(update, context)
         seasons = context.user_data["seasons"]
         selectedSeasons = context.user_data["selectedSeasons"]
         seasonsSelected = []
@@ -748,7 +749,7 @@ def addSerieMovie(update, context):
                 message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
             else:
                 message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
-            context.bot.edit_message_text(
+            await context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
                 text=message,
@@ -760,7 +761,7 @@ def addSerieMovie(update, context):
                 message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
             else:
                 message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
-            context.bot.edit_message_text(
+            await context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
                 text=message,
@@ -772,7 +773,7 @@ def addSerieMovie(update, context):
             message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
         else:
             message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
-        context.bot.edit_message_text(
+        await context.bot.edit_message_text(
             message_id=context.user_data["update_msg"],
             chat_id=update.effective_message.chat_id,
             text=message,
@@ -792,13 +793,13 @@ def getService(context):
         )
 
 
-def help(update, context):
+async def help(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
     
-    context.bot.send_message(
+    await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Help",
             help=config["entrypointHelp"],
             authenticate=config["entrypointAuth"],

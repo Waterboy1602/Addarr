@@ -68,7 +68,7 @@ def checkId(update):
             return False
 
 
-def authentication(update, context):
+async def authentication(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
@@ -77,7 +77,7 @@ def authentication(update, context):
     chatid = update.effective_message.chat_id
     with open(CHATID_PATH, "r") as file:
         if(str(chatid) in file.read()):
-            context.bot.send_message(
+            await context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
                 text=i18n.t("addarr.Chatid already allowed"),
             )
@@ -90,7 +90,7 @@ def authentication(update, context):
             if password == config["telegram"]["password"]:
                 with open(CHATID_PATH, "a") as file:
                     file.write(getChatName(context, chatid))
-                    context.bot.send_message(
+                    await context.bot.send_message(
                         chat_id=update.effective_message.chat_id,
                         text=i18n.t("addarr.Chatid added"),
                     )
@@ -100,7 +100,7 @@ def authentication(update, context):
                 logger.warning(
                     f"Failed authentication attempt by [{update.message.from_user.username}]. Password entered: [{password}]"
                 )
-                context.bot.send_message(
+                await context.bot.send_message(
                     chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Wrong password")
                 )
                 return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
