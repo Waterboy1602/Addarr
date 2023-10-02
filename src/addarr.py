@@ -112,8 +112,8 @@ def main():
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(filters.Regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
-            CallbackQueryHandler(stop, pattern=f"^(?i)"+i18n.t("addarr.Stop")+"$"),
+            MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.Stop")+"$"), stop),
+            CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.Stop")+"$"),
         ],
     )
 
@@ -177,8 +177,8 @@ def main():
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(filters.Regex("^(?i)"+i18n.t("addarr.Stop")+"$"), stop),
-            CallbackQueryHandler(stop, pattern=f"^(?i)"+i18n.t("addarr.Stop")+"$"),
+            MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.Stop")+"$"), stop),
+            CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.Stop")+"$"),
         ],
     )
     if config["transmission"]["enable"]:
