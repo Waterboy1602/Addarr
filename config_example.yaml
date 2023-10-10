@@ -14,6 +14,7 @@ sonarr:
   languageProfile: English
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
+  narrowRootFolderNames: true
   excludedQualityProfiles:
     - 
   defaultTags: # If set must be existing tags
@@ -35,6 +36,7 @@ radarr:
   minimumAvailability: announced
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
+  narrowRootFolderNames: true
   excludedQualityProfiles:
     - 
   defaultTags: # If set must be existing tags

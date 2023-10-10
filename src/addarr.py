@@ -584,13 +584,17 @@ async def pathSerieMovie(update, context):
         
     keyboard = []
     for p in paths:
-        free = format_bytes(p['freeSpace'])
-        keyboard += [[
-            InlineKeyboardButton(
-                f"Path: {p['path']}, Free: {free}",
-                callback_data=f"Path: {p['path']}"
-            ),
-        ]]
+        pathtxt = p['path']
+        if service.config.get("narrowRootFolderNames")
+            pathlst = p['path'].split("/")
+            pathtxt = pathlst[len(pathlst)-1]
+	free = format_bytes(p['freeSpace'])
+	keyboard += [[
+	    InlineKeyboardButton(
+		f"Path: {pathtxt}, Free: {free}",
+		callback_data=f"Path: {p['path']}"
+	    ),
+	]]
     markup = InlineKeyboardMarkup(keyboard)
 
     await context.bot.edit_message_text(
