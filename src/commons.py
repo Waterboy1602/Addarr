@@ -89,7 +89,7 @@ async def authentication(update, context):
                 password = password.replace("/auth ", "")
             if password == config["telegram"]["password"]:
                 with open(CHATID_PATH, "a") as file:
-                    file.write(getChatName(context, chatid))
+                    file.write(await getChatName(context, chatid))
                     await context.bot.send_message(
                         chat_id=update.effective_message.chat_id,
                         text=i18n.t("addarr.Chatid added"),
@@ -106,8 +106,8 @@ async def authentication(update, context):
                 return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
 
 
-def getChatName(context, chatid):
-    chat = context.bot.get_chat(chatid)
+async def getChatName(context, chatid):
+    chat = await context.bot.get_chat(chatid)
     if chat.username:
         chatName = str(chat.username)
     elif chat.title:
