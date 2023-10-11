@@ -29,7 +29,7 @@ logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr", logLevel, config.get("logToConsole", False))
 logger.debug(f"Addarr v{__version__} starting up...")
 
-SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL, GIVE_QUALITY_PROFILES, GIVE_SEASONS, SELECT_SEASONS = range(8)
+SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range(7)
 SERIE_MOVIE_DELETE, READ_DELETE_CHOICE = 0,1
 
 application = Application.builder().token(config["telegram"]["token"]).build()
@@ -173,9 +173,6 @@ def main():
             ],
             SELECT_SEASONS: [
                 CallbackQueryHandler(checkSeasons, pattern="^(Season: )(.*)$"),
-            ],
-            GIVE_SEASONS: [
-                CallbackQueryHandler(addSerieMovie, pattern="^(From season: )(.*)$"),
             ],
         },
         fallbacks=[
