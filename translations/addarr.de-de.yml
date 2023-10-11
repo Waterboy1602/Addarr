@@ -12,27 +12,28 @@ de-de:
   What is this?: Ist es eine Serie oder ein Film?
   New: Führe einen neuen such Befehl aus
   Next result: Nein, zeige mir das nächste Ergebnis
+  Last result: Keine weiteren Ergebnisse verfügbar
   Add: Ja, füge dies hinzu
   Select: Ja, wählen Sie dies
   Select a path: Bitte wähle ein Pfad für die Serie oder den Film
   Select a quality: Bitte wählen Sie ein Qualitätsprofil für den Film oder die Serie
-  Select from which season: Ab welcher Staffel?
-  From season: Ab Staffel
-  Future seasons: Künftige Staffeln
-  Authorize: Dieser Chat muss noch autorisiert werden. Was ist das Passwort?
+  Select from which season: Seit welcher Saison?
+  From season: From season
+  Future seasons: Künftige Saisons
+  Authorize: Dieser Chat muss noch autorisiert werden. Was ist dein Passwort?
   Wrong password: Das Password ist nicht korrekt. Probiere es erneut...
-  Chatid added: "Dieser Chat wurde zur autorisierten Liste hinzugefügt. Du kannst den Bot jetzt benutzen. \Befehle müssen erneut ausgeführt werden."
-  NotAdmin: "Du musst ein Admin sein um diesen Befehl zu benutzen."
+  Chatid added: "Dieser Chat würde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \befehle müssen erneut ausgeführt werden."
+  NotAdmin: "Du müsst ein Admin sein um diesen Befehl zu benutzen."
   Chatid already allowed: "Dieser Chat ist bereits autorisiert."
   Help: "Um diesen Text erneut zu sehen benutze /%{help}.
     \n• Zur Authentifizierung benutze /%{authenticate}.
-    \n• Um ein Film oder eine Serie hinzuzufügen, benutze /%{add}.
-    \n• Um eine Serie oder einen Film zu löschen, verwende /%{delete}.
-    \n• Um direkt ein Film oder eine Serie hinzuzufügen, benutze /%{movie} oder /%{serie}.
-    \n• Um alle Serien in Sonarr anzuzeigen, benutze /%{allSeries}.
-    \n• Um alle Filme in Radarr anzuzeigen, benutze /%{allMovies}.
-    \n• Um die Up- und Download Geschwindigkeit von Transmission umzuschalten, benutze /%{transmission}.
-    \n• Um die Up- und Download Geschwindigkeit von Sabnzbd umzuschalten, benutze /%{sabnzbd}."
+    \n• Um ein Film oder eine Serie hinzuzufügen benutze /%{add}.
+    \n• Um eine Serie oder einen Film zu löschen, verwenden Sie /%{delete}.
+    \n• Um direkt ein Film oder eine Serie hinzuzufügen benutze /%{movie} oder /%{serie}.
+    \n• Um alle Serien in Sonarr anzuzeigen benutze /%{allSeries}.
+    \n• Um alle Filme in Radarr anzuzeigen benutze /%{allMovies}.
+    \n• Um die Up- und Download Geschwindigkeit von Transmission umzuschalten benutze /%{transmission}.
+    \n• Um die up- und Download Geschwindigkeit von Sabnzbd umzuschalten benutze /%{sabnzbd}."
   Missing config: "Die folgenden Configkeys fehlen in der config.yaml-datei: %{missingKeys}.
     \nBitte füge sie hinzu und starte den Bot neu."
   Wrong values: "Die folgenden Configkeys sind falsch in der config.yaml-datei: %{wrongValues}.
@@ -41,15 +42,15 @@ de-de:
   messages:
     Add: Ja füge %{subject} hinzu
     This: Willst du %{subjectWithArticle} hinzufügen?
-    AddFailed: Oops, das hinzufügen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es nochmal.
-    DeleteFailed: Oops, das löschen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es nochmal.
+    AddFailed: Oops, das hinzufügen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
+    DeleteFailed: Oops, das löschen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
     AddSuccess: "%{subjectWithArticle} würde hinzugefügt 🙂"
     DeleteSuccess: "%{subjectWithArticle} würde erfolgreich entfernt 🙂"
     Exist: "%{subjectWithArticle} gibt es bereits 😉"
     NoExist: "%{subjectWithArticle} existiert nicht."
   
   searchresults:
-    zero: Es wurden keine Ergebnisse gefunden
+    zero: Es würden keine Ergebnisse gefunden
     one: Ein Ergebnis gefunden
     other: "%{count} Ergebnisse gefunden"
 
@@ -69,5 +70,13 @@ de-de:
     Limit100: Kein Limit
     ChangedTo50: Auf 50% limitiert
     ChangedTo25: Auf 25% limitiert
-    ChangedTo100: Kein Geschwindigkeitslimit
-    Error: Etwas ist schief gelaufen bei der Änderung des Geschwindigkeitlimits
+    ChangedTo100: Kein Geschwindigkeit Limit
+    Error: Etwas ist schief gelaufen bei der Änderung des Geschwindigkeit Limits
+
+  Notifications:
+    Stop: Benutzer %{first_name} mit chat_id %{chat_id} hat den Prozess gestoppt.
+    Start: Benutzer %{first_name} mit der chat_id %{chat_id} hat eine neue Anfrage gestartet.
+    AddSuccess: Der %{subjectWithArticle} %{title} des Benutzers %{first_name} mit der chat_id %{chat_id} wurde hinzugefügt.
+    AddFailed: Fehler beim Hinzufügen des %{subjectWithArticle} %{title} des Benutzers %{first_name} mit der chat_id %{chat_id}.
+    Exist: Das %{subjectWithArticle} %{title}, das der Benutzer %{first_name} mit chat_id %{chat_id} hinzufügen wollte, existiert bereits.
+    Delete: Der Benutzer %{first_name} mit chat_id %{chat_id} hat eine neue Löschung initiiert.

@@ -12,7 +12,10 @@ es-es:
   What is this?: Esto es una pelicula o una serie?
   New: Ejecuta un nuevo comando de busqueda
   Next result: No, muestrame el siguiente resultado
+  Last result: No hay más resultados
   Add: Si, añadir
+  Delete: Sí, eliminala
+  StopDelete: No, no quiero eliminarla
   Select: Si, selecciona esto
   Select a path: Por favor elige una ruta donde guardar
   Select a quality: Por favor, seleccione la calidad para la pelicula o serie
@@ -39,6 +42,7 @@ es-es:
   messages:
     Add: Si, añade esta %{subject}
     This: Es esta la %{subjectWithArticle} que quieres añadir?
+    ThisDelete: Es esta la %{subjectWithArticle} que quieres eliminar?
     AddFailed: Oops, fallo al añadir %{subjectWithArticle}. Prueba otra vez.
     DeleteFailed: Oops, fallo al eliminar %{subjectWithArticle}. Prueba otra vez.
     AddSuccess: "La %{subjectWithArticle} se ha añadido correctamente 🙂"
@@ -69,3 +73,11 @@ es-es:
     ChangedTo25: Limite aplicado en 25%
     ChangedTo100: Ningun limite aplicado
     Error: Algo ha fallado cuando se ha intentado cambiar la velocidad
+  
+  Notifications:
+    Stop: El usuario %{first_name} con chat_id %{chat_id} ha parado el proceso.
+    Start: El usuario %{first_name} con chat_id %{chat_id} ha iniciado una nueva solicitud.
+    AddSuccess: La %{subjectWithArticle} %{title} del usuario %{first_name} con chat_id %{chat_id} se ha añadido.
+    AddFailed: Error al añadir la %{subjectWithArticle} %{title} del usuario %{first_name} con chat_id %{chat_id}.
+    Exist: La %{subjectWithArticle} %{title} que queria añadir el usuario %{first_name} con chat_id %{chat_id} ya existe.
+    Delete: El usuario %{first_name} con chat_id %{chat_id} ha iniciado una nueva eliminación.

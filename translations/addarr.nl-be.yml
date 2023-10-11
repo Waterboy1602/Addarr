@@ -7,14 +7,13 @@ nl-be:
   Series: Serie
   SeriesWithArticle: De serie
   Start chatting: Je kan nu chatten met Addarr op Telegram. De eerste keer dat je "start" gebruikt, zul je je wachtwoord moeten ingeven.
-  End: Het commando is beëindigd.
+  End: Het toevoegen van films of series is beëindigd.
   Title: "Geef de titel:"
   What is this?: Is dit een film of een serie?
   New: Voer een nieuwe zoekopdracht uit
   Next result: Nee, toon me volgend resultaat
+  Last result: Geen resultaten meer te tonen
   Add: Ja, voeg deze toe
-  Delete: Ja, verwijder deze
-  StopDelete: Nee, ik wil deze niet verwijderen
   Select: Ja, selecteer dit
   Select a path: Kies een pad voor deze film of serie
   Select a quality: Kies een kwaliteitsprofiel voor de film of serie
@@ -30,7 +29,7 @@ nl-be:
     \n• Om de eerste keer te authenticeren gebruik je /%{authenticate}.
     \n• Om een film of serie toe te voegen kun je /%{add} gebruiken.
     \n• Om een serie of film te verwijderen gebruikt u /%{delete}.
-    \n• Wil je meteen een keuze tussen film of serie maken, gebruik dan /%{movie} of /%{serie}.
+    \n• Wil je meteen een keuze tussen film of serie maken, gebruik dan /${movie} of /%{serie}.
     \n• Om te kijken welke series al in Sonarr zitten, gebruik je /%{allSeries}.
     \n• Om te kijken welke films al in Radarr zitten, gebruik je /%{allMovies}.
     \n• Wil je de snelheidslimiet van Transmission wijzigen, gebruik dan /%{transmission}.
@@ -43,7 +42,6 @@ nl-be:
   messages:
     Add: Ja, voeg deze %{subject} toe
     This: Is dit %{subjectWithArticle} die je wilt toevoegen?
-    ThisDelete:  Is dit %{subjectWithArticle} die je wilt verwijderen?
     Failed: Oeps, mislukt om %{subjectWithArticle} toe te voegen. Probeer misschien nog eens opnieuw.
     DeleteFailed: Oeps, %{subjectWithArticle} verwijderen mislukt. Probeer misschien nog eens opnieuw.
     AddSuccess: "%{subjectWithArticle} is met succes toegevoegd 🙂"
@@ -74,3 +72,11 @@ nl-be:
     ChangedTo25: Limiet staat op 25%
     ChangedTo100: Geen snelheidslimiet
     Error: Er ging iets fout tijdens het aanpassen van de snelheid
+
+  Notifications:
+    Stop: Gebruiker %{first_name} met chat_id %{chat_id} heeft het proces gestopt.
+    Start: Gebruiker %{first_name} met chat_id %{chat_id} heeft een nieuw verzoek gestart.
+    AddSuccess: Het %{subjectWithArticle} %{title} van gebruiker %{first_name} met chat_id %{chat_id} is toegevoegd.
+    AddFailed: Fout bij het toevoegen van het %{subjectWithArticle} %{title} van de gebruiker %{first_name} met chat_id %{chat_id}.
+    Exist: Het %{subjectWithArticle} %{title} dat de gebruiker %{first_name} met chat_id %{chat_id} wilde toevoegen bestaat al.
+    Delete: De gebruiker %{first_name} met chat_id %{chat_id} heeft een nieuwe verwijdering geïnitieerd.

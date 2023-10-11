@@ -12,6 +12,7 @@ it-it:
   What is this?: È un film o una serie?
   New: Inizia una nuova ricerca
   Next result: No, mostra il prossimo risultato
+  Last result: Non ci sono altri risultati
   Add: Sì, aggiungilo
   Select: Sì, seleziona questo
   Select a path: Per favore scegli una cartella per il film o per la serie
@@ -71,3 +72,11 @@ it-it:
     ChangedTo25: Limite impostato al 25%
     ChangedTo100: Limite disattivato
     Error: Errore nell'impostazione della velocità
+
+  Notifications:
+    Stop: l'utente %{first_name} con chat_id %{chat_id} ha interrotto il processo.
+    Start: L'utente %{first_name} con chat_id %{chat_id} ha avviato una nuova richiesta.
+    AddSuccess: Il %{subjectWithArticle} %{title} dell'utente %{first_name} con chat_id %{chat_id} è stato aggiunto.
+    AddFailed: Errore nell'aggiunta del %{subjectWithArticle} %{title} dell'utente %{first_name} con chat_id %{chat_id}.
+    Exist: Il %{subjectWithArticle} %{title} che l'utente %{first_name} con chat_id %{chat_id} voleva aggiungere esiste già.
+    Delete: l'utente %{first_name} con chat_id %{chat_id} ha avviato una nuova eliminazione.

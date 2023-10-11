@@ -12,6 +12,7 @@ pt-pt:
   What is this?: É um filme ou uma série?
   New: Execute uma nova pesquisa
   Next result: Não, mostre-me o resultado seguinte
+  Last result: Não há mais resultados a apresentar
   Add: Sim, adicione este
   Select: Sim, seleccione isto
   Select a path: Seleccione um caminho para o filme ou série
@@ -71,3 +72,11 @@ pt-pt:
     ChangedTo25: Limite definido para 25%
     ChangedTo100: Sem limite definido
     Error: Algo correu mal a definir o limite.
+
+  Notifications:
+    Stop: O utilizador %{first_name} com chat_id %{chat_id} parou o processo.
+    Start: O utilizador %{first_name} com chat_id %{chat_id} iniciou um novo pedido.
+    AddSuccess: O %{subjectWithArticle} %{title} do utilizador %{first_name} com o chat_id %{chat_id} foi adicionado.
+    AddFailed: Erro ao adicionar o %{subjectWithArticle} %{title} do utilizador %{first_name} com chat_id %{chat_id}.
+    Exist: O %{subjectWithArticle} %{title} que o utilizador %{first_name} com chat_id %{chat_id} queria adicionar já existe.
+    Delete: O utilizador %{first_name} com o chat_id %{chat_id} iniciou uma nova eliminação.

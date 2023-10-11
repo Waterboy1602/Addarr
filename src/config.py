@@ -9,13 +9,11 @@ for setting, default_value in DEFAULT_SETTINGS.items():
     if setting not in config:
         config[setting] = default_value
 
-
 def flatten_dict(dd, separator ='/', prefix =''):
     return { prefix + separator + k if prefix else k : v
              for kk, vv in dd.items()
              for k, v in flatten_dict(vv, separator, kk).items()
              } if isinstance(dd, dict) else { prefix : dd }
-
 
 def checkConfig():
     missingConfig=[]
@@ -24,10 +22,9 @@ def checkConfig():
             missingConfig.append(key_ex)
     return missingConfig
 
-
 def checkConfigValues():
     wrongValues = []
-    languages = ["en-us", "es-es", "it-it", "nl-be", "pt-pt", "pl-pl", "de-de", "fr-fr", "ru-ru"]
+    languages = ["en-us", "es-es", "it-it", "nl-be", "pt-pt", "pl-pl", "de-de"]
     if config["language"] not in languages:
         wrongValues.append("language")
     return wrongValues

@@ -19,6 +19,7 @@ sonarr:
     - 
   defaultTags: # If set must be existing tags
     - telegram
+  addRequesterIdTag: true
   adminRestrictions: false
 
 #Radarr Configuration
@@ -41,6 +42,7 @@ radarr:
     - 
   defaultTags: # If set must be existing tags
     - telegram
+  addRequesterIdTag: true
   adminRestrictions: false
   
 #Telegram Configuration
@@ -90,3 +92,4 @@ enableAllowlist: false #Check allowlist.txt - very restrictive!
 ##Logging
 logToConsole: true
 debugLogging: false
+adminNotifyId:

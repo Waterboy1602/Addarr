@@ -12,6 +12,7 @@ pl-pl:
   What is this?: To jest film czy serial?
   New: Szukaj jeszcze raz
   Next result: Próbuj dalej
+  Last result: Brak więcej wyników wyszukania
   Add: Tak, chcę to!
   Select: Wybierz: Tak, wybierz to
   Select a path: Wybierz ścieżkę dla filmu lub serialu
@@ -71,3 +72,11 @@ pl-pl:
     ChangedTo25: Limit ustawiony do 25%
     ChangedTo100: Brak limitu prędkości pobierania
     Error: Coś poszło nie tak podczas ustawiania limitu
+
+  Notifications:
+    Stop: Użytkownik %{first_name} z identyfikatorem chat_id %{chat_id} zatrzymał proces.
+    Start: Użytkownik %{first_name} z identyfikatorem chat_id %{chat_id} rozpoczął nowe żądanie.
+    AddSuccess: Artykuł %{subjectWithArticle} %{title} użytkownika %{first_name} z identyfikatorem chat_id %{chat_id} został dodany.
+    AddFailed: Błąd dodawania %{subjectWithArticle} %{title} użytkownika %{first_name} z chat_id %{chat_id}.
+    Exist: Artykuł %{subjectWithArticle} %{title}, który chciał dodać użytkownik %{first_name} with chat_id %{chat_id} już istnieje.
+    Delete: Użytkownik %{first_name} z identyfikatorem chat_id %{chat_id} zainicjował nowe usunięcie.
