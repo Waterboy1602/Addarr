@@ -24,7 +24,7 @@ async def delete(update : Update, context):
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
 
-    if not checkAllowed(update, "admin"):
+    if not checkAllowed(update, "admin") and config.get("enableAdmin"):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),
