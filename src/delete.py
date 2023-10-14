@@ -53,7 +53,7 @@ async def delete(update : Update, context):
     )
     if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
         adminNotifyId = config.get("adminNotifyId")
-        message2=i18n.t("addarr.Notify.Delete", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+        message2=i18n.t("addarr.Notifications.Delete", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
         msg2 = context.bot.send_message(
             chat_id=adminNotifyId, text=message2
     )
