@@ -262,7 +262,7 @@ async def stop(update, context):
         
     if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
         adminNotifyId = config.get("adminNotifyId")
-        msg2 = context.bot.send_message(
+        await context.bot.send_message(
             chat_id=adminNotifyId, text=i18n.t("addarr.Notifications.Stop", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
         )
     clearUserData(context)
@@ -314,7 +314,7 @@ async def startSerieMovie(update : Update, context):
     )
     if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
         adminNotifyId = config.get("adminNotifyId")
-        msg2 = context.bot.send_message(
+        await context.bot.send_message(
             chat_id=adminNotifyId, text=i18n.t("addarr.Notifications.Start", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
         )
     
@@ -840,7 +840,7 @@ async def addSerieMovie(update, context):
                     message2=i18n.t("addarr.Notifications.AddSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 else:
                     message2=i18n.t("addarr.Notifications.AddSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
-                msg2 = context.bot.send_message(
+                await context.bot.send_message(
                     chat_id=adminNotifyId, text=message2
                 )
             clearUserData(context)
@@ -861,7 +861,7 @@ async def addSerieMovie(update, context):
                     message2=i18n.t("addarr.Notifications.AddFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 else:
                     message2=i18n.t("addarr.Notifications.AddFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
-                msg2 = context.bot.send_message(
+                await context.bot.send_message(
                     chat_id=adminNotifyId, text=message2
                 )
             clearUserData(context)
@@ -883,7 +883,7 @@ async def addSerieMovie(update, context):
                 message2=i18n.t("addarr.Notifications.Exist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
             else:
                 message2=i18n.t("addarr.Notifications.Exist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
-            msg2 = context.bot.send_message(
+            await context.bot.send_message(
                 chat_id=adminNotifyId, text=message2
             )
         clearUserData(context)
