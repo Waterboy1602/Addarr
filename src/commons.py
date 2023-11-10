@@ -85,9 +85,9 @@ async def authentication(update, context):
         else:
             file.close()
             password = update.message.text
-            if("/auth" in password):
+            if("/auth " in password):
                 password = password.replace("/auth ", "")
-            if password == config["telegram"]["password"]:
+            if str(password) == str(config["telegram"]["password"]):
                 with open(CHATID_PATH, "a") as file:
                     file.write(await getChatName(context, chatid))
                     await context.bot.send_message(
