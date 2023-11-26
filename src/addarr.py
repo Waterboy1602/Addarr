@@ -697,6 +697,8 @@ async def selectSeasons(update, context):
                 callback_data=f"Season: {s}"
             ),
         ]]
+    keyboard += [[InlineKeyboardButton("Mark all seasons",callback_data=f"Season: All")]]
+
     markup = InlineKeyboardMarkup(keyboard)
 
     await context.bot.edit_message_text(
@@ -741,11 +743,16 @@ async def checkSeasons(update, context):
                 logger.debug(f"Seasons {seasonsSelected} have been selected.")
                 
                 context.user_data["selectedSeasons"] = selectedSeasons
-                
                 return await addSerieMovie(update, context)
-                
+              
             else:
-                if int(insertSeason) not in selectedSeasons:
+                if insertSeason == "All":
+                    for s in seasons:
+                        print(selectedSeasons)
+                        print(s)
+                        if s not in selectedSeasons:
+                            selectedSeasons.append(s)
+                elif int(insertSeason) not in selectedSeasons:
                     selectedSeasons.append(int(insertSeason))
                 else:
                     selectedSeasons.remove(int(insertSeason))
@@ -761,6 +768,7 @@ async def checkSeasons(update, context):
                             callback_data=f"Season: {s}"
                         )
                     ])
+                keyboard += [[InlineKeyboardButton("Mark all seasons",callback_data=f"Season: All")]]
                 markup = InlineKeyboardMarkup(keyboard)
 
                 await context.bot.edit_message_text(
