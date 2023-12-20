@@ -14,10 +14,12 @@ sonarr:
   languageProfile: English
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
+  narrowRootFolderNames: true #If true, only the last folder name will be shown instead of full path
   excludedQualityProfiles:
     - 
   defaultTags: # If set must be existing tags
     - telegram
+  addRequesterIdTag: true #Add telegram user id as tag on series
   adminRestrictions: false
 
 #Radarr Configuration
@@ -35,10 +37,12 @@ radarr:
   minimumAvailability: announced
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
+  narrowRootFolderNames: true #If true, only the last folder name will be shown instead of full path
   excludedQualityProfiles:
     - 
   defaultTags: # If set must be existing tags
     - telegram
+  addRequesterIdTag: true #Add telegram user id as tag on movie
   adminRestrictions: false
   
 #Telegram Configuration
@@ -88,3 +92,4 @@ enableAllowlist: false #Check allowlist.txt - very restrictive!
 ##Logging
 logToConsole: true
 debugLogging: false
+adminNotifyId:

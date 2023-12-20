@@ -24,7 +24,7 @@ async def delete(update : Update, context):
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
 
-    if not checkAllowed(update, "admin"):
+    if not checkAllowed(update, "admin") and config.get("enableAdmin"):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.NotAdmin"),
@@ -50,6 +50,12 @@ async def delete(update : Update, context):
     
     await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+i18n.t("addarr.Title")
+    )
+    if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
+        adminNotifyId = config.get("adminNotifyId")
+        message2=i18n.t("addarr.Notifications.Delete", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+        await context.bot.send_message(
+            chat_id=adminNotifyId, text=message2
     )
     return SERIE_MOVIE_DELETE
     
@@ -182,13 +188,16 @@ async def confirmDelete(update, context):
         else:
             msg = await context.bot.send_message(chat_id=update.effective_message.chat_id, text=message,parse_mode=ParseMode.MARKDOWN,)
             context.user_data["update_msg"] = msg.message_id
-        
-        img = await context.bot.sendPhoto(
-            chat_id=update.effective_message.chat_id,
-            photo=context.user_data["output"][position]["poster"],
-        )
-        context.user_data["photo_update_msg"] = img.message_id
-        
+        try:
+            img = await context.bot.sendPhoto(
+                chat_id=update.effective_message.chat_id,
+                photo=context.user_data["output"][position]["poster"],
+            )
+        except:
+            context.user_data["photo_update_msg"] = None
+        else:
+            context.user_data["photo_update_msg"] = img.message_id
+
         if choice == i18n.t("addarr.Movie"):
             message=i18n.t("addarr.messages.ThisDelete", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
         else:

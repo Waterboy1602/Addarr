@@ -5,6 +5,7 @@ from definitions import CONFIG_PATH, CONFIG_EXAMPLE_PATH, DEFAULT_SETTINGS
 config = yaml.safe_load(open(CONFIG_PATH, encoding="utf8"))
 config_example = yaml.safe_load(open(CONFIG_EXAMPLE_PATH, encoding="utf8"))
 
+
 for setting, default_value in DEFAULT_SETTINGS.items():
     if setting not in config:
         config[setting] = default_value
