@@ -748,8 +748,6 @@ async def checkSeasons(update, context):
             else:
                 if insertSeason == "All":
                     for s in seasons:
-                        print(selectedSeasons)
-                        print(s)
                         if s not in selectedSeasons:
                             selectedSeasons.append(s)
                 elif int(insertSeason) not in selectedSeasons:
