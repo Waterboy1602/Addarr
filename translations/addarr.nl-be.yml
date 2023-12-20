@@ -12,14 +12,13 @@ nl-be:
   What is this?: Is dit een film of een serie?
   New: Voer een nieuwe zoekopdracht uit
   Next result: Nee, toon me volgend resultaat
-  Last result: Geen resultaten meer te tonen
   Add: Ja, voeg deze toe
+  Delete: Ja, verwijder deze
+  StopDelete: No, ik wil dit niet verwijderen
   Select: Ja, selecteer dit
   Select a path: Kies een pad voor deze film of serie
   Select a quality: Kies een kwaliteitsprofiel voor de film of serie
-  Select from which season: Sinds welk seizoen?
-  From season: From season
-  Future seasons: Toekomstige seizoenen
+  Select from which season: Vanaf welk seizoen?
   Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
   Wrong password: Het wachtwoord is verkeerd. Probeer opnieuw...
   Chatid added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
@@ -42,7 +41,8 @@ nl-be:
   messages:
     Add: Ja, voeg deze %{subject} toe
     This: Is dit %{subjectWithArticle} die je wilt toevoegen?
-    Failed: Oeps, mislukt om %{subjectWithArticle} toe te voegen. Probeer misschien nog eens opnieuw.
+    ThisDelete: Is dit %{subjectWithArticle} die je wilt verwijderen?
+    AddFailed: Oeps, mislukt om %{subjectWithArticle} toe te voegen. Probeer misschien nog eens opnieuw.
     DeleteFailed: Oeps, %{subjectWithArticle} verwijderen mislukt. Probeer misschien nog eens opnieuw.
     AddSuccess: "%{subjectWithArticle} is met succes toegevoegd 🙂"
     DeleteSuccess: "%{subjectWithArticle} is met succes verwijderd 🙂"

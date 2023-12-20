@@ -12,14 +12,13 @@ it-it:
   What is this?: È un film o una serie?
   New: Inizia una nuova ricerca
   Next result: No, mostra il prossimo risultato
-  Last result: Non ci sono altri risultati
   Add: Sì, aggiungilo
+  Delete: Sì, eliminare questo
+  StopDelete: No, non voglio cancellarlo
   Select: Sì, seleziona questo
   Select a path: Per favore scegli una cartella per il film o per la serie
   Select a quality: Per favore seleziona un profilo di qualità per il film o la serie
   Select from which season: Da quale stagione?
-  From season: From season
-  Future seasons: Stagioni future
   Authorize: Devi prima autenticare questa chat. Qual'è la password?
   Wrong password: La password è sbagliata. Riprova...
   Chatid added: "Questa chat è stata aggiunta alla lista delle chat autorizzate. Ora puoi utilizzare il bot. \nSe avevi inviato un comando, dovrai inviarlo di nuovo."
@@ -42,7 +41,8 @@ it-it:
   messages:
     Add: Si, aggiungi %{subject}
     This: Vuoi aggiungere questa/o %{subjectWithArticle}?
-    AddFailed: Ops, non sono riuscito ad aggiungere la/il %{subjectWithArticle}. Riprova.
+    ThisDelete: È questo %{subjectWithArticle} che si vuole cancellare?
+    AddFailed: Oops, non sono riuscito ad aggiungere la/il %{subjectWithArticle}. Riprova.
     DeleteFailed: Oops, non è riuscito a eliminare %{subjectWithArticle}. Riprova.
     AddSuccess: "%{subjectWithArticle} aggiunta/o correttamente 🙂"
     DeleteSuccess: "%{subjectWithArticle} è stato rimosso con successo 🙂 "

@@ -12,14 +12,13 @@ pl-pl:
   What is this?: To jest film czy serial?
   New: Szukaj jeszcze raz
   Next result: Próbuj dalej
-  Last result: Brak więcej wyników wyszukania
   Add: Tak, chcę to!
+  Delete: Tak, usuń to
+  StopDelete: Nie, nie chcę tego usuwać
   Select: Wybierz: Tak, wybierz to
   Select a path: Wybierz ścieżkę dla filmu lub serialu
   Select a quality: Proszę wybrać profil jakościowy dla filmu lub serialu
   Select from which season: Od którego sezonu?
-  From season: From season
-  Future seasons: Przyszłe sezony
   Authorize: Musisz zautoryzować ten czat. Jakie jest hasło?
   Wrong password: Hasło nieprawidłowe. Spróbuj ponownie...
   Chatid added: "Ten czat został dodany do whitelisty. Teraz możesz używać tego bota."
@@ -42,6 +41,7 @@ pl-pl:
   messages:
     Add: Tak, dodaj %{subject}
     This: O %{subjectWithArticle} Ci chodzi?
+    ThisDelete: Czy ten %{subjectWithArticle} chcesz usunąć?
     AddFailed: Ups, nie udało się dodać %{subjectWithArticle}. Spróbuj innym razem.
     DeleteFailed: Oops, nie udało się usunąć %{subjectWithArticle}. Spróbuj innym razem.
     AddSuccess: "Właśnie dodałem %{subjectWithArticle} 🙂"

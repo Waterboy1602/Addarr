@@ -12,7 +12,6 @@ es-es:
   What is this?: Esto es una pelicula o una serie?
   New: Ejecuta un nuevo comando de busqueda
   Next result: No, muestrame el siguiente resultado
-  Last result: No hay más resultados
   Add: Si, añadir
   Delete: Sí, eliminala
   StopDelete: No, no quiero eliminarla
@@ -20,8 +19,6 @@ es-es:
   Select a path: Por favor elige una ruta donde guardar
   Select a quality: Por favor, seleccione la calidad para la pelicula o serie
   Select from which season: Desde que temporada?
-  From season: Desde la temporada
-  Future seasons: Futuras temporadas
   Authorize: Necesitas autorizar este chat primero. ¿Cuál es la contraseña?
   Wrong password: Contraseña incorrecta. Prueba otra vez...
   Chatid added: "Este chat ha sido autorizado correctamente. Ya puedes utilizar el bot."
@@ -33,7 +30,9 @@ es-es:
     \n• Para eliminar una serie o película usa /%{delete}.
     \n• Para añadir directamente una película o serie usa /%{movie} or /%{serie}.
     \n• Para comprobar que series hay en Sonarr usa /%{allSeries}.
-    \n• Para comprobar que películas hay en Radarr usa /%{allMovies}."
+    \n• Para comprobar que películas hay en Radarr usa /%{allMovies}.
+    \n• Para alternar la velocidad de subida y bajada de Transmission utiliza /%{transmission}.
+    \n• Para cambiar la velocidad de subida y bajada de Sabnzbd utiliza /%{sabnzbd}."
   Missing config: "Te faltan las siguientes keys en tu config.yaml-file: %{missingKeys}.
     \nAñadelas antes de reiniciar el bot."
   Wrong values: "Te faltan las siguientes keys tienen un valor incorrecto en tu config.yaml-file: %{wrongValues}.
@@ -49,7 +48,7 @@ es-es:
     DeleteSuccess: "La %{subjectWithArticle} se ha eliminado correctamente 🙂"
     Exist: La %{subjectWithArticle} ya existe 😉
     NoExist: La %{subjectWithArticle} no existe
-    
+
   searchresults:
     zero: No se han encontrado resultados.
     one: Se ha encontrado un resultado. 
@@ -73,7 +72,7 @@ es-es:
     ChangedTo25: Limite aplicado en 25%
     ChangedTo100: Ningun limite aplicado
     Error: Algo ha fallado cuando se ha intentado cambiar la velocidad
-  
+
   Notifications:
     Stop: El usuario %{first_name} con chat_id %{chat_id} ha parado el proceso.
     Start: El usuario %{first_name} con chat_id %{chat_id} ha iniciado una nueva solicitud.

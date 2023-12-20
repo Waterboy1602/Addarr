@@ -19,8 +19,6 @@ fr-fr:
   Select a path: Veuillez sélectionner un chemin d'accès pour le film ou la série
   Select a quality: Veuillez sélectionner un profil de qualité pour le film ou la série
   Select from which season: De quelle saison ?
-  From season: De la saison
-  Future seasons: Saison future
   Authorize: Vous devez d'abord autoriser ce chat. Quel est le mot de passe?
   Wrong password: Vous avez entré le mauvais mot de passe. Réessayer...
   Chatid added: "Ce chat a été ajouté avec succès à la liste des chats autorisés. Vous pouvez maintenant commencer à utiliser ce bot. \nSi vous avez entré une commande, vous devez l'exécuter à nouveau."
@@ -51,7 +49,6 @@ fr-fr:
     Exist: "%{subjectWithArticle} existe déjà 😉"
     NoExist: "%{subjectWithArticle} n'existe pas ou vous ne l'avez pas ajouté auparavant"
 
-
   searchresults:
     zero: Aucun résultat trouvé
     one: Un seul résultat de recherche
@@ -75,3 +72,11 @@ fr-fr:
     ChangedTo25: Limite réglée à 25%
     ChangedTo100: Pas de limite de vitesse
     Error: Une erreur s'est produite lors de la tentative de réglage de la vitesse
+
+  Notifications:
+    Stop: L'utilisateur %{first_name} avec chat_id %{chat_id} a arrêté le processus.
+    Start: L'utilisateur %{first_name} avec chat_id %{chat_id} a lancé une nouvelle demande.
+    AddSuccess: Le %{subjectWithArticle} %{title} de l'utilisateur %{first_name} avec chat_id %{chat_id} a été ajouté.
+    AddFailed: Erreur lors de l'ajout du %{subjectWithArticle} %{title} de l'utilisateur %{first_name} avec chat_id %{chat_id}.
+    Exist: Le %{subjectWithArticle} %{titre} que l'utilisateur %{first_name} avec chat_id %{c.hat_id} voulait ajouter existe déjà.
+    Delete: L'utilisateur %{first_name} avec chat_id %{chat_id} a initié une nouvelle suppression.

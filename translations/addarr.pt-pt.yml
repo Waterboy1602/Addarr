@@ -4,7 +4,7 @@ pt-pt:
   Stop: Stop
   Movie: Filme
   MovieWithArticle: Filme
-  Serie: Serie
+  Series: Serie
   SeriesWithArticle: Serie
   Start chatting: Comece um chat com o Addarr no Telegram. Da primeira vez que escrever "start" deverá introduzir a password.
   End:  A adição de filmes ou séries terminou
@@ -12,14 +12,13 @@ pt-pt:
   What is this?: É um filme ou uma série?
   New: Execute uma nova pesquisa
   Next result: Não, mostre-me o resultado seguinte
-  Last result: Não há mais resultados a apresentar
   Add: Sim, adicione este
+  Delete: Sim, apagar isto
+  StopDelete: Não, não quero apagar isto
   Select: Sim, seleccione isto
   Select a path: Seleccione um caminho para o filme ou série
   Select a quality: Por favor, seleccione um perfil de qualidade para o filme ou série
   Select from which season: A partir de que temporada?
-  From season: From season
-  Future seasons: Futuras temporadas
   Authorize: Primeiro tem de autorizar este chat. Indique a password
   Wrong password: Introduziu a password errada. Tente novamente
   Chatid added: "Este chat foi adicionado à lista de chats autorizados. Pode agora utilizar este bot.\nSe introduziu um comando, deverá executá-lo novamente."
@@ -33,15 +32,16 @@ pt-pt:
     \n• Para ver que séries existem no Sonarr, escreva /%{allSeries}.
     \n• Para ver que filme existem no Radarr, escreva /%{allMovies}.
     \n• Para alterar a velocidade de download do Transmission escreva /%{transmission}.
-    \n• To change the up- and download speed of Sabnzbd use /%{sabnzbd}."
-  Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.
-    \nAdd these before restarting the bot."
-  Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.
-    \nChange these before restarting the bot."
+    \n• Para alterar a velocidade de subida e descida do Sabnzbd, utilize /%{sabnzbd}."
+  Missing config: "Estão em falta as seguintes configkeys no seu ficheiro config.yaml: %{missingKeys}.
+    \nAdiciona-as antes de reiniciar o bot."
+  Wrong values: "As seguintes configkeys têm um valor errado no seu ficheiro config.yaml: %{wrongValues}.
+    \nAltera estes valores antes de reiniciar o bot."
 
   messages:
     Add: Sim, adicione este %{subject}
     This: É este %{subjectWithArticle} que quer adicionar?
+    ThisDelete: É este %{subjectWithArticle} que pretende eliminar?
     AddFailed: Oops, falha ao adicionar este %{subjectWithArticle}. Tente novamente.
     DeleteFailed: Oops, não apagou %{subjectWithArticle}. Tente novamente.
     AddSuccess:  "O %{subjectWithArticle} foi adicionado com sucesso 🙂"

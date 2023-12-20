@@ -6,20 +6,19 @@ de-de:
   MovieWithArticle: Der Film
   Series: Serie
   SeriesWithArticle: Die Serie
-  Start chatting: Starte mit Addar auf Telegram zu chatten. Das erste Mal wenn du "start" verwendest wirst du gebeten dein Password einzugeben.
+  Start chatting: Starte mit Addarr auf Telegram zu chatten. Das erste Mal wenn du "start" verwendest wirst du gebeten dein Password einzugeben.
   End: Das hinzufügen der Serie oder des Films wurde beendet.
   Title: "Gebe den Titel ein:"
   What is this?: Ist es eine Serie oder ein Film?
   New: Führe einen neuen such Befehl aus
   Next result: Nein, zeige mir das nächste Ergebnis
-  Last result: Keine weiteren Ergebnisse verfügbar
   Add: Ja, füge dies hinzu
+  Delete: Ja, löschen Sie dies
+  StopDelete: Nein, ich will das nicht löschen
   Select: Ja, wählen Sie dies
   Select a path: Bitte wähle ein Pfad für die Serie oder den Film
   Select a quality: Bitte wählen Sie ein Qualitätsprofil für den Film oder die Serie
   Select from which season: Seit welcher Saison?
-  From season: From season
-  Future seasons: Künftige Saisons
   Authorize: Dieser Chat muss noch autorisiert werden. Was ist dein Passwort?
   Wrong password: Das Password ist nicht korrekt. Probiere es erneut...
   Chatid added: "Dieser Chat würde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \befehle müssen erneut ausgeführt werden."
@@ -42,13 +41,14 @@ de-de:
   messages:
     Add: Ja füge %{subject} hinzu
     This: Willst du %{subjectWithArticle} hinzufügen?
+    ThisDelete: Ist dies %{subjectWithArticle}, das Sie löschen möchten?
     AddFailed: Oops, das hinzufügen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
     DeleteFailed: Oops, das löschen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
     AddSuccess: "%{subjectWithArticle} würde hinzugefügt 🙂"
     DeleteSuccess: "%{subjectWithArticle} würde erfolgreich entfernt 🙂"
     Exist: "%{subjectWithArticle} gibt es bereits 😉"
     NoExist: "%{subjectWithArticle} existiert nicht."
-  
+
   searchresults:
     zero: Es würden keine Ergebnisse gefunden
     one: Ein Ergebnis gefunden
