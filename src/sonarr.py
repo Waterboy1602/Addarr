@@ -82,12 +82,12 @@ def removeFromLibrary(tvdbId):
 
 
 def buildData(json, path, qualityProfileId, tags, seasonsSelected):
+#    "languageProfileId": getLanguageProfileId(config["languageProfile"]),
     built_data = {
         "qualityProfileId": qualityProfileId,
-        "languageProfileId": getLanguageProfileId(config["languageProfile"]),
         "addOptions": {
-            "ignoreEpisodesWithFiles": "true",
-            "ignoreEpisodesWithoutFiles": "false",
+            "ignoreEpisodesWithFiles": True,
+            "ignoreEpisodesWithoutFiles": False,
             "searchForMissingEpisodes": config["search"],
         },
         "rootFolderPath": path,
