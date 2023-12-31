@@ -689,15 +689,15 @@ async def selectSeasons(update, context):
     seasonNumbers = [s["seasonNumber"] for s in seasons]
     context.user_data["seasons"] = seasonNumbers
     
-    keyboard = [[InlineKeyboardButton(i18n.t("Future and Selected seasons"),callback_data="Season: Future and Selected")]]
+    keyboard = [[InlineKeyboardButton(i18n.t("addarr.Future and Selected seasons"),callback_data="Season: Future and Selected")]]
     for s in seasonNumbers:
         keyboard += [[
             InlineKeyboardButton(
-                f"{i18n.t('Season')} {s}",
+                f"{i18n.t('addarr.Season')} {s}",
                 callback_data=f"Season: {s}"
             ),
         ]]
-    keyboard += [[InlineKeyboardButton("Mark all seasons",callback_data=f"Season: All")]]
+    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Mark all seasons"),callback_data=f"Season: All")]]
 
     markup = InlineKeyboardMarkup(keyboard)
 
@@ -756,17 +756,17 @@ async def checkSeasons(update, context):
                     selectedSeasons.remove(int(insertSeason))
                     
                 context.user_data["selectedSeasons"] = selectedSeasons
-                keyboard = [[InlineKeyboardButton(i18n.t("Future and Selected seasons"),callback_data="Season: Future and Selected")]]
+                keyboard = [[InlineKeyboardButton(i18n.t("addarr.Future and Selected seasons"),callback_data="Season: Future and Selected")]]
                 for s in seasons:
                     selected = str(s)
                     if s in selectedSeasons: selected = str(s) + " ✅"
                     keyboard.append([
                         InlineKeyboardButton(
-                            f"{i18n.t('Season')} {selected}",
+                            f"{i18n.t('addarr.Season')} {selected}",
                             callback_data=f"Season: {s}"
                         )
                     ])
-                keyboard += [[InlineKeyboardButton("Mark all seasons",callback_data=f"Season: All")]]
+                keyboard += [[InlineKeyboardButton(i18n.t("addarr.Mark all seasons"),callback_data=f"Season: All")]]
                 markup = InlineKeyboardMarkup(keyboard)
 
                 await context.bot.edit_message_text(
