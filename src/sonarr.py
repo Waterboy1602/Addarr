@@ -158,7 +158,7 @@ def getTags():
 
 def createTag(tag):
     data_json = {
-        "id": max([t["id"] for t in getTags()])+1,
+        "id": int(max([t["id"] for t in getTags()], default=0)+1),
         "label": str(tag)
     }
     add = requests.post(commons.generateApiQuery("sonarr", "tag"), json=data_json, headers={'Content-Type': 'application/json'})
