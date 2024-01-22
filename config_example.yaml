@@ -9,7 +9,7 @@ sonarr:
     apikey: 
     username: 
     password:
-  search: true
+  search: true # Start search after adding series
   seasonFolder: true
   languageProfile: English
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
@@ -32,7 +32,7 @@ radarr:
   auth:
     apikey:
     username:
-    password: 
+    password:  # Start search after adding movie
   search: true
   minimumAvailability: announced
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
