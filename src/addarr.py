@@ -391,12 +391,11 @@ async def searchSerieMovie(update, context):
         context.user_data["choice"] = choice
     
     choice = context.user_data["choice"]
-    context.user_data["position"] = 0
+    
+    position = context.user_data["position"] = 0
 
     service = getService(context)
 
-    position = context.user_data["position"]
-    
     searchResult = service.search(title)
     if not searchResult:
         await context.bot.send_message( 
@@ -421,7 +420,6 @@ async def searchSerieMovie(update, context):
         msg = await context.bot.send_message(chat_id=update.effective_message.chat_id, text=message,parse_mode=ParseMode.MARKDOWN,)
         context.user_data["update_msg"] = msg.message_id
     
-
     try:
         img = await context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,

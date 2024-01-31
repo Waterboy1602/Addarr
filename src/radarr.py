@@ -35,13 +35,13 @@ def giveTitles(parsed_json):
     data = []
     for movie in parsed_json:
         if all(
-            x in movie for x in ["title", "overview", "remotePoster", "year", "tmdbId"]
+            x in movie for x in ["title", "overview", "year", "tmdbId"]
         ):
             data.append(
                 {
                     "title": movie["title"],
                     "overview": movie["overview"],
-                    "poster": movie["remotePoster"],
+                    "poster": movie.get("remotePoster", None),
                     "year": movie["year"],
                     "id": movie["tmdbId"],
                 }
