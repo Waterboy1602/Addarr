@@ -28,7 +28,7 @@ def checkConfig():
 
 def checkConfigValues():
     wrongValues = []
-    languages = ["en-us", "es-es", "it-it", "nl-be", "pt-pt", "pl-pl", "de-de", "fr-fr", "ru-ru"]
+    languages = ["de-de", "en-us", "es-es", "fr-fr", "it-it", "nl-be", "pl-pl", "pt-pt", "ru-ru"]
     if config["language"] not in languages:
         wrongValues.append("language")
     return wrongValues
