@@ -7,7 +7,7 @@ en-us:
   Series: Series
   SeriesWithArticle: The series
   Start chatting: Start chatting with Addarr in Telegram. The first time you use "start" you will be asked to enter your password.
-  End: The adding of movies or series has ended.
+  End: The adding/deleting of movies or series has ended.
   Title: "Enter the title:"
   What is this?: Is this a movie or a series?
   New: Execute a new search command

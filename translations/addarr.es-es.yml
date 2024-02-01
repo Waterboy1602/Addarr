@@ -7,7 +7,7 @@ es-es:
   Series: Serie
   SeriesWithArticle: serie
   Start chatting: Empieza a chatear con Addarr en Telegram. La primera vez que uses "start" te pedira introducir tu contraseña configurada.
-  End: La adicion de peliculas o series ha finalizado.
+  End: La adicion/eliminación de peliculas o series ha finalizado.
   Title: "Introduce el titulo:"
   What is this?: Esto es una pelicula o una serie?
   New: Ejecuta un nuevo comando de busqueda
