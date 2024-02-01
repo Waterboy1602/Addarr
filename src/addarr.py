@@ -22,6 +22,8 @@ from config import checkConfigValues, config, checkConfig
 from translations import i18n
 from warnings import filterwarnings
 
+import asyncio
+
 __version__ = "0.7"
 
 # Set up logging
@@ -941,8 +943,10 @@ def clearUserData(context):
 
 
 if __name__ == "__main__":
-    if startCheck():
+    loop = asyncio.get_event_loop()
+    if loop.run_until_complete(startCheck()):
         main()
+        loop.close()
     else:
         import sys
         sys.exit(0)
