@@ -1,10 +1,10 @@
-#Sonarr Configuration
+# Sonarr Configuration
 sonarr:
   server:
     addr: 
     port : 8989 # Default is 8989
     path: / # Default is / . If set, it must start and finish with / . Eg: /sonarr/
-    ssl: false #default false
+    ssl: false # Default false
   auth:
     apikey: 
     username: 
@@ -14,21 +14,21 @@ sonarr:
   languageProfile: English
   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
     - # First excluded folder, add others with a "-" on a new line (same indentation)
-  narrowRootFolderNames: true #If true, only the last folder name will be shown instead of full path
+  narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
   excludedQualityProfiles:
     - 
   defaultTags: # If set must be existing tags
     - telegram
-  addRequesterIdTag: true #Add telegram user id as tag on series
+  addRequesterIdTag: true # Add telegram user id as tag on series
   adminRestrictions: false
 
-#Radarr Configuration
+# Radarr Configuration
 radarr:
   server:
     addr:
     port : 7878 # Default is 7878
     path: / # Default is / . If set, it must start and finish with / . Eg: /radarr/
-    ssl: false #default false
+    ssl: false # Default false
   auth:
     apikey:
     username:
@@ -42,20 +42,20 @@ radarr:
     - 
   defaultTags: # If set must be existing tags
     - telegram
-  addRequesterIdTag: true #Add telegram user id as tag on movie
+  addRequesterIdTag: true # Add telegram user id as tag on movie
   adminRestrictions: false
   
-#Telegram Configuration
+# Telegram Configuration
 telegram:
   token:
   password:
 
-#Transmission Configuration
+# Transmission Configuration
 transmission:
-  enable: true #enable the transmission commands
-  onlyAdmin: true #transmission command  will only work for admins
+  enable: true # Enable the Transmission commands
+  onlyAdmin: true # Transmission command  will only work for admins
   host: # IP-adres of the Transmission service
-  authentication: true #is transmission protected with a password?
+  authentication: true # Is Transmission protected with a password?
   username: 
   password:
 
@@ -66,30 +66,30 @@ sabnzbd:
     addr:
     port: 8090 # Default is 8090
     path: / # Default is / . If set, it must start and finish with / . Eg: /sonarr/
-    ssl: false #default false
+    ssl: false # Default false
   auth:
     apikey:
     username:
     password:
 
 # Optional settings:
-##Language
-language: en-us # en-us, es-es, it-it, nl-be, pt-pt, fr-fr, ru-ru
+## Language
+language: en-us # de-de, en-us, es-es, fr-fr, it-it, nl-be, pl-pl, pt-pt, ru-ru
 
-##Entrypoints
-entrypointAuth: auth #auth or a custom entrypoint
-entrypointHelp: help #help entrypoint
-entrypointAdd: start #start or a custom entrypoint
-entrypointAllSeries: allSeries #allSeries or a custom entrypoint
-entrypointAllMovies: allMovies #allMovies or a custom entrypoint
-entrypointTransmission: transmission #transmission or a custom entrypoint
-entrypointSabnzbd: sabnzbd #sabnzbd or a custom entrypoint
+## Entrypoints
+entrypointAuth: auth # auth or a custom entrypoint
+entrypointHelp: help # help entrypoint
+entrypointAdd: start # start or a custom entrypoint
+entrypointAllSeries: allSeries # allSeries or a custom entrypoint
+entrypointAllMovies: allMovies # allMovies or a custom entrypoint
+entrypointTransmission: transmission # transmission or a custom entrypoint
+entrypointSabnzbd: sabnzbd # sabnzbd or a custom entrypoint
 
-##Restrict some commands to only admins and/or provide extra authorization by usernames
-enableAdmin: false #Check admin.txt
-enableAllowlist: false #Check allowlist.txt - very restrictive!
+## Restrict some commands to only admins and/or provide extra authorization by usernames
+enableAdmin: false # Check admin.txt
+enableAllowlist: false # Check allowlist.txt - very restrictive!
 
-##Logging
+## Logging
 logToConsole: true
 debugLogging: false
 adminNotifyId:
