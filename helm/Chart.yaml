@@ -1,7 +1,7 @@
 apiVersion: v2
 appVersion: latest
 description: A helm chart for Addarr
-name: Addarr
+name: addarr
 type: application
 version: 0.1.0
 home: https://github.com/Waterboy1602/Addarr
