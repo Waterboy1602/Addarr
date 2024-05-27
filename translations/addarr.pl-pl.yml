@@ -6,16 +6,22 @@ pl-pl:
   MovieWithArticle: Ten film
   Series: Serial
   SeriesWithArticle: Ten serial
+  Album: Album
+  AlbumWithArticle: Ten album
+  Artist: Artysta
+  ArtistWithArticle: Ten artysta
+  Music: Muzyka
+  MusicWithArticle: Ta muzyka
   Start chatting: Rozpocznij rozmowę z Addarrem na Telegramie. Przy pierwszym użyciu "start" zostaniesz poproszony o podanie hasła.
-  End: Dodawanie/usuwanie filmów lub seriali zostało zakończone.
-  Title: "Wpisz tytuł:"
+  End: Proces zakończony.
+  Title: "Wpisz wyszukiwany termin:"
   What is this?: To jest film czy serial?
   New: Szukaj jeszcze raz
   Next result: Próbuj dalej
   Add: Tak, chcę to!
   Delete: Tak, usuń to
   StopDelete: Nie, nie chcę tego usuwać
-  Select: Wybierz: Tak, wybierz to
+  Select: Wybierz Tak, wybierz to
   Select a path: Wybierz ścieżkę dla filmu lub serialu
   Select a quality: Proszę wybrać profil jakościowy dla filmu lub serialu
   Select from which season: Od którego sezonu?
@@ -51,7 +57,7 @@ pl-pl:
     DeleteSuccess: "%{subjectWithArticle} has been successfully removed 🙂"
     Exist: "%{subjectWithArticle} już istnieje 😉"
     NoExist: "%{subjectWithArticle} nie istnieje"
-    
+
   searchresults:
     zero: Brak rezultatów
     one: Jeden rezultat

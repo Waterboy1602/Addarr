@@ -23,7 +23,7 @@ async def transmission(update, context):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
-    
+
     if not config["enable"]:
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
@@ -67,7 +67,7 @@ async def changeSpeedTransmission(update, context):
             await authentication(update, context) == "added"
         ):  # To also stop the beginning command
             return ConversationHandler.END
-    
+
     choice = update.callback_query.data
     command = f"transmission-remote {config['host']}"
     if config["authentication"]:
@@ -77,7 +77,7 @@ async def changeSpeedTransmission(update, context):
             + ":"
             + config["password"]
         )
-    
+
     message = None
     if choice == TSL_NORMAL:
         command += ' --no-alt-speed'
@@ -85,7 +85,7 @@ async def changeSpeedTransmission(update, context):
     elif choice == TSL_LIMIT:
         command += ' --alt-speed'
         message=i18n.t("addarr.Transmission.ChangedToTSL"),
-    
+
     os.system(command)
 
     await context.bot.send_message(

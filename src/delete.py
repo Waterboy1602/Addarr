@@ -36,7 +36,7 @@ async def delete(update : Update, context):
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
         )
         return SERIE_MOVIE_DELETE
-    
+
     if update.message is not None:
         reply = update.message.text.lower()
     elif update.callback_query is not None:
@@ -47,7 +47,7 @@ async def delete(update : Update, context):
     if reply == i18n.t("addarr.New").lower():
         logger.debug("User issued New command, so clearing user_data")
         clearUserData(context)
-    
+
     await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+i18n.t("addarr.Title")
     )
@@ -58,9 +58,9 @@ async def delete(update : Update, context):
             chat_id=adminNotifyId, text=message2
     )
     return SERIE_MOVIE_DELETE
-    
 
-async def choiceDeleteSerieMovie(update, context):
+
+async def choiceDeleteSerieMovieMusic(update, context):
     service = getService(context)
     if service.config.get("adminRestrictions") and not checkAllowed(update, context, "admin"):
         await context.bot.send_message(
@@ -88,9 +88,9 @@ async def choiceDeleteSerieMovie(update, context):
             i18n.t("addarr.Movie").lower(),
         ]:
             logger.debug(
-                f"User entered a title {reply}"
+                f"User entered a term {reply}"
             )
-            context.user_data["title"] = reply
+            context.user_data["term"] = reply
 
         if context.user_data.get("choice") in [
             i18n.t("addarr.Series"),
@@ -99,7 +99,7 @@ async def choiceDeleteSerieMovie(update, context):
             logger.debug(
                 f"user_data[choice] is {context.user_data['choice']}, skipping step of selecting movie/series"
             )
-            return await deleteSerieMovie(update, context)
+            return await deleteSerieMovieMusic(update, context)
         else:
             keyboard = [
                 [
@@ -126,7 +126,7 @@ async def choiceDeleteSerieMovie(update, context):
 
 
 async def confirmDelete(update, context):
-    title = context.user_data["title"]
+    term = context.user_data["term"]
 
     if not context.user_data.get("choice"):
         choice = None
@@ -135,7 +135,7 @@ async def confirmDelete(update, context):
         elif update.callback_query is not None:
             choice = update.callback_query.data
         context.user_data["choice"] = choice
-    
+
     choice = context.user_data["choice"]
     context.user_data["position"] = 0
 
@@ -143,15 +143,15 @@ async def confirmDelete(update, context):
 
     position = context.user_data["position"]
 
-    searchResult = service.search(title)
+    searchResult = service.search(term)
     if not searchResult:
-        await context.bot.send_message( 
-            chat_id=update.effective_message.chat_id, 
+        await context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.searchresults", count=0),
         )
         clearUserData(context)
         return ConversationHandler.END
-        
+
     context.user_data["output"] = service.giveTitles(searchResult)
     idnumber = context.user_data["output"][position]["id"]
 
@@ -167,7 +167,7 @@ async def confirmDelete(update, context):
                         '\U000023ED '+i18n.t("addarr.StopDelete"),
                         callback_data=i18n.t("addarr.Stop")
                     ),
-                ],[ 
+                ],[
                     InlineKeyboardButton(
                         '\U0001F50D '+i18n.t("addarr.New"),
                         callback_data=i18n.t("addarr.New")
@@ -175,9 +175,9 @@ async def confirmDelete(update, context):
                 ]
             ]
         markup = InlineKeyboardMarkup(keyboard)
-        
+
         message = f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
-        
+
         if "update_msg" in context.user_data:
             await context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
@@ -205,7 +205,7 @@ async def confirmDelete(update, context):
         msg = await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
         )
-        context.user_data["title_update_msg"] = context.user_data["update_msg"]
+        context.user_data["term_update_msg"] = context.user_data["update_msg"]
         context.user_data["update_msg"] = msg.message_id
     else:
         if choice == i18n.t("addarr.Movie"):
@@ -221,8 +221,8 @@ async def confirmDelete(update, context):
         return ConversationHandler.END
     return GIVE_OPTION
 
-async def deleteSerieMovie(update, context):  
-    choice = context.user_data["choice"]  
+async def deleteSerieMovieMusic(update, context):
+    choice = context.user_data["choice"]
     position = context.user_data["position"]
     service = getService(context)
     idnumber = context.user_data["output"][position]["id"]

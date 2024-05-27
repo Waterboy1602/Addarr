@@ -1,23 +1,29 @@
 #English - United States
-en-us: 
+en-us:
   Start: Start
   Stop: Stop
   Movie: Movie
   MovieWithArticle: The movie
   Series: Series
   SeriesWithArticle: The series
+  Album: Album
+  AlbumWithArticle: The Album
+  Artist: Artist
+  ArtistWithArticle: The Artist
+  Music: Music
+  MusicWithArticle: The Music
   Start chatting: Start chatting with Addarr in Telegram. The first time you use "start" you will be asked to enter your password.
-  End: The adding/deleting of movies or series has ended.
-  Title: "Enter the title:"
-  What is this?: Is this a movie or a series?
+  End: The process has ended.
+  Title: "Enter a search term:"
+  What is this?: What are you looking for?
   New: Execute a new search command
   Next result: No, show me the next result
   Add: Yes, add this
   Delete: Yes, delete this
   StopDelete: No, I don't want to delete this
   Select: Yes, select this
-  Select a path: Please select a path for the movie or series
-  Select a quality: Please select a quality profile for the movie or series
+  Select a path: Please select a path for the media
+  Select a quality: Please select a quality profile
   Select from which season: From which season?
   Future and Selected seasons: Future and Selected seasons
   Season: Season
@@ -29,11 +35,12 @@ en-us:
   Chatid already allowed: "This chat is already authorized."
   Help: "Want to see this text again? Use /%{help}.
     \n• To authenticate before first use you should use /%{authenticate}.
-    \n• To add a movie or series use /%{add}.
-    \n• To delete a movie or series use /%{delete}.
-    \n• To immediately add a movie or series you can use /%{movie} or /%{serie}.
+    \n• To add media use /%{add}.
+    \n• To delete media use /%{delete}.
+    \n• To immediately add media you can use /%{movie}, /%{serie} or /%{music}.
     \n• To check which series are in Sonarr you can use /%{allSeries}.
     \n• To check which movies are in Radarr you can use /%{allMovies}.
+    \n• To check which artists are in Lidarr you can use /%{allMusic}.
     \n• To toggle the up- and download speed of Transmission use /%{transmission}.
     \n• To change the up- and download speed of Sabnzbd use /%{sabnzbd}."
   Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.

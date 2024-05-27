@@ -71,7 +71,7 @@ def addToLibrary(tmdbId, path, qualityProfileId, tags):
 
 
 def removeFromLibrary(tmdbId):
-    parameters = { 
+    parameters = {
         "deleteFiles": str(True)
     }
     dbId = getDbIdFromImdbId(tmdbId)

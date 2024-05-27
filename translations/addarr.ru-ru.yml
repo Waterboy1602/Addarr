@@ -6,9 +6,15 @@ ru-ru:
   MovieWithArticle: фильм
   Series: Series
   SeriesWithArticle: сериал
+  Album: Album
+  AlbumWithArticle: альбом
+  Artist: Artist
+  ArtistWithArticle: художник
+  Music: Music
+  MusicWithArticle: музыка
   Start chatting: Начните общаться с Addarr в Telegram. При первом использовании "films" вам будет предложено ввести пароль.
-  End: Добавление/удаление фильмов или сериалов завершилось.
-  Title: "Введи название для поиска:"
+  End: Процесс завершен.
+  Title: "Введите поисковый запрос:"
   What is this?: Это фильм или сериал?
   New: Начать поиск заново
   Next result: Нет, следующий
@@ -80,7 +86,7 @@ ru-ru:
     ChangedTo25: Ограничение установлено на 25%
     ChangedTo100: Нет ограничения
     Error: Что-то пошло не так при попытке установить скорость
-    
+
   Notifications:
     Stop: Пользователь %{first_name} с chat_id %{chat_id} остановил процесс.
     Start: Пользователь %{first_name} с chat_id %{chat_id} начал новый запрос.

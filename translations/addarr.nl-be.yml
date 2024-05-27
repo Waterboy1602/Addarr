@@ -1,14 +1,20 @@
 #Nederlands - België
-nl-be: 
+nl-be:
   Start: Start
   Stop: Stop
   Movie: Film
   MovieWithArticle: De film
   Series: Serie
   SeriesWithArticle: De serie
+  Album: Album
+  AlbumWithArticle: Het album
+  Artist: Artiest
+  ArtistWithArticle: De artiest
+  Music: Muziek
+  MusicWithArticle: De muziek
   Start chatting: Je kan nu chatten met Addarr op Telegram. De eerste keer dat je "start" gebruikt, zul je je wachtwoord moeten ingeven.
-  End: Het toevoegen/verwijderen van films of series is beëindigd.
-  Title: "Geef de titel:"
+  End: Het proces is beëindigd.
+  Title: "Geef de zoekterm:"
   What is this?: Is dit een film of een serie?
   New: Voer een nieuwe zoekopdracht uit
   Next result: Nee, toon me volgend resultaat
@@ -51,7 +57,7 @@ nl-be:
     DeleteSuccess: "%{subjectWithArticle} is met succes verwijderd 🙂"
     Exist: "%{subjectWithArticle} was al toegevoegd 😉"
     NoExist: "%{subjectWithArticle} bestaat niet"
-  
+
   searchresults:
     zero: "Er zijn geen resultaten gevonden."
     one: Een zoekresultaat

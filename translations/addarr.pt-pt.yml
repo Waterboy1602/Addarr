@@ -1,14 +1,20 @@
 #Português - Portugal
-pt-pt: 
+pt-pt:
   Start: Início
   Stop: Stop
   Movie: Filme
   MovieWithArticle: Filme
   Series: Serie
   SeriesWithArticle: Serie
+  Album: Album
+  AlbumWithArticle: O Album
+  Artist: Artista
+  ArtistWithArticle: O Artista
+  Music: Musica
+  MusicWithArticle: A Musica
   Start chatting: Comece um chat com o Addarr no Telegram. Da primeira vez que escrever "start" deverá introduzir a password.
-  End: A adição/eliminação de filmes ou séries terminou.
-  Title: "Introduza o título:"
+  End: O processo terminou.
+  Title: "Introduza o termo de pesquisa:"
   What is this?: É um filme ou uma série?
   New: Execute uma nova pesquisa
   Next result: Não, mostre-me o resultado seguinte
@@ -51,7 +57,7 @@ pt-pt:
     DeleteSuccess: "O %{subjectWithArticle} foi removido com sucesso 🙂"
     Exist: O %{subjectWithArticle} já existe 😉
     NoExist: O %{subjectWithArticle} não existe
-  
+
   searchresults:
     zero: Não foram encontrados resultados
     one: Foi encontrado um resultado

@@ -1,14 +1,20 @@
 #Italiano - Italia
-it-it: 
+it-it:
   Start: Inizia
   Stop: Ferma
   Movie: Film
   MovieWithArticle: Film
   Series: Serie
   SeriesWithArticle: Serie
+  Album: Album
+  AlbumWithArticle: Album
+  Artist: Artista
+  ArtistWithArticle: Artista
+  Music: Musica
+  MusicWithArticle: Musica
   Start chatting: Inizia a chattare con Addarr su Telegram. La prima volta che usi "start" dovrai inserire la password.
-  End: L'aggiunta/eliminazione di film o serie è terminata.
-  Title: "Inserisci il titolo:"
+  End: Il processo è terminato.
+  Title: "Inserisci il termine di ricerca:"
   What is this?: È un film o una serie?
   New: Inizia una nuova ricerca
   Next result: No, mostra il prossimo risultato
@@ -51,7 +57,7 @@ it-it:
     DeleteSuccess: "%{subjectWithArticle} è stato rimosso con successo 🙂 "
     Exist: "%{subjectWithArticle} già esistente 😉"
     NoExist: "%{subjectWithArticle} non esiste."
-  
+
   searchresults:
     zero: Nessun risultato
     one: Un solo risultato

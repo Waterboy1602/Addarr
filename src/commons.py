@@ -73,7 +73,7 @@ async def authentication(update, context):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
-        
+
     chatid = update.effective_message.chat_id
     with open(CHATID_PATH, "r") as file:
         if(str(chatid) in file.read()):
@@ -110,8 +110,8 @@ async def getChatName(context, chatid):
     chat = await context.bot.get_chat(chatid)
     if chat.username:
         chatName = str(chat.username)
-    elif chat.title:
-        chatName = str(chat.title)
+    elif chat.term:
+        chatName = str(chat.term)
     elif chat.last_name and chat.first_name:
         chatName = str(chat.last_name) + str(chat.first_name)
     elif chat.first_name:
@@ -130,9 +130,9 @@ async def getChatName(context, chatid):
 
 # Check if user is an admin or an allowed user
 def checkAllowed(update, mode):
-    if mode == "admin": 
+    if mode == "admin":
         path = ADMIN_PATH
-    else: 
+    else:
         path = ALLOWLIST_PATH
     admin = False
     user = update.effective_user
@@ -160,7 +160,7 @@ def format_long_list_message(list):
     string = ""
     for item in list:
         string += "• " \
-                  + item["title"] \
+                  + item["term"] \
                   + " (" \
                   + str(item["year"]) \
                   + ")" \
