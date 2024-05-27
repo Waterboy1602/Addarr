@@ -32,7 +32,7 @@ logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr", logLevel, config.get("logToConsole", False))
 logger.debug(f"Addarr v{__version__} starting up...")
 
-SERIE_MOVIE_MUSIC_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range(7)
+AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range(7)
 SERIE_MOVIE_ARTIST_DELETE, READ_DELETE_CHOICE = 0,1
 
 application = Application.builder().token(config["telegram"]["token"]).build()
@@ -122,10 +122,10 @@ def main():
             SERIE_MOVIE_ARTIST_DELETE: [MessageHandler(filters.TEXT, choice)],
             READ_DELETE_CHOICE: [
                 MessageHandler(
-                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}|{i18n.t("addarr.Music")})$'),
                     delete.confirmDelete,
                 ),
-                CallbackQueryHandler(delete.confirmDelete, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
+                CallbackQueryHandler(delete.confirmDelete, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}|{i18n.t("addarr.Music")})$')
             ],
             GIVE_OPTION: [
                 CallbackQueryHandler(delete.delete, pattern=f'({i18n.t("addarr.Delete")})'),
@@ -161,13 +161,13 @@ def main():
             ),
         ],
         states={
-            SERIE_MOVIE_MUSIC_AUTHENTICATED: [MessageHandler(filters.TEXT, choice)],
+            AUTHENTICATED: [MessageHandler(filters.TEXT, choice)],
             READ_CHOICE: [
                 MessageHandler(
-                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}|{i18n.t("addarr.Music")})$'),
                     search,
                 ),
-                CallbackQueryHandler(search, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                CallbackQueryHandler(search, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}|{i18n.t("addarr.Music")})$'),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.New")})$'),
                     start
@@ -304,7 +304,7 @@ async def stop(update, context):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
         )
-        return SERIE_MOVIE_MUSIC_AUTHENTICATED
+        return AUTHENTICATED
 
     if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
         adminNotifyId = config.get("adminNotifyId")
@@ -340,18 +340,19 @@ async def start(update : Update, context):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
         )
-        return SERIE_MOVIE_MUSIC_AUTHENTICATED
+        return AUTHENTICATED
 
     if update.message is not None:
         reply = update.message.text.lower()
     elif update.callback_query is not None:
         reply = update.callback_query.data.lower()
     else:
-        return SERIE_MOVIE_MUSIC_AUTHENTICATED
+        return AUTHENTICATED
 
     if reply[1:] in [
         i18n.t("addarr.Series").lower(),
         i18n.t("addarr.Movie").lower(),
+        i18n.t("addarr.Music").lower(),
     ]:
         logger.debug(
             f"User issued {reply} command, so setting user_data[choice] accordingly"
@@ -361,6 +362,8 @@ async def start(update : Update, context):
                 "choice": i18n.t("addarr.Series")
                 if reply[1:] == i18n.t("addarr.Series").lower()
                 else i18n.t("addarr.Movie")
+                if reply[1:] == i18n.t("addarr.Movie").lower()
+                else i18n.t("addarr.Music"),
             }
         )
     elif reply == i18n.t("addarr.New").lower():
@@ -376,7 +379,7 @@ async def start(update : Update, context):
             chat_id=adminNotifyId, text=i18n.t("addarr.Notifications.Start", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
         )
 
-    return SERIE_MOVIE_MUSIC_AUTHENTICATED
+    return AUTHENTICATED
 
 
 
@@ -406,7 +409,7 @@ async def choice(update, context):
         elif update.callback_query is not None:
             reply = update.callback_query.data
         else:
-            return SERIE_MOVIE_MUSIC_AUTHENTICATED
+            return AUTHENTICATED
 
         if reply.lower() not in [
             i18n.t("addarr.Series").lower(),
