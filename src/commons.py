@@ -33,11 +33,11 @@ def cleanUrl(text):
     return url
 
 
-def generateApiQuery(app, endpoint, parameters={}):
+def generateApiQuery(app, endpoint, parameters={}, apiVersion=3):
     try:
         apikey = config[app]["auth"]["apikey"]
         url = (
-            generateServerAddr(app) + "api/v3/" + str(endpoint) + "?apikey=" + str(apikey)
+            generateServerAddr(app) + "api/v" + str(apiVersion) + "/" + str(endpoint) + "?apikey=" + str(apikey)
         )
         # If parameters exist iterate through dict and add parameters to URL.
         if parameters:

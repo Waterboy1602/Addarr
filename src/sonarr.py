@@ -31,7 +31,7 @@ def search(term):
         return False
 
 
-def giveTitles(parsed_json):
+def giveResults(parsed_json):
     data = []
     for show in parsed_json:
         if all(

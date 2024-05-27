@@ -31,7 +31,7 @@ def search(title):
         return False
 
 
-def giveTitles(parsed_json):
+def giveResults(parsed_json):
     data = []
     for movie in parsed_json:
         if all(

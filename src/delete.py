@@ -152,7 +152,7 @@ async def confirmDelete(update, context):
         clearUserData(context)
         return ConversationHandler.END
 
-    context.user_data["output"] = service.giveTitles(searchResult)
+    context.user_data["output"] = service.giveResults(searchResult)
     idnumber = context.user_data["output"][position]["id"]
 
     if service.inLibrary(idnumber):

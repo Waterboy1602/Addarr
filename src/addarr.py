@@ -147,7 +147,7 @@ def main():
         ],
     )
 
-    addMovieseriemusic_handler = ConversationHandler(
+    addMedia_handler = ConversationHandler(
         entry_points=[
             CommandHandler(config["entrypointAdd"], start),
             CommandHandler(i18n.t("addarr.Movie"), start),
@@ -270,7 +270,7 @@ def main():
     application.add_handler(allSeries_handler_text)
     application.add_handler(allMovies_handler_command)
     application.add_handler(allMovies_handler_text)
-    application.add_handler(addMovieseriemusic_handler)
+    application.add_handler(addMedia_handler)
     application.add_handler(deleteMovieserieMusic_handler)
     application.add_handler(allMusic_handler_command)
     application.add_handler(allMusic_handler_text)
@@ -496,9 +496,13 @@ async def search(update, context):
         clearUserData(context)
         return ConversationHandler.END
 
-    context.user_data["output"] = service.giveTitles(searchResult)
+    context.user_data["output"] = service.giveResults(searchResult)
     message=i18n.t("addarr.searchresults", count=len(searchResult))
-    message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
+
+    if(choice == i18n.t("addarr.Music")):
+        message += f"\n\n*{context.user_data['output'][position]['artistName']} ({context.user_data['output'][position]['type']})*"
+    else:
+        message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
 
     if "update_msg" in context.user_data:
         await context.bot.edit_message_text(
@@ -602,7 +606,11 @@ async def nextOption(update, context):
     searchResult = context.user_data["output"]
     choice = context.user_data["choice"]
     message=i18n.t("addarr.searchresults", count=len(searchResult))
-    message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
+
+    if choice == i18n.t("addarr.Music"):
+        message += f"\n\n*{context.user_data['output'][position]['artistName']} ({context.user_data['output'][position]['type']})*"
+    else:
+        message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
     await context.bot.edit_message_text(
         message_id=context.user_data["term_update_msg"],
         chat_id=update.effective_message.chat_id,
@@ -825,7 +833,7 @@ async def selectSeasons(update, context):
             return qualityProfile(update, context)
 
     service = getService(context)
-    if service == radarr:
+    if(service == radarr or service == lidarr):
         return await add(update, context)
 
     position = context.user_data["position"]
@@ -983,8 +991,6 @@ async def add(update, context):
             )
         logger.debug(f"Seasons {seasonsSelected} have been selected.")
 
-    if choice == i18n.t("addarr.Music"):
-            logger.debug("Music <- here")
 
     qualityProfile = context.user_data["qualityProfile"]
     #Add tag for user
@@ -1003,13 +1009,17 @@ async def add(update, context):
     logger.debug(f"Tags {tags} have been selected.")
 
     if not service.inLibrary(idnumber):
-        if choice == i18n.t("addarr.Movie"):
+        if choice == i18n.t("addarr.Music"):
+            added = service.addToLibrary(idnumber, path, qualityProfile, tags)
+        elif choice == i18n.t("addarr.Movie"):
             added = service.addToLibrary(idnumber, path, qualityProfile, tags)
         else:
             added = service.addToLibrary(idnumber, path, qualityProfile, tags, seasonsSelected)
 
         if added:
-            if choice == i18n.t("addarr.Movie"):
+            if choice == i18n.t("addarr.Music"):
+                message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.MusicWithArticle"))
+            elif choice == i18n.t("addarr.Movie"):
                 message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
             else:
                 message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
@@ -1020,7 +1030,9 @@ async def add(update, context):
             )
             if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
                 adminNotifyId = config.get("adminNotifyId")
-                if choice == i18n.t("addarr.Movie"):
+                if choice == i18n.t("addarr.Music"):
+                    message2 = i18n.t("addarr.Notifications.AddSuccess", subjectWithArticle=i18n.t("addarr.MusicWithArticle"),term=context.user_data['output'][position]['artistName'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                elif choice == i18n.t("addarr.Movie"):
                     message2=i18n.t("addarr.Notifications.AddSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),term=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 else:
                     message2=i18n.t("addarr.Notifications.AddSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),term=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
@@ -1030,7 +1042,9 @@ async def add(update, context):
             clearUserData(context)
             return ConversationHandler.END
         else:
-            if choice == i18n.t("addarr.Movie"):
+            if choice == i18n.t("addarr.Music"):
+                message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.MusicWithArticle").lower())
+            elif choice == i18n.t("addarr.Movie"):
                 message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
             else:
                 message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
@@ -1041,7 +1055,9 @@ async def add(update, context):
             )
             if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
                 adminNotifyId = config.get("adminNotifyId")
-                if choice == i18n.t("addarr.Movie"):
+                if choice == i18n.t("addarr.Music"):
+                    message2 = i18n.t("addarr.Notifications.AddFailed", subjectWithArticle=i18n.t("addarr.MusicWithArticle"),term=context.user_data['output'][position]['artistName'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                elif choice == i18n.t("addarr.Movie"):
                     message2=i18n.t("addarr.Notifications.AddFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),term=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 else:
                     message2=i18n.t("addarr.Notifications.AddFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),term=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
@@ -1051,7 +1067,9 @@ async def add(update, context):
             clearUserData(context)
             return ConversationHandler.END
     else:
-        if choice == i18n.t("addarr.Movie"):
+        if choice == i18n.t("addarr.Music"):
+            message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.MusicWithArticle"))
+        elif choice == i18n.t("addarr.Movie"):
             message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
         else:
             message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
@@ -1063,6 +1081,8 @@ async def add(update, context):
 
         if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
             adminNotifyId = config.get("adminNotifyId")
+            if choice == i18n.t("addarr.Music"):
+                message2 = i18n.t("addarr.Notifications.Exist", subjectWithArticle=i18n.t("addarr.MusicWithArticle"),term=context.user_data['output'][position]['artistName'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
             if choice == i18n.t("addarr.Movie"):
                 message2=i18n.t("addarr.Notifications.Exist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),term=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
             else:
