@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config
+  namespace: {{ .Release.Namespace }}
+data:
+  config.yaml: |-
+    {{ .Values.config | nindent 4 }} 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: allowlist
+  namespace: {{ .Release.Namespace }}
+data:
+  allowlist.txt: |-
+    {{ .Values.allowlist | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: admin
+  namespace: {{ .Release.Namespace }}
+data:
+  admin.txt: |-
+    {{ .Values.admins | nindent 4 }}

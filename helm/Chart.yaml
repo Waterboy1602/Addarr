@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: latest
+description: A helm chart for Addarr
+name: addarr
+type: application
+version: 0.1.0
+home: https://github.com/Waterboy1602/Addarr
+maintainers:
+  - name: TempleHasFallen
+    url: https://github.com/templehasfallen

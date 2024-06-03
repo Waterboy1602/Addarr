@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: addarr
+  template:
+    metadata:
+      labels:
+        app: addarr
+    spec:
+      containers:
+        - name: addarr
+          image: '{{ .Values.addarr.repository.image }}{{ if ne .Values.addarr.repository.tag "" }}:{{ .Values.addarr.repository.tag }}{{ end }}'
+          volumeMounts:
+          - name: persist
+            mountPath: /app/chatid.txt
+            subPath: chatid.txt
+          - name: config
+            mountPath: /app/config.yaml
+            subPath: config.yaml
+          - name: allowlist
+            mountPath: /app/allowlist.txt
+            subPath: allowlist.txt
+          - name: admin
+            mountPath: /app/admin.txt
+            subPath: admin.txt
+      initContainers:
+        - name: config
+          image: busybox:1.28
+          command: ["/bin/sh", "-c", "if [[ ! -e /persist/chatid.txt ]]; then touch /persist/chatid.txt; fi"]
+          volumeMounts:
+          - mountPath: /persist
+            name: persist
+      restartPolicy: Always
+      volumes:
+      - name: persist
+        persistentVolumeClaim:
+          claimName: addarr-pvc
+      - name: config
+        configMap:
+          name: config
+      - name: allowlist
+        configMap:
+          name: allowlist
+      - name: admin
+        configMap:
+          name: admin
+

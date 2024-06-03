@@ -1,0 +1,117 @@
+# Required: Set your Storage Class below for dynamic provisioning of PVC for storing chatids
+
+storageClassName: ""
+
+config: |-
+  # Sonarr Configuration
+  sonarr:
+    server:
+      addr: 
+      port : 8989 # Default is 8989
+      path: / # Default is / . If set, it must start and finish with / . Eg: /sonarr/
+      ssl: false # Default false
+    auth:
+      apikey: 
+      username: 
+      password:
+    search: true # Start search after adding series
+    seasonFolder: true
+    languageProfile: English
+    excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
+      - # First excluded folder, add others with a "-" on a new line (same indentation)
+    narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
+    excludedQualityProfiles:
+      - 
+    defaultTags: # If set must be existing tags
+      - telegram
+    addRequesterIdTag: true # Add telegram user id as tag on series
+    adminRestrictions: false
+
+  # Radarr Configuration
+  radarr:
+    server:
+      addr:
+      port : 7878 # Default is 7878
+      path: / # Default is / . If set, it must start and finish with / . Eg: /radarr/
+      ssl: false # Default false
+    auth:
+      apikey:
+      username:
+      password:  # Start search after adding movie
+    search: true
+    minimumAvailability: announced
+    excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
+      - # First excluded folder, add others with a "-" on a new line (same indentation)
+    narrowRootFolderNames: true #If true, only the last folder name will be shown instead of full path
+    excludedQualityProfiles:
+      - 
+    defaultTags: # If set must be existing tags
+      - telegram
+    addRequesterIdTag: true # Add telegram user id as tag on movie
+    adminRestrictions: false
+  
+  # Telegram Configuration
+  telegram:
+    token:
+    password:
+
+  # Transmission Configuration
+  transmission:
+    enable: true # Enable the Transmission commands
+    onlyAdmin: true # Transmission command  will only work for admins
+    host: # IP-adres of the Transmission service
+    authentication: true # Is Transmission protected with a password?
+    username: 
+    password:
+
+  sabnzbd:
+    enable: true
+    onlyAdmin: true
+    server:
+      addr:
+      port: 8090 # Default is 8090
+      path: / # Default is / . If set, it must start and finish with / . Eg: /sonarr/
+      ssl: false # Default false
+    auth:
+      apikey:
+      username:
+      password:
+
+  # Optional settings:
+  ## Language
+  language: en-us # de-de, en-us, es-es, fr-fr, it-it, nl-be, pl-pl, pt-pt, ru-ru
+
+  ## Entrypoints
+  entrypointAuth: auth # auth or a custom entrypoint
+  entrypointHelp: help # help entrypoint
+  entrypointAdd: start # start or a custom entrypoint
+  entrypointAllSeries: allSeries # allSeries or a custom entrypoint
+  entrypointAllMovies: allMovies # allMovies or a custom entrypoint
+  entrypointTransmission: transmission # transmission or a custom entrypoint
+  entrypointSabnzbd: sabnzbd # sabnzbd or a custom entrypoint
+
+  ## Restrict some commands to only admins and/or provide extra authorization by usernames
+  enableAdmin: false # Check admin.txt
+  enableAllowlist: false # Check allowlist.txt - very restrictive!
+
+  ## Logging
+  logToConsole: true
+  debugLogging: false
+  adminNotifyId: 
+
+
+# For allowlist list IDs/Usernames Indented by 2 below allowlist
+allowlist: |-
+
+
+# For Admins list IDs/Usernames Indented by 2 below admins
+admins: |-
+ 
+
+addarr:
+  repository:
+    image: waterboy1602/addarr
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+
