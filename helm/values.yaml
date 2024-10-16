@@ -16,7 +16,6 @@ config: |-
       password:
     search: true # Start search after adding series
     seasonFolder: true
-    languageProfile: English
     excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
       - # First excluded folder, add others with a "-" on a new line (same indentation)
     narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path

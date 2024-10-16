@@ -16,6 +16,9 @@ This is a Telegram Bot made to add series to [Sonarr](https://github.com/Sonarr/
 - Translated in English (US), Dutch (Belgium), Spanish (Spain), Italian (Italy), Portuguese (Portugal), Polish (Poland), German (Germany) and French (France)
 - Command to give an overview of all the other commands
 
+> [!IMPORTANT]  
+> Addarr only works with Sonarr V4, because of some breaking API changes between V3 and V4.
+
 ## COMMANDS
 
 These are the default commands:

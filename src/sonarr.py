@@ -82,7 +82,6 @@ def removeFromLibrary(tvdbId):
 
 
 def buildData(json, path, qualityProfileId, tags, seasonsSelected):
-#    "languageProfileId": getLanguageProfileId(config["languageProfile"]),
     built_data = {
         "qualityProfileId": qualityProfileId,
         "addOptions": {
@@ -166,17 +165,6 @@ def createTag(tag):
         return True
     else:
         return False
-
-
-def getLanguageProfileId(language):
-    parameters = {}
-    req = requests.get(commons.generateApiQuery("sonarr", "languageProfile", parameters))
-    parsed_json = json.loads(req.text)
-    languageId = [l["id"] for l in parsed_json if l["name"] == language]
-    if len(languageId) == 0:
-        languageId = [l["id"] for l in parsed_json]
-        logger.debug("Didn't find a match with languageProfile from the config file. Took instead the first languageId from languageProfile-API response")
-    return languageId[0]
 
 def getSeasons(tvdbId):
     parameters = {"term": "tvdb:" + str(tvdbId)}
