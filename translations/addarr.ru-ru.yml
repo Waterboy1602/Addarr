@@ -19,9 +19,10 @@ ru-ru:
   Select a path: Выбери путь для сохранения фильма или сериала
   Select a quality: Пожалуйста, выберите профиль качества для фильма или сериала
   Select from which season: Какой сезон?
-  Future and Selected seasons: Будущие и выбранные сезоны
+  Selected and future seasons: Выбранные и будущие сезоны
   Season: Сезон
-  Mark all seasons: Отметить все сезоны
+  Select all seasons: Выбрать все сезоны
+  Deselect all seasons: Снять выбор со всех сезонов
   Authorize: Сначала вам нужно авторизоваться. Какой пароль?
   Wrong password: Вы ввели неверный пароль. Попробуйте снова...
   Chatid added: "Этот чат успешно добавлен в список разрешенных чатов. Теперь вы можете начать пользоваться этим ботом."

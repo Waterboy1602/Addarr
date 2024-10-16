@@ -3,7 +3,6 @@
 import logging
 import re
 
-
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 import telegram
 from telegram.constants import ParseMode
@@ -688,18 +687,23 @@ async def selectSeasons(update, context):
     seasons = service.getSeasons(idnumber)
     seasonNumbers = [s["seasonNumber"] for s in seasons]
     context.user_data["seasons"] = seasonNumbers
-    
-    keyboard = [[InlineKeyboardButton(i18n.t("addarr.Future and Selected seasons"),callback_data="Season: Future and Selected")]]
+    selectedSeasons = []
+
+    keyboard = [[InlineKeyboardButton('\U0001F5D3 ' + i18n.t("addarr.Selected and future seasons"),callback_data="Season: Future and selected")]]
     for s in seasonNumbers:
         keyboard += [[
             InlineKeyboardButton(
-                f"{i18n.t('addarr.Season')} {s}",
+                "\U00002705 " + f"{i18n.t('addarr.Season')} {s}",
                 callback_data=f"Season: {s}"
             ),
         ]]
-    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Mark all seasons"),callback_data=f"Season: All")]]
+        selectedSeasons.append(int(s))
+
+    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Deselect all seasons"),callback_data=f"Season: None")]]
 
     markup = InlineKeyboardMarkup(keyboard)
+
+    context.user_data["selectedSeasons"] = selectedSeasons
 
     await context.bot.edit_message_text(
         message_id=context.user_data["update_msg"],
@@ -710,25 +714,16 @@ async def selectSeasons(update, context):
     return SELECT_SEASONS
 
 async def checkSeasons(update, context):
-
-    position = context.user_data["position"]
     choice = context.user_data["choice"]
-    selection_finished = False
-    idnumber = context.user_data["output"][position]["id"]
-
-    service = getService(context)
     seasons = context.user_data["seasons"]
     selectedSeasons = []
     if "selectedSeasons" in context.user_data:
         selectedSeasons = context.user_data["selectedSeasons"]
     
     if choice == i18n.t("addarr.Series"):
-
-        # Season selection should be in the update message
-
         if update.callback_query is not None:
             insertSeason = update.callback_query.data.replace("Season: ", "").strip()
-            if insertSeason == "Future and Selected":
+            if insertSeason == "Future and selected":
                 seasonsSelected = []
                 for s in seasons:
                     monitored = False
@@ -750,23 +745,35 @@ async def checkSeasons(update, context):
                     for s in seasons:
                         if s not in selectedSeasons:
                             selectedSeasons.append(s)
+                elif insertSeason == "None":
+                    for s in seasons:
+                        if s in selectedSeasons:
+                            selectedSeasons.remove(s)
                 elif int(insertSeason) not in selectedSeasons:
                     selectedSeasons.append(int(insertSeason))
                 else:
                     selectedSeasons.remove(int(insertSeason))
                     
                 context.user_data["selectedSeasons"] = selectedSeasons
-                keyboard = [[InlineKeyboardButton(i18n.t("addarr.Future and Selected seasons"),callback_data="Season: Future and Selected")]]
+                keyboard = [[InlineKeyboardButton('\U0001F5D3 ' + i18n.t("addarr.Selected and future seasons"),callback_data="Season: Future and selected")]]
                 for s in seasons:
-                    selected = str(s)
-                    if s in selectedSeasons: selected = str(s) + " ✅"
+                    if s in selectedSeasons: 
+                        season = "\U00002705 " + f"{i18n.t('addarr.Season')} {s}" 
+                    else:
+                        season = "\U00002B1C " + f"{i18n.t('addarr.Season')} {s}"
+
                     keyboard.append([
                         InlineKeyboardButton(
-                            f"{i18n.t('addarr.Season')} {selected}",
+                            season,
                             callback_data=f"Season: {s}"
                         )
                     ])
-                keyboard += [[InlineKeyboardButton(i18n.t("addarr.Mark all seasons"),callback_data=f"Season: All")]]
+                
+                if len(selectedSeasons) == len(seasons):
+                    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Deselect all seasons"),callback_data=f"Season: None")]]
+                else:
+                    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Select all seasons"),callback_data=f"Season: All")]]
+
                 markup = InlineKeyboardMarkup(keyboard)
 
                 await context.bot.edit_message_text(
@@ -791,7 +798,6 @@ async def addSerieMovie(update, context):
     service = getService(context)
     
     if choice == i18n.t("addarr.Series"):
-
         seasons = context.user_data["seasons"]
         selectedSeasons = context.user_data["selectedSeasons"]
         seasonsSelected = []
@@ -809,6 +815,7 @@ async def addSerieMovie(update, context):
         logger.debug(f"Seasons {seasonsSelected} have been selected.")
     
     qualityProfile = context.user_data["qualityProfile"]
+
     #Add tag for user 
     #TODO (creation does not work right now, creation should be manual)
     tags = []

@@ -19,9 +19,10 @@ pt-pt:
   Select a path: Seleccione um caminho para o filme ou série
   Select a quality: Por favor, seleccione um perfil de qualidade para o filme ou série
   Select from which season: A partir de que temporada?
-  Future and Selected seasons: Temporadas futuras e seleccionadas
+  Selected and future seasons: emporadas selecionadas e futuras
   Season: Temporada
-  Mark all seasons: Marque todas as temporadas
+  Select all seasons: Selecionar todas as temporadas
+  Deselect all seasons: Deselecionar todas as temporadas
   Authorize: Primeiro tem de autorizar este chat. Indique a password
   Wrong password: Introduziu a password errada. Tente novamente
   Chatid added: "Este chat foi adicionado à lista de chats autorizados. Pode agora utilizar este bot.\nSe introduziu um comando, deverá executá-lo novamente."

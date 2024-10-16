@@ -19,9 +19,10 @@ pl-pl:
   Select a path: Wybierz ścieżkę dla filmu lub serialu
   Select a quality: Proszę wybrać profil jakościowy dla filmu lub serialu
   Select from which season: Od którego sezonu?
-  Future and Selected seasons: Przyszłe i wybrane sezony
+  Selected and future seasons: Wybrane i przyszłe sezony
   Season: Sezon
-  Mark all seasons: Zaznacz wszystkie sezony
+  Select all seasons: Wybierz wszystkie sezony
+  Deselect all seasons: Odznacz wszystkie sezony
   Authorize: Musisz zautoryzować ten czat. Jakie jest hasło?
   Wrong password: Hasło nieprawidłowe. Spróbuj ponownie...
   Chatid added: "Ten czat został dodany do whitelisty. Teraz możesz używać tego bota."

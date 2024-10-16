@@ -19,9 +19,10 @@ fr-fr:
   Select a path: Veuillez sélectionner un chemin d'accès pour le film ou la série
   Select a quality: Veuillez sélectionner un profil de qualité pour le film ou la série
   Select from which season: De quelle saison ?
-  Future and Selected seasons: Saisons futures et sélectionnées
+  Selected and future seasons: Saisons sélectionnées et futures
   Season: Saison
-  Mark all seasons: Marquer toutes les saisons
+  Select all seasons: Sélectionner toutes les saisons
+  Deselect all seasons: Désélectionner toutes les saisons
   Authorize: Vous devez d'abord autoriser ce chat. Quel est le mot de passe?
   Wrong password: Vous avez entré le mauvais mot de passe. Réessayer...
   Chatid added: "Ce chat a été ajouté avec succès à la liste des chats autorisés. Vous pouvez maintenant commencer à utiliser ce bot. \nSi vous avez entré une commande, vous devez l'exécuter à nouveau."
