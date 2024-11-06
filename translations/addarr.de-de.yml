@@ -6,33 +6,33 @@ de-de:
   MovieWithArticle: Der Film
   Series: Serie
   SeriesWithArticle: Die Serie
-  Start chatting: Starte mit Addarr auf Telegram zu chatten. Das erste Mal wenn du "start" verwendest wirst du gebeten dein Password einzugeben.
-  End: Das Hinzufügen/Löschen von Filmen oder Serien ist beendet.
+  Start chatting: Starte mit Addarr auf Telegram zu chatten. Das erste Mal wenn du "start" verwendest, wirst du gebeten, das Passwort einzugeben.
+  End: Das Hinzufügen / Löschen von Filmen oder Serien wurde beendet.
   Title: "Gebe den Titel ein:"
-  What is this?: Ist es eine Serie oder ein Film?
-  New: Führe einen neuen such Befehl aus
+  What is this?: Ist das eine Serie oder ein Film?
+  New: Führe einen neuen Suchbefehl aus
   Next result: Nein, zeige mir das nächste Ergebnis
-  Add: Ja, füge dies hinzu
-  Delete: Ja, löschen Sie dies
-  StopDelete: Nein, ich will das nicht löschen
-  Select: Ja, wählen Sie dies
-  Select a path: Bitte wähle ein Pfad für die Serie oder den Film
-  Select a quality: Bitte wählen Sie ein Qualitätsprofil für den Film oder die Serie
-  Select from which season: Seit welcher Saison?
+  Add: Ja, hinzufügen
+  Delete: Ja, löschen
+  StopDelete: Nein, nicht löschen
+  Select: Ja, auswählen
+  Select a path: Bitte wähle einen Pfad für die Serie oder den Film
+  Select a quality: Bitte wähle ein Qualitätsprofil
+  Select from which season: Ab welcher Staffel?
   Selected and future seasons: Ausgewählte und zukünftige Staffeln
   Season: Staffel
   Select all seasons: Alle Staffeln auswählen
   Deselect all seasons: Alle Staffeln abwählen
-  Authorize: Dieser Chat muss noch autorisiert werden. Was ist dein Passwort?
-  Wrong password: Das Password ist nicht korrekt. Probiere es erneut...
-  Chatid added: "Dieser Chat würde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \befehle müssen erneut ausgeführt werden."
-  NotAdmin: "Du müsst ein Admin sein um diesen Befehl zu benutzen."
+  Authorize: Dieser Chat muss noch autorisiert werden. Wie ist dein Passwort?
+  Wrong password: Das Passwort ist nicht korrekt. Probiere es erneut.
+  Chatid added: "Dieser Chat wurde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \befehle müssen erneut ausgeführt werden."
+  NotAdmin: "Du musst ein Admin sein um diesen Befehl zu benutzen."
   Chatid already allowed: "Dieser Chat ist bereits autorisiert."
   Help: "Um diesen Text erneut zu sehen benutze /%{help}.
     \n• Zur Authentifizierung benutze /%{authenticate}.
-    \n• Um ein Film oder eine Serie hinzuzufügen benutze /%{add}.
+    \n• Um einen Film oder eine Serie hinzuzufügen benutze /%{add}.
     \n• Um eine Serie oder einen Film zu löschen, verwenden Sie /%{delete}.
-    \n• Um direkt ein Film oder eine Serie hinzuzufügen benutze /%{movie} oder /%{serie}.
+    \n• Um direkt einen Film oder eine Serie hinzuzufügen benutze /%{movie} oder /%{serie}.
     \n• Um alle Serien in Sonarr anzuzeigen benutze /%{allSeries}.
     \n• Um alle Filme in Radarr anzuzeigen benutze /%{allMovies}.
     \n• Um die Up- und Download Geschwindigkeit von Transmission umzuschalten benutze /%{transmission}.
@@ -43,23 +43,23 @@ de-de:
     \nBitte füge sie hinzu und starte den Bot neu."
 
   messages:
-    Add: Ja füge %{subject} hinzu
-    This: Willst du %{subjectWithArticle} hinzufügen?
-    ThisDelete: Ist dies %{subjectWithArticle}, das Sie löschen möchten?
-    AddFailed: Oops, das hinzufügen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
-    DeleteFailed: Oops, das löschen von %{subjectWithArticle} ist fehlgeschlagen. Probiere es doch nochmal.
-    AddSuccess: "%{subjectWithArticle} würde hinzugefügt 🙂"
-    DeleteSuccess: "%{subjectWithArticle} würde erfolgreich entfernt 🙂"
-    Exist: "%{subjectWithArticle} gibt es bereits 😉"
-    NoExist: "%{subjectWithArticle} existiert nicht."
+    Add: Ja hinzufügen
+    This: Willst du dieses Element hinzufügen?
+    ThisDelete: Ist dies das korrekte Element, was gelöscht werden soll?
+    AddFailed: Oops, das Hinzufügen ist fehlgeschlagen. Probiere es doch nochmal.
+    DeleteFailed: Oops, das Löschen ist fehlgeschlagen. Probiere es doch nochmal.
+    AddSuccess: "Wurde hinzugefügt 🙂"
+    DeleteSuccess: "Wurde erfolgreich entfernt 🙂"
+    Exist: "Das gibt's bereits 😉"
+    NoExist: "Das Element existiert nicht."
 
   searchresults:
-    zero: Es würden keine Ergebnisse gefunden
+    zero: Es wurden keine Ergebnisse gefunden
     one: Ein Ergebnis gefunden
     other: "%{count} Ergebnisse gefunden"
 
   Transmission:
-    NotEnabled: "Die Transmission Funktion ist nicht aktiviert."
+    NotEnabled: "Die Transmission-Funktion ist nicht aktiviert."
     Speed: "Welche Geschwindigkeit willst du verwenden?"
     TSL: Temporäre Geschwindigkeitsbegrenzung
     Normal: Normale Geschwindigkeit
@@ -67,7 +67,7 @@ de-de:
     ChangedToNormal: "Geschwindigkeitsbegrenzung ist deaktiviert."
 
   Sabnzbd:
-    NotEnabled: "Die Sabnzbd Funktion ist nicht aktiviert."
+    NotEnabled: "Die Sabnzbd-Funktion ist nicht aktiviert."
     Speed: "Welche Geschwindigkeit willst du verwenden?"
     Limit25: 25%
     Limit50: 50%
@@ -75,12 +75,12 @@ de-de:
     ChangedTo50: Auf 50% limitiert
     ChangedTo25: Auf 25% limitiert
     ChangedTo100: Kein Geschwindigkeit Limit
-    Error: Etwas ist schief gelaufen bei der Änderung des Geschwindigkeit Limits
+    Error: Bei der Änderung des Geschwindigkeitslimits ist Etwas ist schief gelaufen. Probiere es doch nochmal.
 
   Notifications:
-    Stop: Benutzer %{first_name} mit chat_id %{chat_id} hat den Prozess gestoppt.
-    Start: Benutzer %{first_name} mit der chat_id %{chat_id} hat eine neue Anfrage gestartet.
-    AddSuccess: Der %{subjectWithArticle} %{title} des Benutzers %{first_name} mit der chat_id %{chat_id} wurde hinzugefügt.
-    AddFailed: Fehler beim Hinzufügen des %{subjectWithArticle} %{title} des Benutzers %{first_name} mit der chat_id %{chat_id}.
-    Exist: Das %{subjectWithArticle} %{title}, das der Benutzer %{first_name} mit chat_id %{chat_id} hinzufügen wollte, existiert bereits.
-    Delete: Der Benutzer %{first_name} mit chat_id %{chat_id} hat eine neue Löschung initiiert.
+    Stop: Benutzer %{first_name} (%{chat_id}) hat den Bot-Prozess gestoppt.
+    Start: Benutzer %{first_name} (%{chat_id}) hat einem neuen Bot-Prozess gestartet.
+    AddSuccess: "Hinzufügen von \"%{title}\" für %{first_name} (%{chat_id}): Erfolgreich."
+    AddFailed: "Hinzufügen von \"%{title}\" für %{first_name} (%{chat_id}): Fehlgeschlagen."
+    Exist: "Hinzufügen von Element \"%{title}\" für %{first_name} (%{chat_id}): Existiert bereits."
+    Delete: Der Benutzer %{first_name} (%{chat_id}) hat \"%{title}\" gelöscht.
