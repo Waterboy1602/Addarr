@@ -77,6 +77,15 @@ en-us:
     ChangedTo100: No speed limit
     Error: Something went wrong while trying to set the speed
 
+  qBittorrent:
+    NotEnabled: The qBittorrent function is not activated.
+    Speed: Which speed do you want qBittorrent to use?
+    Alternate: Alternate Speed Limit
+    Normal: Normal Speed
+    ChangedToAlternate: Alternate Speed limits activated
+    ChangedToNormal: Normal Speed activated
+    Error: Something went wrong while trying to set the speed limit
+
   Notifications:
     Stop: User %{first_name} with chat_id %{chat_id} has stopped the process.
     Start: The user %{first_name} with chat_id %{chat_id} has started a new request.

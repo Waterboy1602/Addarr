@@ -233,6 +233,32 @@ def main():
             ],
         )
         application.add_handler(changeSabznbdSpeed_handler)
+    
+    if config["qbittorrent"]["enable"]:
+        import qbittorrent as qbittorrent
+        changeqBittorrentSpeed_handler = ConversationHandler(
+            entry_points=[
+                CommandHandler(config["entrypointqBittorrent"], qbittorrent.qbittorrent),
+                MessageHandler(
+                    filters.Regex(
+                        re.compile(
+                            r"" + config["entrypointqBittorrent"] + "", re.IGNORECASE
+                        )
+                    ),
+                    qbittorrent.qbittorrent,
+                ),
+            ],
+            states={
+                qbittorrent.QBITTORRENT_SPEED_NORMAL: [
+                    CallbackQueryHandler(qbittorrent.changeSpeedqBittorrent),
+                ]
+            },
+            fallbacks=[
+                CommandHandler("stop", stop),
+                MessageHandler(filters.Regex("^(Stop|stop)$"), stop),
+            ],
+        )
+        application.add_handler(changeqBittorrentSpeed_handler)
 
     application.add_handler(auth_handler_command)
     application.add_handler(auth_handler_text)

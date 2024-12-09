@@ -71,6 +71,18 @@ sabnzbd:
     username:
     password:
 
+qbittorrent:
+  enable: true
+  onlyAdmin: false
+  server:
+    addr: 
+    port: 8080 # Default is 8080
+    path: / # Default is / . If set, it must start and finish with / . Eg: /qbittorrent/
+    ssl: false # Default false
+  auth:
+    username: 
+    password: 
+
 # Optional settings:
 ## Language
 language: en-us # de-de, en-us, es-es, fr-fr, it-it, nl-be, pl-pl, pt-pt, ru-ru
@@ -83,6 +95,7 @@ entrypointAllSeries: allSeries # allSeries or a custom entrypoint
 entrypointAllMovies: allMovies # allMovies or a custom entrypoint
 entrypointTransmission: transmission # transmission or a custom entrypoint
 entrypointSabnzbd: sabnzbd # sabnzbd or a custom entrypoint
+entrypointqBittorrent: qbittorrent # qbittorrent or a custom entrypoint
 
 ## Restrict some commands to only admins and/or provide extra authorization by usernames
 enableAdmin: false # Check admin.txt
