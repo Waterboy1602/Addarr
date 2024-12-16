@@ -31,11 +31,19 @@ These are the default commands:
 - `/series` (en-us) - `/serie` (nl-be, it-it, pt-pt, es-es, de-de, fr-fr) : start adding a series to Sonarr
 - `/allSeries`: receive a list of all the series on Sonarr
 - `/allMovies`: receive a list of all the movies on Radarr
-- `/transmission`: change the down-/upload speed of Transmission from Temporary Speed Limit to normal or the other way around
-- `/sabnzbd`: change the down-/upload speed of Sabnzbd to 25%, 50% or 100% of the defined limit.
+- `/transmission`: change the download/upload speed of Transmission from Temporary Speed Limit to normal or the other way around
+- `/sabnzbd`: change the download/upload speed of Sabnzbd to 25%, 50% or 100% of the defined limit.
+- `/qbittorrent`: change the global download/upload rate limit of qBitorrent to alternative rate or normal rates.
 - `/stop`: stops the command you were executing. Can be used at any moment  
 
 Every command does also work if you send a message without `/` and no other words before or after the entrypoint
+
+### Single Line Commands
+
+Single line commands allow you to skip multiple steps of the process
+
+- `Find {movie | series} {title}`: will bring you directly to Title selection step. If you have multiple instances of Sonarr/Radarr setup, you will need to select to which instance you want to add the title to. For example if you want to find the title "Wrong Turn" you would type `Find movie Wrong Turn` or to find a tv show `Find series iZombie`
+
 
 ## CONFIG
 
