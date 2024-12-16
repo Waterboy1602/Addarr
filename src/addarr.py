@@ -31,7 +31,6 @@ logger = logger.getLogger("addarr", logLevel, config.get("logToConsole", False))
 logger.debug(f"Addarr v{__version__} starting up...")
 
 MEDIA_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_INSTANCE, GIVE_PATHS, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range (7)
-SERIE_MOVIE_DELETE, READ_DELETE_CHOICE = 0,1
 
 application = Application.builder().token(config["telegram"]["token"]).build()
 
@@ -82,34 +81,43 @@ def main():
 
     deleteMovieserie_handler = ConversationHandler(
         entry_points=[
-            CommandHandler(config["entrypointDelete"], delete.delete),
+            CommandHandler(config["entrypointDelete"], delete.startDelete),
             MessageHandler(
                 filters.Regex(
                     re.compile(r'^' + config["entrypointDelete"] + '$', re.IGNORECASE)
                 ),
-                delete.delete,
+                delete.startDelete,
             ),
         ],
         states={
-            SERIE_MOVIE_DELETE: [MessageHandler(filters.TEXT, choiceSerieMovie)],
-            READ_DELETE_CHOICE: [
+            delete.MEDIA_DELETE_AUTHENTICATED: [MessageHandler(filters.TEXT, delete.storeDeleteTitle)],
+
+            delete.MEDIA_DELETE_TYPE:[
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
-                    delete.confirmDelete,
+                    delete.storeDeleteMediaType
                 ),
-                CallbackQueryHandler(delete.confirmDelete, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
+                CallbackQueryHandler(delete.storeDeleteMediaType, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                MessageHandler(
+                    filters.Regex(f'^({i18n.t("addarr.New")})$'),
+                    delete.startDelete
+                ),
+                CallbackQueryHandler(delete.startDelete, pattern=f'({i18n.t("addarr.New")})'),
             ],
-            GIVE_OPTION: [
-                CallbackQueryHandler(delete.deleteSerieMovie, pattern=f'({i18n.t("addarr.Delete")})'),
+
+            delete.GIVE_INSTANCE: [CallbackQueryHandler(delete.storeMediaInstance, pattern=r"^instance=(.+)")],
+            
+            delete.DELETE_CONFIRM:[
+                CallbackQueryHandler(delete.deleteMedia, pattern=f'({i18n.t("addarr.Delete")})'),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.Delete")})$'),
-                    delete.deleteSerieMovie
+                    delete.deleteMedia
                 ),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.New")})$'),
-                    delete
+                    delete.deleteMedia
                 ),
-                CallbackQueryHandler(delete, pattern=f'({i18n.t("addarr.New")})'),
+                CallbackQueryHandler(delete.deleteMedia, pattern=f'({i18n.t("addarr.New")})'),  
             ],
         },
         fallbacks=[
@@ -352,8 +360,6 @@ async def startNewMedia(update : Update, context):
 
     return MEDIA_AUTHENTICATED
 
-async def choiceSerieMovie(update, context):
-    return 
 
 async def storeMediaType(update, context):
     if not checkId(update):
@@ -362,7 +368,6 @@ async def storeMediaType(update, context):
         ):  # To also stop the beginning command
             return ConversationHandler.END
     else:
-        logger.info('hit store medial type')
         choice = None
         if update.message is not None:
             choice = update.message.text

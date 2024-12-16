@@ -8,17 +8,17 @@ import logger
 from commons import authentication, checkAllowed, checkId
 from config import config
 from translations import i18n
-from addarr import getService, clearUserData, stop
-
+from addarr import getService, clearUserData, stop, promptInstanceSelection
 
 
 # Set up logging
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", False))
 
-SERIE_MOVIE_DELETE, READ_DELETE_CHOICE,GIVE_OPTION = range(3)
+MEDIA_DELETE_AUTHENTICATED, GIVE_INSTANCE, MEDIA_DELETE_TYPE, DELETE_CONFIRM = range(4)
 
-async def delete(update : Update, context):
+async def startDelete(update : Update, context):
+    # since we need to determine what instance of sonnar/radarr we will be using, the check for admistRestrictions will come after instance has been selected
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
@@ -35,14 +35,14 @@ async def delete(update : Update, context):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
         )
-        return SERIE_MOVIE_DELETE
+        return MEDIA_DELETE_AUTHENTICATED
     
     if update.message is not None:
         reply = update.message.text.lower()
     elif update.callback_query is not None:
         reply = update.callback_query.data.lower()
     else:
-        return SERIE_MOVIE_DELETE
+        return MEDIA_DELETE_AUTHENTICATED
 
     if reply == i18n.t("addarr.New").lower():
         logger.debug("User issued New command, so clearing user_data")
@@ -57,17 +57,9 @@ async def delete(update : Update, context):
         await context.bot.send_message(
             chat_id=adminNotifyId, text=message2
     )
-    return SERIE_MOVIE_DELETE
-    
+    return MEDIA_DELETE_AUTHENTICATED
 
-async def choiceDeleteSerieMovie(update, context):
-    service = getService(context)
-    if service.config.get("adminRestrictions") and not checkAllowed(update, context, "admin"):
-        await context.bot.send_message(
-            chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.NotAdmin"),
-        )
-        return ConversationHandler.END
+async def storeDeleteTitle(update : Update, context):
     if not checkId(update):
         if (
             authentication(update, context) == "added"
@@ -77,30 +69,16 @@ async def choiceDeleteSerieMovie(update, context):
         return stop(update, context)
     else:
         if update.message is not None:
-            reply = update.message.text
+            reply = update.message.text.lower()
         elif update.callback_query is not None:
             reply = update.callback_query.data
         else:
-            return SERIE_MOVIE_DELETE
+            return MEDIA_DELETE_AUTHENTICATED
+        
+        logger.info(f"Storing {reply} as title")
+        context.user_data["title"] = reply
 
-        if reply.lower() not in [
-            i18n.t("addarr.Series").lower(),
-            i18n.t("addarr.Movie").lower(),
-        ]:
-            logger.debug(
-                f"User entered a title {reply}"
-            )
-            context.user_data["title"] = reply
-
-        if context.user_data.get("choice") in [
-            i18n.t("addarr.Series"),
-            i18n.t("addarr.Movie"),
-        ]:
-            logger.debug(
-                f"user_data[choice] is {context.user_data['choice']}, skipping step of selecting movie/series"
-            )
-            return await deleteSerieMovie(update, context)
-        else:
+        if context.user_data.get("choice") is None:
             keyboard = [
                 [
                     InlineKeyboardButton(
@@ -121,28 +99,63 @@ async def choiceDeleteSerieMovie(update, context):
             markup = InlineKeyboardMarkup(keyboard)
             msg = await update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
             context.user_data["update_msg"] = msg.message_id
+            return MEDIA_DELETE_TYPE
 
-        return READ_DELETE_CHOICE
+        
+async def storeDeleteMediaType(update : Update, context):
+    if not checkId(update):
+        if (
+            authentication(update, context) == "added"
+        ):  # To also stop the beginning command
+            return ConversationHandler.END
+    else:
+        if not context.user_data.get("choice"):
+            choice = None
+            if update.message is not None:
+                choice = update.message.text
+            elif update.callback_query is not None:
+                choice = update.callback_query.data
+            context.user_data["choice"] = choice
+            logger.info(f'choice: {choice}')
+        
+        await promptInstanceSelection(update, context)
+        return GIVE_INSTANCE
 
 
-async def confirmDelete(update, context):
-    title = context.user_data["title"]
-
-    if not context.user_data.get("choice"):
-        choice = None
-        if update.message is not None:
-            choice = update.message.text
-        elif update.callback_query is not None:
-            choice = update.callback_query.data
-        context.user_data["choice"] = choice
+async def storeMediaInstance(update, context):
+    if update.message is not None:
+        reply = update.message.text.lower()
+        logger.debug(f"reply is {reply}")
+    elif update.callback_query is not None:
+        reply = update.callback_query.data
+    else:
+        return MEDIA_DELETE_AUTHENTICATED
     
+    if reply.startswith("instance="):
+        label = reply.replace("instance=", "", 1)
+    else:
+        label = reply
+    
+    context.user_data["instance"] = label
+    
+    instance = context.user_data["instance"]
+    title = context.user_data["title"]
     choice = context.user_data["choice"]
-    context.user_data["position"] = 0
+    position = context.user_data["position"] = 0
 
     service = getService(context)
+    service.setInstance(instance)
 
-    position = context.user_data["position"]
-
+    service_Config = service.getInstance()
+    
+    if service_Config.get("adminRestrictions") and not checkAllowed(update, context, "admin"):
+        await context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.NotAdmin"),
+        )
+        logger.info(f"User {update.effective_message.chat_id} is not an admin. Delete service terminated. No action taken.")
+        return ConversationHandler.END
+    
     searchResult = service.search(title)
     if not searchResult:
         await context.bot.send_message( 
@@ -219,12 +232,15 @@ async def confirmDelete(update, context):
         )
         clearUserData(context)
         return ConversationHandler.END
-    return GIVE_OPTION
+    return DELETE_CONFIRM
 
-async def deleteSerieMovie(update, context):  
+async def deleteMedia(update, context):  
     choice = context.user_data["choice"]  
     position = context.user_data["position"]
+    instance = context.user_data["instance"]
+   
     service = getService(context)
+    service.setInstance(instance)
     idnumber = context.user_data["output"][position]["id"]
 
     if service.removeFromLibrary(idnumber):
