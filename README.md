@@ -7,6 +7,7 @@ This is a Telegram Bot made to add series to [Sonarr](https://github.com/Sonarr/
 ## FEATURES
 
 - Add series/movies to Sonarr/Radarr
+- Multiple instances of Sonarr/Radarr supported
 - Get a list of all the series on Sonarr
 - Change down-/uploadspeed of Transmission (Temporary Speed Limit)
 - Secure bot with a password. New chats first need to authenticate
