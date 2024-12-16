@@ -13,10 +13,26 @@ from config import config
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.sonarr", logLevel, config.get("logToConsole", False))
 
-config = config["sonarr"]
+sonarr_config = config["sonarr"][0]
 
 addSerieNeededFields = ["tvdbId", "tvRageId", "title", "titleSlug", "images", "seasons"]
 
+def setInstance(label):
+    global sonarr_config
+    sonarr_instances = config['sonarr']
+    commons.setLabel(label)
+
+    for instance in sonarr_instances:
+        if instance["label"] == label:
+            sonarr_config = instance
+            logger.info(f"Sonarr instance set to: {label}")
+            return
+
+    logger.error(f"Sonarr instance with label '{label}' not found. Default instace will be used.")
+
+def getInstance():
+    global sonarr_config
+    return sonarr_config
 
 def search(title):
     parameters = {"term": title}
@@ -87,10 +103,10 @@ def buildData(json, path, qualityProfileId, tags, seasonsSelected):
         "addOptions": {
             "ignoreEpisodesWithFiles": True,
             "ignoreEpisodesWithoutFiles": False,
-            "searchForMissingEpisodes": config["search"],
+            "searchForMissingEpisodes": sonarr_config["search"],
         },
         "rootFolderPath": path,
-        "seasonFolder": config["seasonFolder"],
+        "seasonFolder": sonarr_config["seasonFolder"],
         "monitored": True,
         "tags": tags,
         "seasons": seasonsSelected,
@@ -154,17 +170,24 @@ def getTags():
     parsed_json = json.loads(req.text)
     return parsed_json
 
-
 def createTag(tag):
     data_json = {
-        "id": int(max([t["id"] for t in getTags()], default=0)+1),
+        "id": int(max([t["id"] for t in getTags()], default=0) + 1),
         "label": str(tag)
     }
     add = requests.post(commons.generateApiQuery("sonarr", "tag"), json=data_json, headers={'Content-Type': 'application/json'})
+    response_content = json.loads(add.content.decode('utf-8'))
     if add.status_code == 200:
-        return True
+        return response_content["id"]
     else:
-        return False
+        return -1
+    
+def tagExists(tag):
+    tags = getTags()
+    for item in tags:
+        if item['label'] == str(tag).lower():
+            return item['id']
+    return -1
 
 def getSeasons(tvdbId):
     parameters = {"term": "tvdb:" + str(tvdbId)}
