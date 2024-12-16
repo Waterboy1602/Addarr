@@ -79,7 +79,7 @@ def main():
         all.allMovies,
     )
 
-    deleteMovieserie_handler = ConversationHandler(
+    deleteMedia_handler = ConversationHandler(
         entry_points=[
             CommandHandler(config["entrypointDelete"], delete.startDelete),
             MessageHandler(
@@ -127,12 +127,9 @@ def main():
         ],
     )
 
-    # addStartHandler = ConversationHandler(
-       
-    # )
-
     addMedia_handler = ConversationHandler(
         entry_points=[
+            CommandHandler(config["entrypointAdd"], startNewMedia),
             CommandHandler(i18n.t("addarr.Movie"), startNewMedia),
             CommandHandler(i18n.t("addarr.Series"), startNewMedia),
             MessageHandler(
@@ -282,7 +279,7 @@ def main():
     application.add_handler(allMovies_handler_command)
     application.add_handler(allMovies_handler_text)
     application.add_handler(addMedia_handler)
-    application.add_handler(deleteMovieserie_handler)
+    application.add_handler(deleteMedia_handler)
 
     help_handler_command = CommandHandler(config["entrypointHelp"], help)
     application.add_handler(help_handler_command)
