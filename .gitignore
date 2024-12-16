@@ -9,3 +9,4 @@ logs/
 env/
 venv/
 .idea/
+*.dev

@@ -13,10 +13,26 @@ from config import config
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.radarr", logLevel, config.get("logToConsole", False))
 
-config = config["radarr"]
+radarr_config = config["radarr"][0]
 
 addMovieNeededFields = ["tmdbId", "year", "title", "titleSlug", "images"]
 
+def setInstance(label):
+    global radarr_config
+    radarr_instances = config['radarr']
+    commons.setLabel(label)
+
+    for instance in radarr_instances:
+        if instance["label"] == label:
+            radarr_config = instance
+            logger.info(f"Radarr instance set to: {label}")
+            return
+
+    logger.error(f"Radarr instance with label '{label}' not found. Default instace will be used.")
+
+def getInstance():
+    global radarr_config
+    return radarr_config
 
 def search(title):
     parameters = {"term": title}
@@ -85,9 +101,9 @@ def removeFromLibrary(tmdbId):
 def buildData(json, path, qualityProfileId, tags):
     built_data = {
         "qualityProfileId": int(qualityProfileId),
-        "minimumAvailability": config["minimumAvailability"],
+        "minimumAvailability": radarr_config["minimumAvailability"],
         "rootFolderPath": path,
-        "addOptions": {"searchForMovie": config["search"]},
+        "addOptions": {"searchForMovie": radarr_config["search"]},
         "tags": tags,
     }
 
@@ -140,19 +156,26 @@ def getTags():
     req = requests.get(commons.generateApiQuery("radarr", "tag", parameters))
     parsed_json = json.loads(req.text)
     return parsed_json
-
-
+    
 def createTag(tag):
     data_json = {
-        "id": max([t["id"] for t in getTags()], default=0)+1,
+        "id": int(max([t["id"] for t in getTags()], default=0) + 1),
         "label": str(tag)
     }
     add = requests.post(commons.generateApiQuery("radarr", "tag"), json=data_json, headers={'Content-Type': 'application/json'})
+    response_content = json.loads(add.content.decode('utf-8'))
     if add.status_code == 200:
-        return True
+        return response_content["id"]
     else:
-        return False
+        return -1
 
+def tagExists(tag):
+    tags = getTags()
+    for item in tags:
+        if item['label'] == str(tag).lower():
+            return item['id']
+    return -1
+    
 
 def getDbIdFromImdbId(tmdbId):
     req = requests.get(commons.generateApiQuery("radarr", "movie", {}))

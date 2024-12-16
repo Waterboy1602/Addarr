@@ -2,7 +2,7 @@ import requests
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler
 
-from commons import authentication, checkAllowed, checkId, generateApiQuery, generateServerAddr
+from commons import authentication, checkAllowed, checkId, generateServerAddr
 from config import config
 from translations import i18n
 import logging

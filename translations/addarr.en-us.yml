@@ -6,6 +6,7 @@ en-us:
   MovieWithArticle: The movie
   Series: Series
   SeriesWithArticle: The series
+  Find: Find
   Start chatting: Start chatting with Addarr in Telegram. The first time you use "start" you will be asked to enter your password.
   End: The adding/deleting of movies or series has ended.
   Title: "Enter the title:"
@@ -16,6 +17,7 @@ en-us:
   Delete: Yes, delete this
   StopDelete: No, I don't want to delete this
   Select: Yes, select this
+  Select an instance: Please select an instance
   Select a path: Please select a path for the movie or series
   Select a quality: Please select a quality profile for the movie or series
   Select from which season: From which season?

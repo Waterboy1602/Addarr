@@ -1,48 +1,96 @@
 # Sonarr Configuration
 sonarr:
-  server:
-    addr: 
-    port : 8989 # Default is 8989
-    path: / # Default is / . If set, it must start and finish with / . Eg: /sonarr/
-    ssl: false # Default false
-  auth:
-    apikey: 
-    username: 
-    password:
-  search: true # Start search after adding series
-  seasonFolder: true
-  excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
-    - # First excluded folder, add others with a "-" on a new line (same indentation)
-  narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
-  excludedQualityProfiles:
-    - 
-  defaultTags: # If set must be existing tags
-    - telegram
-  addRequesterIdTag: true # Add telegram user id as tag on series
-  adminRestrictions: false
+  - label: tv # label must be a unique value from other labels
+    server:
+      addr: 
+      port: 8989 # Default is 8989
+      path: / # Default is /. If set, it must start and finish with /. Eg: /sonarr/
+      ssl: false # Default false
+    auth:
+      apikey: 
+      username: 
+      password: 
+    search: true # Start search after adding series
+    seasonFolder: true
+    excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
+      - # First excluded folder, add others with a "-" on a new line (same indentation)
+    narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
+    excludedQualityProfiles:
+      - 
+    defaultTags: # If set must be existing tags
+      - telegram
+    addRequesterIdTag: true # Add telegram user id as tag on series
+    adminRestrictions: false
+
+  # use template below to add multiple instances of sonarr
+  # - label: tv_4k  # label must be a unique value from other labels
+  #   server:
+  #     addr: 
+  #     port: 8981
+  #     path: / # Default is /. If set, it must start and finish with /. Eg: /sonarr/
+  #     ssl: false # Default false
+  #   auth:
+  #     apikey: 
+  #     username: 
+  #     password: 
+  #   search: true # Start search after adding series
+  #   seasonFolder: true
+  #   excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
+  #     - # First excluded folder, add others with a "-" on a new line (same indentation)
+  #   narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
+  #   excludedQualityProfiles:
+  #     - 
+  #   defaultTags: # If set must be existing tags
+  #     - telegram
+  #   addRequesterIdTag: true # Add telegram user id as tag on series
+  #   adminRestrictions: false
 
 # Radarr Configuration
 radarr:
-  server:
-    addr:
-    port : 7878 # Default is 7878
-    path: / # Default is / . If set, it must start and finish with / . Eg: /radarr/
-    ssl: false # Default false
-  auth:
-    apikey:
-    username:
-    password:  # Start search after adding movie
-  search: true
-  minimumAvailability: announced
-  excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
-    - # First excluded folder, add others with a "-" on a new line (same indentation)
-  narrowRootFolderNames: true #If true, only the last folder name will be shown instead of full path
-  excludedQualityProfiles:
-    - 
-  defaultTags: # If set must be existing tags
-    - telegram
-  addRequesterIdTag: true # Add telegram user id as tag on movie
-  adminRestrictions: false
+  - label: movies #label must be a unique value from other labels
+    server:
+      addr: 
+      port: 7878 # Default is 7878
+      path: / # Default is /. If set, it must start and finish with /. Eg: /sonarr/
+      ssl: false # Default false
+    auth:
+      apikey: 
+      username: 
+      password: 
+    search: true # Start search after adding series
+    minimumAvailability: announced
+    excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
+      - # First excluded folder, add others with a "-" on a new line (same indentation)
+    narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
+    excludedQualityProfiles:
+      - 
+    defaultTags: # If set must be existing tags
+      - telegram
+    addRequesterIdTag: true # Add telegram user id as tag on series
+    adminRestrictions: false
+
+  # use template below to add multiple instances of radarr   
+  #  - label: movies #label must be a unique value from other labels
+  #    server:
+  #      addr: 
+  #      port: 7871
+  #      path: / # Default is /. If set, it must start and finish with /. Eg: /sonarr/
+  #      ssl: false # Default false
+  #    auth:
+  #      apikey: 
+  #      username: 
+  #      password: 
+  #    search: true # Start search after adding series
+  #    minimumAvailability: announced
+  #    excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
+  #      - # First excluded folder, add others with a "-" on a new line (same indentation)
+  #    narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
+  #    excludedQualityProfiles:
+  #      - 
+  #    defaultTags: # If set must be existing tags
+  #      - telegram
+  #    addRequesterIdTag: true # Add telegram user id as tag on series
+  #    adminRestrictions: false
   
 # Telegram Configuration
 telegram:
