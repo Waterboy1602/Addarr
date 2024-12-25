@@ -9,3 +9,7 @@ logs/
 env/
 venv/
 .idea/
+
+chatid.txt
+admin.txt
+allowlist.txt
