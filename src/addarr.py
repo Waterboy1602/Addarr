@@ -57,11 +57,12 @@ def main():
 
     auth_handler_command = CommandHandler(config["entrypointAuth"], authentication)
     auth_handler_text = MessageHandler(
-                            filters.Regex(
-                                re.compile(r"^" + config["entrypointAuth"] + "$", re.IGNORECASE)
-                            ),
-                            authentication,
-                        )
+          filters.Regex(
+               re.compile(r"^/?"+ re.escape(config["entrypointAuth"]) + r"(?:\s.*)?$", re.IGNORECASE)
+          ),
+          authentication,
+    )
+        
     
     allSeries_handler_command = CommandHandler(config["entrypointAllSeries"], all.allSeries)
     allSeries_handler_text = MessageHandler(
@@ -129,6 +130,13 @@ def main():
 
     addMedia_handler = ConversationHandler(
         entry_points=[
+            CommandHandler(config["entrypointAdd"], startNewMedia),
+            MessageHandler(
+                filters.Regex(
+                    re.compile(r"^" + config["entrypointAdd"] + "$", re.IGNORECASE)
+                ),
+                startNewMedia,
+            ),
             CommandHandler(config["entrypointAdd"], startNewMedia),
             CommandHandler(i18n.t("addarr.Movie"), startNewMedia),
             CommandHandler(i18n.t("addarr.Series"), startNewMedia),
@@ -1065,10 +1073,12 @@ async def help(update, context):
             delete=config["entrypointDelete"],
             movie=i18n.t("addarr.Movie").lower(),
             serie=i18n.t("addarr.Series").lower(),
+            find=i18n.t("addarr.Find").lower(),
             allSeries=config["entrypointAllSeries"],
             allMovies=config["entrypointAllMovies"],
             transmission=config["entrypointTransmission"],
             sabnzbd=config["entrypointSabnzbd"],
+            qbittorrent=config["entrypointqBittorrent"],
         )
     )
     return ConversationHandler.END

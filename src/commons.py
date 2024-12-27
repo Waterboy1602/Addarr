@@ -119,9 +119,11 @@ async def authentication(update, context):
         else:
             file.close()
             password = update.message.text
-            if("/auth " in password):
-                password = password.replace("/auth ", "")
-            if str(password) == str(config["telegram"]["password"]):
+            # This will remove both /auth and auth from the password string if they are present.
+            # It ensures that even if there is no leading slash, it will still be detected and removed.
+            if("auth" in password.lower()):
+                password = password.lower().replace("/auth", "").replace("auth", "").strip()
+            if str(password).strip() == str(config["telegram"]["password"]):
                 with open(CHATID_PATH, "a") as file:
                     file.write(await getChatName(context, chatid))
                     await context.bot.send_message(
