@@ -51,7 +51,7 @@ radarr:
     server:
       addr: 
       port: 7878 # Default is 7878
-      path: / # Default is /. If set, it must start and finish with /. Eg: /sonarr/
+      path: / # Default is /. If set, it must start and finish with /. Eg: /radarr/
       ssl: false # Default false
     auth:
       apikey: 
@@ -66,7 +66,7 @@ radarr:
       - 
     defaultTags:
       - telegram
-    addRequesterIdTag: true # Add telegram user id as tag on series
+    addRequesterIdTag: true # Add telegram user id as tag on movies
     adminRestrictions: false
 
   # use template below to add multiple instances of radarr   
@@ -74,7 +74,7 @@ radarr:
   #    server:
   #      addr: 
   #      port: 7871
-  #      path: / # Default is /. If set, it must start and finish with /. Eg: /sonarr/
+  #      path: / # Default is /. If set, it must start and finish with /. Eg: /radarr/
   #      ssl: false # Default false
   #    auth:
   #      apikey: 
@@ -89,7 +89,7 @@ radarr:
   #      - 
   #    defaultTags:
   #      - telegram
-  #    addRequesterIdTag: true # Add telegram user id as tag on series
+  #    addRequesterIdTag: true # Add telegram user id as tag on movies
   #    adminRestrictions: false
   
 # Telegram Configuration
@@ -112,7 +112,7 @@ sabnzbd:
   server:
     addr:
     port: 8090 # Default is 8090
-    path: / # Default is / . If set, it must start and finish with / . Eg: /sonarr/
+    path: / # Default is / . If set, it must start and finish with / . Eg: /sabnzbd/
     ssl: false # Default false
   auth:
     apikey:

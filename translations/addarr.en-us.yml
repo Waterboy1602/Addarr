@@ -35,10 +35,12 @@ en-us:
     \n• To add a movie or series use /%{add}.
     \n• To delete a movie or series use /%{delete}.
     \n• To immediately add a movie or series you can use /%{movie} or /%{serie}.
+    \n• You can also use single line commands to add movies or series eg. %{find} %{movie} Superman or %{find} %{serie} House
     \n• To check which series are in Sonarr you can use /%{allSeries}.
     \n• To check which movies are in Radarr you can use /%{allMovies}.
     \n• To toggle the up- and download speed of Transmission use /%{transmission}.
-    \n• To change the up- and download speed of Sabnzbd use /%{sabnzbd}."
+    \n• To change the up- and download speed of Sabnzbd use /%{sabnzbd}.
+    \n• To change the up- and download speed of qBittorrent use /%{qbittorrent}."
   Missing config: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.
     \nAdd these before restarting the bot."
   Wrong values: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.

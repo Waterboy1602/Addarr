@@ -22,6 +22,7 @@ DEFAULT_SETTINGS = {
     "entrypointAllMovies": "allMovies", #allSeries or a custom entrypoint
     "entrypointTransmission": "transmission", #transmission or a custom entrypoint
     "entrypointSabnzbd": "sabnzbd", #sabnzbd or a custom entrypoint
+    "entrypointqBittorrent": "qbittorrent", #sabnzbd or a custom entrypoint
     "logToConsole": True,
     "debugLogging": False,
     "language": "en-us",
