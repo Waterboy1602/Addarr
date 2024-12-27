@@ -10,23 +10,49 @@ from translations import i18n
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr.commons", logLevel, config.get("logToConsole", False))
 
+_current_label = None
+
+# Sets the global label that can be accessed within other functions
+def setLabel(label: str):
+    global _current_label
+    _current_label = label
+
+def getLabel() -> str:
+    global _current_label
+    return _current_label
 
 def generateServerAddr(app):
     try:
-        if config[app]["server"]["ssl"]:
-            http = "https://"
-        else:
-            http = "http://"
-        try:
-            addr = config[app]["server"]["addr"]
-            port = config[app]["server"]["port"]
-            path = config[app]["server"]["path"]
-            return http + addr + ":" + str(port) + path
-        except Exception:
-            logger.warn("No ip or port defined.")
-    except Exception as e:
-        logger.warn(f"Generate of serveraddress failed: {e}.")
+        global _current_label
+        if _current_label is None:
+            logger.warning("Label is not set. Call setLabel() first.")
+            return ""
+    
+        instances = config[app]
+    
+        for instance in instances:
+            if instance["label"] == _current_label:
+                try:
+                    if instance["server"]["ssl"]:
+                        http = "https://"
+                    else:
+                        http = "http://"
+                    
+                    addr = instance["server"]["addr"]
+                    port = instance["server"]["port"]
+                    path = instance["server"]["path"]
+                    
+                    return f"{http}{addr}:{port}{path}"
 
+                except KeyError as e:
+                    logger.warning(f"Missing key {e} in configuration for {_current_label} instance.")
+                except Exception as e:
+                    logger.warning(f"Failed to generate server address for {_current_label}: {e}")
+        
+        logger.warning(f"{app.capitalize()} instance with label '{_current_label}' not found.")
+
+    except Exception as e:
+        logger.warning(f"Generate server address failed: {e}.")
 
 def cleanUrl(text):
     url = text.replace(" ", "%20")
@@ -35,7 +61,15 @@ def cleanUrl(text):
 
 def generateApiQuery(app, endpoint, parameters={}):
     try:
-        apikey = config[app]["auth"]["apikey"]
+        global _current_label
+        if _current_label is None:
+            logger.warning("Label is not set. Call setLabel() first.")
+            return ""
+        
+        instances = config[app]
+        for instance in instances:
+            if instance["label"] == _current_label:
+                apikey = instance["auth"]["apikey"]
         url = (
             generateServerAddr(app) + "api/v3/" + str(endpoint) + "?apikey=" + str(apikey)
         )
@@ -45,7 +79,7 @@ def generateApiQuery(app, endpoint, parameters={}):
                 url += "&" + key + "=" + value
         return cleanUrl(url)  # Clean URL (validate) and return as string
     except Exception as e:
-        logger.warn(f"Generate of APIQUERY failed: {e}.")
+        logger.warning(f"Generate of APIQUERY failed: {e}.")
 
 
 # Check if Id is authenticated
@@ -85,9 +119,11 @@ async def authentication(update, context):
         else:
             file.close()
             password = update.message.text
-            if("/auth " in password):
-                password = password.replace("/auth ", "")
-            if str(password) == str(config["telegram"]["password"]):
+            # This will remove both /auth and auth from the password string if they are present.
+            # It ensures that even if there is no leading slash, it will still be detected and removed.
+            if("auth" in password.lower()):
+                password = password.lower().replace("/auth", "").replace("auth", "").strip()
+            if str(password).strip() == str(config["telegram"]["password"]):
                 with open(CHATID_PATH, "a") as file:
                     file.write(await getChatName(context, chatid))
                     await context.bot.send_message(

@@ -30,8 +30,7 @@ logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr", logLevel, config.get("logToConsole", False))
 logger.debug(f"Addarr v{__version__} starting up...")
 
-SERIE_MOVIE_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_PATHS, TSL_NORMAL, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range(7)
-SERIE_MOVIE_DELETE, READ_DELETE_CHOICE = 0,1
+MEDIA_AUTHENTICATED, READ_CHOICE, GIVE_OPTION, GIVE_INSTANCE, GIVE_PATHS, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range (7)
 
 application = Application.builder().token(config["telegram"]["token"]).build()
 
@@ -58,11 +57,13 @@ def main():
 
     auth_handler_command = CommandHandler(config["entrypointAuth"], authentication)
     auth_handler_text = MessageHandler(
-                            filters.Regex(
-                                re.compile(r"^" + config["entrypointAuth"] + "$", re.IGNORECASE)
-                            ),
-                            authentication,
-                        )
+          filters.Regex(
+               re.compile(r"^/?"+ re.escape(config["entrypointAuth"]) + r"(?:\s.*)?$", re.IGNORECASE)
+          ),
+          authentication,
+    )
+        
+    
     allSeries_handler_command = CommandHandler(config["entrypointAllSeries"], all.allSeries)
     allSeries_handler_text = MessageHandler(
                             filters.Regex(
@@ -79,36 +80,45 @@ def main():
         all.allMovies,
     )
 
-    deleteMovieserie_handler = ConversationHandler(
+    deleteMedia_handler = ConversationHandler(
         entry_points=[
-            CommandHandler(config["entrypointDelete"], delete.delete),
+            CommandHandler(config["entrypointDelete"], delete.startDelete),
             MessageHandler(
                 filters.Regex(
                     re.compile(r'^' + config["entrypointDelete"] + '$', re.IGNORECASE)
                 ),
-                delete.delete,
+                delete.startDelete,
             ),
         ],
         states={
-            SERIE_MOVIE_DELETE: [MessageHandler(filters.TEXT, choiceSerieMovie)],
-            READ_DELETE_CHOICE: [
+            delete.MEDIA_DELETE_AUTHENTICATED: [MessageHandler(filters.TEXT, delete.storeDeleteTitle)],
+
+            delete.MEDIA_DELETE_TYPE:[
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
-                    delete.confirmDelete,
+                    delete.storeDeleteMediaType
                 ),
-                CallbackQueryHandler(delete.confirmDelete, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
+                CallbackQueryHandler(delete.storeDeleteMediaType, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                MessageHandler(
+                    filters.Regex(f'^({i18n.t("addarr.New")})$'),
+                    delete.startDelete
+                ),
+                CallbackQueryHandler(delete.startDelete, pattern=f'({i18n.t("addarr.New")})'),
             ],
-            GIVE_OPTION: [
-                CallbackQueryHandler(delete.deleteSerieMovie, pattern=f'({i18n.t("addarr.Delete")})'),
+
+            delete.GIVE_INSTANCE: [CallbackQueryHandler(delete.storeMediaInstance, pattern=r"^instance=(.+)")],
+            
+            delete.DELETE_CONFIRM:[
+                CallbackQueryHandler(delete.deleteMedia, pattern=f'({i18n.t("addarr.Delete")})'),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.Delete")})$'),
-                    delete.deleteSerieMovie
+                    delete.deleteMedia
                 ),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.New")})$'),
-                    delete
+                    delete.deleteMedia
                 ),
-                CallbackQueryHandler(delete, pattern=f'({i18n.t("addarr.New")})'),
+                CallbackQueryHandler(delete.deleteMedia, pattern=f'({i18n.t("addarr.New")})'),  
             ],
         },
         fallbacks=[
@@ -118,42 +128,51 @@ def main():
         ],
     )
 
-    addMovieserie_handler = ConversationHandler(
+    addMedia_handler = ConversationHandler(
         entry_points=[
-            CommandHandler(config["entrypointAdd"], startSerieMovie),
-            CommandHandler(i18n.t("addarr.Movie"), startSerieMovie),
-            CommandHandler(i18n.t("addarr.Series"), startSerieMovie),
+            CommandHandler(config["entrypointAdd"], startNewMedia),
             MessageHandler(
                 filters.Regex(
-                    re.compile(r'^' + config["entrypointAdd"] + '$', re.IGNORECASE)
+                    re.compile(r"^" + config["entrypointAdd"] + "$", re.IGNORECASE)
                 ),
-                startSerieMovie,
+                startNewMedia,
+            ),
+            CommandHandler(config["entrypointAdd"], startNewMedia),
+            CommandHandler(i18n.t("addarr.Movie"), startNewMedia),
+            CommandHandler(i18n.t("addarr.Series"), startNewMedia),
+            MessageHandler(
+                filters.Regex(
+                    re.compile(
+                        rf'^{i18n.t("addarr.Find")} ((?:{i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})) (.+)$',
+                        re.IGNORECASE
+                    )
+                ),
+                storeTitle,
             ),
         ],
         states={
-            SERIE_MOVIE_AUTHENTICATED: [MessageHandler(filters.TEXT, choiceSerieMovie)],
+            MEDIA_AUTHENTICATED: [
+                MessageHandler(filters.TEXT, storeTitle),
+                CallbackQueryHandler(storeTitle, pattern=rf'^{i18n.t("addarr.Movie")}$|^{i18n.t("addarr.Series")}$'),
+            ],
             READ_CHOICE: [
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
-                    searchSerieMovie,
+                    storeMediaType,
                 ),
-                CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                CallbackQueryHandler(storeMediaType, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.New")})$'),
-                    startSerieMovie
+                    startNewMedia
                 ),
-                CallbackQueryHandler(startSerieMovie, pattern=f'({i18n.t("addarr.New")})'),
+                CallbackQueryHandler(startNewMedia, pattern=f'({i18n.t("addarr.New")})'),
             ],
+            GIVE_INSTANCE: [CallbackQueryHandler(storeInstance, pattern=r"^instance=(.+)")],
             GIVE_OPTION: [
-                CallbackQueryHandler(qualityProfileSerieMovie, pattern=f'({i18n.t("addarr.Select")})'),
-                MessageHandler(
-                    filters.Regex(f'^({i18n.t("addarr.Select")})$'),
-                    qualityProfileSerieMovie
-                ),
-                CallbackQueryHandler(pathSerieMovie, pattern=f'({i18n.t("addarr.Add")})'),
+                CallbackQueryHandler(storeSelection, pattern=f'({i18n.t("addarr.Add")})'),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.Add")})$'),
-                    pathSerieMovie
+                    storeSelection
                 ),
                 CallbackQueryHandler(nextOption, pattern=f'({i18n.t("addarr.Next result")})'),
                 MessageHandler(
@@ -162,18 +181,18 @@ def main():
                 ),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.New")})$'),
-                    startSerieMovie
+                    startNewMedia
                 ),
-                CallbackQueryHandler(startSerieMovie, pattern=f'({i18n.t("addarr.New")})'),
+                CallbackQueryHandler(startNewMedia, pattern=f'({i18n.t("addarr.New")})'),
             ],
             GIVE_PATHS: [
-                CallbackQueryHandler(qualityProfileSerieMovie, pattern="^(Path: )(.*)$"),
+                CallbackQueryHandler(storePath, pattern="^(Path: )(.*)$"),
             ],
             GIVE_QUALITY_PROFILES: [
-                CallbackQueryHandler(selectSeasons, pattern="^(Quality profile: )(.*)$"),
+                CallbackQueryHandler(storeQualityProfile, pattern="^(Quality profile: )(.*)$"),
             ],
             SELECT_SEASONS: [
-                CallbackQueryHandler(checkSeasons, pattern="^(Season: )(.*)$"),
+                CallbackQueryHandler(storeSeasons, pattern="^(Season: )(.*)$"),
             ],
         },
         fallbacks=[
@@ -182,6 +201,7 @@ def main():
             CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.Stop")+"$"),
         ],
     )
+    
     if config["transmission"]["enable"]:
         import transmission as transmission
         changeTransmissionSpeed_handler = ConversationHandler(
@@ -233,6 +253,32 @@ def main():
             ],
         )
         application.add_handler(changeSabznbdSpeed_handler)
+    
+    if config["qbittorrent"]["enable"]:
+        import qbittorrent as qbittorrent
+        changeqBittorrentSpeed_handler = ConversationHandler(
+            entry_points=[
+                CommandHandler(config["entrypointqBittorrent"], qbittorrent.qbittorrent),
+                MessageHandler(
+                    filters.Regex(
+                        re.compile(
+                            r"" + config["entrypointqBittorrent"] + "", re.IGNORECASE
+                        )
+                    ),
+                    qbittorrent.qbittorrent,
+                ),
+            ],
+            states={
+                qbittorrent.QBITTORRENT_SPEED_NORMAL: [
+                    CallbackQueryHandler(qbittorrent.changeSpeedqBittorrent),
+                ]
+            },
+            fallbacks=[
+                CommandHandler("stop", stop),
+                MessageHandler(filters.Regex("^(Stop|stop)$"), stop),
+            ],
+        )
+        application.add_handler(changeqBittorrentSpeed_handler)
 
     application.add_handler(auth_handler_command)
     application.add_handler(auth_handler_text)
@@ -240,8 +286,8 @@ def main():
     application.add_handler(allSeries_handler_text)
     application.add_handler(allMovies_handler_command)
     application.add_handler(allMovies_handler_text)
-    application.add_handler(addMovieserie_handler)
-    application.add_handler(deleteMovieserie_handler)
+    application.add_handler(addMedia_handler)
+    application.add_handler(deleteMedia_handler)
 
     help_handler_command = CommandHandler(config["entrypointHelp"], help)
     application.add_handler(help_handler_command)
@@ -259,7 +305,7 @@ async def stop(update, context):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
         )
-        return SERIE_MOVIE_AUTHENTICATED
+        return MEDIA_AUTHENTICATED
         
     if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
         adminNotifyId = config.get("adminNotifyId")
@@ -271,9 +317,9 @@ async def stop(update, context):
         chat_id=update.effective_message.chat_id, text=i18n.t("addarr.End")
     )
     return ConversationHandler.END
-    
 
-async def startSerieMovie(update : Update, context):
+
+async def startNewMedia(update : Update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
         #When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
@@ -283,46 +329,62 @@ async def startSerieMovie(update : Update, context):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
         )
-        return SERIE_MOVIE_AUTHENTICATED
+        return MEDIA_AUTHENTICATED
 
     if update.message is not None:
         reply = update.message.text.lower()
     elif update.callback_query is not None:
         reply = update.callback_query.data.lower()
     else:
-        return SERIE_MOVIE_AUTHENTICATED
-
-    if reply[1:] in [
-        i18n.t("addarr.Series").lower(),
-        i18n.t("addarr.Movie").lower(),
-    ]:
+        return MEDIA_AUTHENTICATED
+    
+    if i18n.t("addarr.Movie").lower() in reply:
         logger.debug(
             f"User issued {reply} command, so setting user_data[choice] accordingly"
         )
-        context.user_data.update(
-            {
-                "choice": i18n.t("addarr.Series")
-                if reply[1:] == i18n.t("addarr.Series").lower()
-                else i18n.t("addarr.Movie")
-            }
+        context.user_data["choice"] = i18n.t("addarr.Movie")
+    elif i18n.t("addarr.Series").lower() in reply:
+        logger.debug(
+            f"User issued {reply} command, so setting user_data[choice] accordingly"
         )
-    elif reply == i18n.t("addarr.New").lower():
+        context.user_data["choice"] = i18n.t("addarr.Series")
+    elif reply.lower() == i18n.t("addarr.New").lower():
         logger.debug("User issued New command, so clearing user_data")
         clearUserData(context)
-    
+
+
     await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+i18n.t("addarr.Title")
     )
+
     if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
         adminNotifyId = config.get("adminNotifyId")
         await context.bot.send_message(
             chat_id=adminNotifyId, text=i18n.t("addarr.Notifications.Start", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
         )
-    
-    return SERIE_MOVIE_AUTHENTICATED
+
+    return MEDIA_AUTHENTICATED
 
 
-async def choiceSerieMovie(update, context):
+async def storeMediaType(update, context):
+    if not checkId(update):
+        if (
+            await authentication(update, context) == "added"
+        ):  # To also stop the beginning command
+            return ConversationHandler.END
+    else:
+        choice = None
+        if update.message is not None:
+            choice = update.message.text
+        elif update.callback_query is not None:
+            choice = update.callback_query.data
+        context.user_data["choice"] = choice
+        logger.info(f'choice: {choice}')
+
+    await promptInstanceSelection(update, context)
+    return GIVE_INSTANCE
+        
+async def storeTitle(update : Update, context):
     if not checkId(update):
         if (
             await authentication(update, context) == "added"
@@ -332,72 +394,124 @@ async def choiceSerieMovie(update, context):
         return await stop(update, context)
     else:
         if update.message is not None:
-            reply = update.message.text
-            logger.debug(f"reply is {reply}")
+            reply = update.message.text.lower()
         elif update.callback_query is not None:
             reply = update.callback_query.data
         else:
-            return SERIE_MOVIE_AUTHENTICATED
+            return MEDIA_AUTHENTICATED
 
-        if reply.lower() not in [
-            i18n.t("addarr.Series").lower(),
-            i18n.t("addarr.Movie").lower(),
-        ]:
-            logger.debug(
-                f"User entered a title {reply}"
-            )
-            context.user_data["title"] = reply
+        #check if its a single line command
+        singleLineCommand = re.match(
+            rf'^{i18n.t("addarr.Find")} ({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}) (.+)$',
+            reply,
+            re.IGNORECASE,
+        )
 
-        if context.user_data.get("choice") in [
-            i18n.t("addarr.Series"),
-            i18n.t("addarr.Movie"),
-        ]:
+        if singleLineCommand:
             logger.debug(
-                f"user_data[choice] is {context.user_data['choice']}, skipping step of selecting movie/series"
+                f"User issued single line command {reply}"
             )
-            return await searchSerieMovie(update, context)
+            # there will be a title and choice in it. extract it.
+            adv_cmd = re.match(
+                rf'^{i18n.t("addarr.Find")} ((?:{i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})) (.+)$',
+                reply,
+                re.IGNORECASE,
+            )
+            if adv_cmd:
+                context.user_data["choice"] = singleLineCommand.group(1)
+                context.user_data["title"] = singleLineCommand.group(2)
+                logger.debug(
+                    f"User is looking for a {singleLineCommand.group(2)}, named {singleLineCommand.group(1)}"
+                )
+            else:
+                logger.warning(f"There was an error parseing single line command {reply}")
         else:
-            keyboard = [
-                [
-                    InlineKeyboardButton(
-                        '\U0001F3AC '+i18n.t("addarr.Movie"),
-                        callback_data=i18n.t("addarr.Movie")
-                    ),
-                    InlineKeyboardButton(
-                        '\U0001F4FA '+i18n.t("addarr.Series"),
-                        callback_data=i18n.t("addarr.Series")
-                    ),
-                ],
-                [ InlineKeyboardButton(
-                        '\U0001F50D '+i18n.t("addarr.New"),
-                        callback_data=i18n.t("addarr.New")
-                    ),
-                ]
-            ]
-            markup = InlineKeyboardMarkup(keyboard)
-            msg = await update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
-            context.user_data["update_msg"] = msg.message_id
-        return READ_CHOICE
+            if context.user_data.get("title") is None:
+                logger.info(f"Storing {reply} as title")
+                context.user_data["title"] = reply
+                if context.user_data.get("choice") is None:
+                    keyboard = [
+                        [
+                            InlineKeyboardButton(
+                                '\U0001F3AC '+i18n.t("addarr.Movie"),
+                                callback_data=i18n.t("addarr.Movie")
+                            ),
+                            InlineKeyboardButton(
+                                '\U0001F4FA '+i18n.t("addarr.Series"),
+                                callback_data=i18n.t("addarr.Series")
+                            ),
+                        ],
+                        [ InlineKeyboardButton(
+                                '\U0001F50D '+i18n.t("addarr.New"),
+                                callback_data=i18n.t("addarr.New")
+                            ),
+                        ]
+                    ]
+                    markup = InlineKeyboardMarkup(keyboard)
+                    msg = await update.message.reply_text(i18n.t("addarr.What is this?"), reply_markup=markup)
+                    context.user_data["update_msg"] = msg.message_id
+                    return READ_CHOICE
 
+        
+        await promptInstanceSelection(update, context)
+        return GIVE_INSTANCE
 
-async def searchSerieMovie(update, context):
+async def promptInstanceSelection(update : Update, context):
+    service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.Movie").lower() else 'sonarr'
+    instances = config[service_name] 
+    if len(instances) == 1:
+           # There is only 1 instance, so use it!
+           logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
+           context.user_data["instance"] = instances[0]["label"]
+           return await storeInstance(update, context) # skip to next step
+    keyboard = []
+    for instance in instances:
+        label = instance['label']
+        keyboard += [[
+            InlineKeyboardButton(
+            label,
+            callback_data=f"instance={label}"
+            ),
+        ]]
+    markup = InlineKeyboardMarkup(keyboard)
+    if update.message:
+        msg = await update.message.reply_text(
+            text=i18n.t("addarr.Select an instance"),
+            reply_markup=markup
+        )
+    else:
+        msg = await update.effective_chat.send_message(
+            text=i18n.t("addarr.Select an instance"),
+            reply_markup=markup
+        )
+    context.user_data["update_msg"] = msg.message_id
+
+async def storeInstance(update : Update, context):
+    # store selected instance and give out search results
+    if update.message is not None:
+        reply = update.message.text.lower()
+        logger.debug(f"reply is {reply}")
+    elif update.callback_query is not None:
+        reply = update.callback_query.data
+    else:
+        return MEDIA_AUTHENTICATED
+    
+    if reply.startswith("instance="):
+        label = reply.replace("instance=", "", 1)
+    else:
+        label = reply
+    
+    context.user_data["instance"] = label
+    
+    instance = context.user_data["instance"]
     title = context.user_data["title"]
-
-    if not context.user_data.get("choice"):
-        choice = None
-        if update.message is not None:
-            choice = update.message.text
-        elif update.callback_query is not None:
-            choice = update.callback_query.data
-        context.user_data["choice"] = choice
-    
     choice = context.user_data["choice"]
-    
     position = context.user_data["position"] = 0
-
     service = getService(context)
+    service.setInstance(instance)
 
     searchResult = service.search(title)
+
     if not searchResult:
         await context.bot.send_message( 
             chat_id=update.effective_message.chat_id, 
@@ -476,7 +590,7 @@ async def searchSerieMovie(update, context):
         ]
     markup = InlineKeyboardMarkup(keyboard)
 
-    if choice == i18n.t("addarr.Movie"):
+    if choice.lower() == i18n.t("addarr.Movie").lower():
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
     else:
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
@@ -485,7 +599,7 @@ async def searchSerieMovie(update, context):
     )
     context.user_data["title_update_msg"] = context.user_data["update_msg"]
     context.user_data["update_msg"] = msg.message_id
-    
+
     return GIVE_OPTION
 
 
@@ -494,6 +608,7 @@ async def nextOption(update, context):
     context.user_data["position"] = position
     searchResult = context.user_data["output"]
     choice = context.user_data["choice"]    
+
     message=i18n.t("addarr.searchresults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
     await context.bot.edit_message_text(
@@ -568,7 +683,7 @@ async def nextOption(update, context):
         message_id=context.user_data["update_msg"],
         chat_id=update.effective_message.chat_id,
     )
-    if choice == i18n.t("addarr.Movie"):
+    if choice.lower() == i18n.t("addarr.Movie").lower():
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
     else:
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
@@ -577,21 +692,29 @@ async def nextOption(update, context):
     )
     context.user_data["update_msg"] = msg.message_id
     return GIVE_OPTION
-    
 
-async def pathSerieMovie(update, context):
+
+async def storeSelection(update : Update, context):
+    # store the selected movie and prompt which root folder to use
+
+    # variables in context.user_data will keep track of what the user selected based on position and stuff
+    # so we dont really have to "store" anything here this time
+
     service = getService(context)
+    service.setInstance(context.user_data["instance"])
+    
     paths = service.getRootFolders()
     excluded_root_folders = service.config.get("excludedRootFolders", [])
     paths = [p for p in paths if p["path"] not in excluded_root_folders]
     logger.debug(f"Excluded root folders: {excluded_root_folders}")
+
     context.user_data.update({"paths": [p["path"] for p in paths]})
     if len(paths) == 1:
         # There is only 1 path, so use it!
         logger.debug("Only found 1 path, so proceeding with that one...")
         context.user_data["path"] = paths[0]["path"]
-        return await qualityProfileSerieMovie(update, context)
-        
+        return await storePath(update, context) # go back to previous step
+    
     keyboard = []
     for p in paths:
         pathtxt = p['path']
@@ -613,10 +736,12 @@ async def pathSerieMovie(update, context):
         text=i18n.t("addarr.Select a path"),
         reply_markup=markup,
     )
+    
     return GIVE_PATHS
 
 
-async def qualityProfileSerieMovie(update, context):
+async def storePath(update : Update, context):
+    # store selected root folder and prompt to select quality profiles
     if not context.user_data.get("path"):
         # Path selection should be in the update message
         path = None
@@ -629,20 +754,22 @@ async def qualityProfileSerieMovie(update, context):
             logger.debug(
                 f"Callback query [{update.callback_query.data.replace('Path: ', '').strip()}] doesn't match any of the paths. Sending paths for selection..."
             )
-            return await pathSerieMovie(update, context)
-
+            return await storeSelection(update, context)  # go back to previous step
+    
     service = getService(context)
+    service.setInstance(context.user_data["instance"])
 
     excluded_quality_profiles = service.config.get("excludedQualityProfiles", [])
     qualityProfiles = service.getQualityProfiles()
     qualityProfiles = [q for q in qualityProfiles if q["name"] not in excluded_quality_profiles]
-    
+    logger.debug(f"Excluded quality profiles: {excluded_quality_profiles}")
+
     context.user_data.update({"qualityProfiles": [q['id'] for q in qualityProfiles]})
     if len(qualityProfiles) == 1:
-        # There is only 1 path, so use it!
+        # There is only 1 quality profile, so use it!
         logger.debug("Only found 1 profile, so proceeding with that one...")
         context.user_data["qualityProfile"] = qualityProfiles[0]['id']
-        return await selectSeasons(update, context)
+        return await qualityProfiles(update, context)
 
     keyboard = []
     for q in qualityProfiles:
@@ -660,10 +787,12 @@ async def qualityProfileSerieMovie(update, context):
         text=i18n.t("addarr.Select a quality"),
         reply_markup=markup,
     )
+
     return GIVE_QUALITY_PROFILES
 
 
-async def selectSeasons(update, context):
+async def storeQualityProfile(update : Update, context):
+    # store quality profile selection and save the movie. 
     if not context.user_data.get("qualityProfile"):
         # Quality selection should be in the update message
         qualityProfile = None
@@ -676,12 +805,14 @@ async def selectSeasons(update, context):
             logger.debug(
                 f"Callback query [{update.callback_query.data.replace('Quality profile: ', '').strip()}] doesn't match any of the quality profiles. Sending quality profiles for selection..."
             )
-            return qualityProfileSerieMovie(update, context)
-
+            return storePath(update, context) # go back to previous step
+        
     service = getService(context)
+    service.setInstance(context.user_data["instance"])
+
     if service == radarr:
-        return await addSerieMovie(update, context)
-    
+        return await addMedia(update, context)
+        
     position = context.user_data["position"]
     idnumber = context.user_data["output"][position]["id"]
     seasons = service.getSeasons(idnumber)
@@ -711,16 +842,18 @@ async def selectSeasons(update, context):
         text=i18n.t("addarr.Select from which season"),
         reply_markup=markup,
     )
+
     return SELECT_SEASONS
 
-async def checkSeasons(update, context):
+
+async def storeSeasons(update, context):
     choice = context.user_data["choice"]
     seasons = context.user_data["seasons"]
     selectedSeasons = []
     if "selectedSeasons" in context.user_data:
         selectedSeasons = context.user_data["selectedSeasons"]
-    
-    if choice == i18n.t("addarr.Series"):
+ 
+    if choice.lower() == i18n.t("addarr.Series").lower():
         if update.callback_query is not None:
             insertSeason = update.callback_query.data.replace("Season: ", "").strip()
             if insertSeason == "Future and selected":
@@ -738,7 +871,7 @@ async def checkSeasons(update, context):
                 logger.debug(f"Seasons {seasonsSelected} have been selected.")
                 
                 context.user_data["selectedSeasons"] = selectedSeasons
-                return await addSerieMovie(update, context)
+                return await addMedia(update, context)
               
             else:
                 if insertSeason == "All":
@@ -788,16 +921,17 @@ async def checkSeasons(update, context):
             logger.debug(
                 f"Callback query [{update.callback_query.data.replace('From season: ', '').strip()}] doesn't match any of the season options. Sending seasons for selection..."
             )
-            return await checkSeasons(update, context)
+            return await storeSeasons(update, context) 
         
-async def addSerieMovie(update, context):
+async def addMedia(update, context):
     position = context.user_data["position"]
     choice = context.user_data["choice"]
     idnumber = context.user_data["output"][position]["id"]
     path = context.user_data["path"]
     service = getService(context)
-    
-    if choice == i18n.t("addarr.Series"):
+    service.setInstance(context.user_data["instance"])
+
+    if choice.lower() == i18n.t("addarr.Series").lower():
         seasons = context.user_data["seasons"]
         selectedSeasons = context.user_data["selectedSeasons"]
         seasonsSelected = []
@@ -816,29 +950,41 @@ async def addSerieMovie(update, context):
     
     qualityProfile = context.user_data["qualityProfile"]
 
-    #Add tag for user 
-    #TODO (creation does not work right now, creation should be manual)
+    # Process the tags that will be added
     tags = []
-    if service.config.get("addRequesterIdTag"):
-        if str(update.effective_message.chat.id) not in [str(t["label"]) for t in service.getTags()]:
-            service.createTag(str(update.effective_message.chat.id))
-        logger.debug(f"Message : {update.effective_message}")
-        for t in service.getTags():
-            logger.debug(f"TAG {t} check")
-            if str(t["label"]) == str(update.effective_message.chat.id):
-                tags.append(str(t["id"]))
+    service_Config = service.getInstance()
+    
+    if service_Config.get("addRequesterIdTag"):
+        userTag = str(update.effective_message.chat.id)
+        if service.tagExists(userTag) != -1:
+            tags = [userTag]
+            logger.debug(f'The tag {userTag} already exists. Using existing tag for user')
+        else:
+            logger.debug(f'The tag {userTag} does not exists. Creating new tag for user')
+            newTag = service.createTag(userTag)
+            if newTag >=0: 
+                tags = [newTag]
+            else:
+                instace_name = service.getInstance()
+                logger.debug(f'Create user tag FAILED in {instace_name}: {userTag}')
+    else:
+        logger.debug("tagging not included")
     if not tags:
-        tags = [int(t["id"]) for t in service.getTags() if t["label"] in service.config.get("defaultTags", [])]
-    logger.debug(f"Tags {tags} have been selected.")
+        logger.debug(f'Adding default tags')
+        default_tags = service_Config.get("defaultTags", [])
+        for tag in default_tags:
+            if str(tag) not in [str(t["label"]) for t in service.getTags()]:
+                newTag = service.createTag(str(tag))
+                tags.append(newTag)
     
     if not service.inLibrary(idnumber):
-        if choice == i18n.t("addarr.Movie"):
+        if choice.lower() == i18n.t("addarr.Movie").lower():
             added = service.addToLibrary(idnumber, path, qualityProfile, tags)
         else:
             added = service.addToLibrary(idnumber, path, qualityProfile, tags, seasonsSelected)
         
         if added:
-            if choice == i18n.t("addarr.Movie"):
+            if choice.lower() == i18n.t("addarr.Movie").lower():
                 message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
             else:
                 message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
@@ -849,7 +995,7 @@ async def addSerieMovie(update, context):
             )
             if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
                 adminNotifyId = config.get("adminNotifyId")
-                if choice == i18n.t("addarr.Movie"):
+                if choice.lower() == i18n.t("addarr.Movie").lower():
                     message2=i18n.t("addarr.Notifications.AddSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 else:
                     message2=i18n.t("addarr.Notifications.AddSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
@@ -859,7 +1005,7 @@ async def addSerieMovie(update, context):
             clearUserData(context)
             return ConversationHandler.END
         else:
-            if choice == i18n.t("addarr.Movie"):
+            if choice.lower() == i18n.t("addarr.Movie").lower():
                 message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
             else:
                 message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
@@ -870,7 +1016,7 @@ async def addSerieMovie(update, context):
             )
             if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
                 adminNotifyId = config.get("adminNotifyId")
-                if choice == i18n.t("addarr.Movie"):
+                if choice.lower() == i18n.t("addarr.Movie").lower():
                     message2=i18n.t("addarr.Notifications.AddFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 else:
                     message2=i18n.t("addarr.Notifications.AddFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
@@ -880,7 +1026,7 @@ async def addSerieMovie(update, context):
             clearUserData(context)
             return ConversationHandler.END
     else:
-        if choice == i18n.t("addarr.Movie"):
+        if choice.lower() == i18n.t("addarr.Movie").lower():
             message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
         else:
             message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
@@ -892,7 +1038,7 @@ async def addSerieMovie(update, context):
             
         if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
             adminNotifyId = config.get("adminNotifyId")
-            if choice == i18n.t("addarr.Movie"):
+            if choice.lower() == i18n.t("addarr.Movie").lower():
                 message2=i18n.t("addarr.Notifications.Exist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
             else:
                 message2=i18n.t("addarr.Notifications.Exist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
@@ -902,17 +1048,16 @@ async def addSerieMovie(update, context):
         clearUserData(context)
         return ConversationHandler.END
 
-
 def getService(context):
-    if context.user_data.get("choice") == i18n.t("addarr.Series"):
+    if context.user_data.get("choice").lower() == i18n.t("addarr.Series").lower():
         return sonarr
-    elif context.user_data.get("choice") == i18n.t("addarr.Movie"):
+    elif context.user_data.get("choice").lower() == i18n.t("addarr.Movie").lower():
         return radarr
     else:
         raise ValueError(
-            f"Cannot determine service based on unknown or missing choice: {context.user_data.get('choice')}."
+            f"Cannot determine service based on unknown or missing choice: {context.user_data.get('choice')}"
         )
-
+    
 
 async def help(update, context):
     if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
@@ -928,10 +1073,12 @@ async def help(update, context):
             delete=config["entrypointDelete"],
             movie=i18n.t("addarr.Movie").lower(),
             serie=i18n.t("addarr.Series").lower(),
+            find=i18n.t("addarr.Find").lower(),
             allSeries=config["entrypointAllSeries"],
             allMovies=config["entrypointAllMovies"],
             transmission=config["entrypointTransmission"],
             sabnzbd=config["entrypointSabnzbd"],
+            qbittorrent=config["entrypointqBittorrent"],
         )
     )
     return ConversationHandler.END
