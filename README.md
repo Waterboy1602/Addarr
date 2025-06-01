@@ -1,6 +1,15 @@
+<!-- markdownlint-disable MD033 -->
+
 # ADDARR
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/waterboy1602/addarr)](https://hub.docker.com/r/waterboy1602/addarr)
+<div align="center" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+
+![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)
+![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
+[![Docker Pulls](https://img.shields.io/docker/pulls/waterboy1602/addarr?style=for-the-badge&logo=docker)](https://hub.docker.com/r/waterboy1602/addarr)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+</div>
 
 This Telegram bot makes it easy to manage your media library right from your chat. Add or delete series to [Sonarr](https://github.com/Sonarr/Sonarr) or movies to [Radarr](https://github.com/Radarr/Radarr) using simple, interactive commands. You can view a full list of your series and movies, and get notified when media you've added has finished downloading.
 
