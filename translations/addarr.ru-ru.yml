@@ -1,91 +1,137 @@
-#Ru
-ru-ru:
-  Start: Start
-  Stop: Стоп
-  Movie: Movie
-  MovieWithArticle: фильм
-  Series: Series
-  SeriesWithArticle: сериал
-  Start chatting: Начните общаться с Addarr в Telegram. При первом использовании "films" вам будет предложено ввести пароль.
-  End: Добавление/удаление фильмов или сериалов завершилось.
-  Title: "Введи название для поиска:"
-  What is this?: Это фильм или сериал?
-  New: Начать поиск заново
-  Next result: Нет, следующий
-  Add: Да, это он
-  Delete: Да, его удалить
-  StopDelete: Нет, я не хочу его удалять
-  Select: Да, выберите это
-  Select a path: Выбери путь для сохранения фильма или сериала
-  Select a quality: Пожалуйста, выберите профиль качества для фильма или сериала
-  Select from which season: Какой сезон?
-  Selected and future seasons: Выбранные и будущие сезоны
-  Season: Сезон
-  Select all seasons: Выбрать все сезоны
-  Deselect all seasons: Снять выбор со всех сезонов
-  Authorize: Сначала вам нужно авторизоваться. Какой пароль?
-  Wrong password: Вы ввели неверный пароль. Попробуйте снова...
-  Chatid added: "Этот чат успешно добавлен в список разрешенных чатов. Теперь вы можете начать пользоваться этим ботом."
-  NotAdmin: "Вы должны быть администратором, чтобы выполнить эту команду."
-  Chatid already allowed: "Вы уже авторизованы"
-  Help: "Хочешь снова увидеть этот текст? Введи /%{help}.
-    \n• Для аутентификации перед первым использованием ты должен использовать /%{authenticate}.
-    \n• Чтобы добавить фильм или сериал, используй /%{add}.
-    \n• Чтобы удалить фильм или сериал, используй /%{add}.
-    \n• Чтобы сразу добавить фильм или сериал можно использовать /%{movie} или /%{serie}.
-    \n• Чтобы проверить, какие сериалы есть в Sonarr, ты можешь использовать /%{allSeries}.
-    \n• Чтобы проверить, какие сериалы есть в Radarr, ты можешь использовать /%{allMovies}.
-    \n• Чтобы изменить скорость загрузки и выгрузки в Transmission, используй /%{transmission}.
-    \n• Чтобы изменить скорость загрузки и выгрузки в Sabnzbd, используй /%{sabnzbd}."
-  Missing config: "В вашем файле config.yaml отсутствуют следующие ключи конфигурации: %{missingKeys}.
-    \nДобавь их перед перезапуском бота."
-  Wrong values: "Следующие ключи конфигурации имеют неправильное значение в вашем файле config.yaml: %{wrongValues}.
-    \nИзмени их перед перезапуском бота."
+﻿ru-ru:
+  General:
+    Start: Начать
+    Stop: Стоп
+    Find: Поиск
+    Movie: Фильм
+    MovieWithArticle: Фильм
+    Series: Сериал
+    SeriesWithArticle: Сериал
+    Title: Введите название
+    WhatIsThis: Это фильм или сериал?
+    New: Новый поиск
+    Season: Сезон
+    End: Операция отменена пользователем.
+    PreviousResult: Предыдущий
+    NextResult: Следующий
+    SelectAnInstance: Пожалуйста выберите источник
+    SelectAPath: Пожалуйста укажите путь для фильма/сериала
+    SelectAQuality: Пожалуйста выберите желаемое качествео для фильма/сериала
+    SelectFromWhichSeason: С какого сезона?
 
-  messages:
-    Add: Да, это он %{subject}
-    This: Этот %{subjectWithArticle} ты хочешь добавить?
-    ThisDelete: Этот %{subjectWithArticle} ты хочешь удалить?
-    AddFailed: "К сожалению, не удалось добавить %{subjectWithArticle}.
-      \nЧтобы начать новый поиск введи - films"
-    DeleteFailed: Упс, не удалось удалить %{subjectWithArticle}. Может быть, попробовать еще раз.
-    AddSuccess: "Все ОК. %{subjectWithArticle} добавил 🙂.
-      \nЧтобы начать новый поиск введи - films"
-    DeleteSuccess: "%{subjectWithArticle} удалил 🙂"
-    Exist: "Этот %{subjectWithArticle} уже есть у Вас 😉
-      \nЧтобы начать новый поиск введи - films"
-    NoExist: "%{subjectWithArticle} не существует
-      \nЧтобы начать новый поиск введи - films"
+  Actions:
+    Add: Да, вот это
+    Delete: Да, удалить
+    StopDelete: Нет, я не хочу его удалять
+    Select: Да, выбрать это
+    SelectedAndFutureSeasons: Выбранные и будущие сезоны
+    SelectAllSeasons: Выбрать все сезоны
+    DeselectAllSeasons: Снять выбор с всех сезонов
 
-  searchresults:
-    zero:  "Не нашел.
-      \nЧтобы начать новый поиск введи - films"
-    one: Есть один результат
-    other: "%{count} результатов поиска"
+  Authorization:
+    Authorize: Сначала нужно авторизоваться. Какой пароль?
+    WrongPassword: Неверный пароль. Попробуйте снова...
+    ChatID_Added: "Этот чат успешно добавлен в список авторизованных чатов. Теперь вы можете начать пользоваться ботом. \nЕсли вы уже вводили какую-то команду - введите её ещё раз."
+    NotAdmin: Для этой команды нужны права администратора.
+    ChatID_Allowed: Этот чат уже авторизован.
+    User_Added: Пользователь %{username} был добавлен в список разрешённых чатов.
+    Accept: Принять
+    Reject: Отклонить
+
+  Notifications:
+    ProfileCreated: Уведомление создано. Вы получите уведомление когда выбранные вами файлы будут загружены.
+    ProfileExists: Вы уже подписаны на уведомление.
+    CreatingProfiles: Сейчас будет создан профиль уведомления. Вам может прийти тестовое уведомление.
+
+  Messages:
+    Add: "Да, добавь его %{subject}"
+    This: "Вы хотите добавить вот это %{subjectWithArticle} ?"
+    ThisDelete: "Вы хотите удалить вот это %{subjectWithArticle} ?"
+    AddFailed: Упс, ошибочка в процессе добавления %{subjectWithArticle}. Может попробуете ещё раз?
+    DeleteFailed: Упс, ошибока в процессе удаления %{subjectWithArticle}. Может попробуете ещё раз?
+    AddSuccess: "%{subjectWithArticle} успешно добавлено 🙂"
+    DeleteSuccess: "%{subjectWithArticle} успешно удалено 🙂"
+    Exist: "%{subjectWithArticle} уже существует 😉"
+    NoExist: "%{subjectWithArticle} не существует"
+    LoadingAll: Это может занять некоторое время в зависимости от вашей библиотеки. Пожалуйста подождите . . .
+    MissingConfig: "У вас отсутствуют важные ключи в вашем config.yaml : %{missingKeys}.
+      \nДобавьте их перед использованием бота."
+    ConfigError: "У этих ключей в вашем config.yaml недопустимые параметры: %{wrongValues}.
+      \nИсправьте их перед использованием бота."
+    StartChatting: Начните общение с вашим Addar ботом. После нажатия на "start" вам будет предложено ввести пароль.
+
+  SearchResults:
+    zero: Ничего не найдено
+    one: Найдено одно совпадение
+    other: "%{count} совпадений найдено"
 
   Transmission:
-    NotEnabled: "Transmission не включен"
-    Speed: "Какую скорость ты хочешь использовать в Transmission?"
-    TSL: Временные ограничения скорости
-    Normal: Нормальная скорость
-    ChangedToTSL: "Ограничение скорости включено."
-    ChangedToNormal: "Ограничение скорости отключено."
+    NotEnabled: Функции Transmission не активированы.
+    Speed: С какой скоростью хотите использовать Transmission?
+    TSL: Временное ограничение скорости
+    Normal: Обычная скорость
+    ChangedToTSL: Временное ограничение скорости включено.
+    ChangedToNormal: Временное ограничение скорости выключено.
 
   Sabnzbd:
     NotEnabled: Функция Sabnzbd не активирована.
-    Speed: Какую скорость ты хочешь использовать в Sabnzbd?
+    Speed: С какой скоростью вы хотите использовать Sabnzbd ?
     Limit25: 25%
     Limit50: 50%
-    Limit100: Безлимитный
-    ChangedTo50: Ограничение установлено на 50%
-    ChangedTo25: Ограничение установлено на 25%
-    ChangedTo100: Нет ограничения
-    Error: Что-то пошло не так при попытке установить скорость
-    
-  Notifications:
-    Stop: Пользователь %{first_name} с chat_id %{chat_id} остановил процесс.
-    Start: Пользователь %{first_name} с chat_id %{chat_id} начал новый запрос.
-    AddSuccess: Запрос %{subjectWithArticle} %{title} пользователя %{first_name} с chat_id %{chat_id} была добавлена.
-    AddFailed: Ошибка при добавлении %{subjectWithArticle} %{title} пользователя %{first_name} с chat_id %{chat_id}.
-    Exist: Тема %{subjectWithArticle} %{title} , которую хотел добавить пользователь %{first_name} с chat_id %{c.hat_id}, уже существует.
-    Delete: Пользователь %{first_name} с chat_id %{chat_id} инициировал новое удаление.
+    Limit100: Без ограничений
+    ChangedTo50: Лимит установлен на 50%
+    ChangedTo25: Лимит установлен на 25%
+    ChangedTo100: Без ограничений
+    Error: Что-то пошло не так во время попытки установить скорость.
+
+  qBittorrent:
+    NotEnabled: Функция qBittorrent не активирована.
+    Speed: С какой скоростью хотите использовать qBittorrent ?
+    Alternate: Изменить ограничение скорости
+    Normal: Обычная скорость
+    ChangedToAlternate: Изменение скорости включено
+    ChangedToNormal: Изменение скорости выключено
+    Error: Что-то пошло не так во время попытки установить скорость.
+
+  AdminNotifications:
+    Stop: Пользователь %{first_name} в чате %{chat_id} остановил процесс.
+    Start: Пользователь %{first_name} в чате %{chat_id} запустил новый запрос.
+    AddSuccess: %{subjectWithArticle} %{title} был добавлен пользователем %{first_name} в чате %{chat_id}.
+    AddFailed: Ошибка в процесе добавления %{subjectWithArticle} %{title} пользователем %{first_name} в чате %{chat_id}.
+    Exist: %{subjectWithArticle} %{title} который пользователь %{first_name} в чате %{chat_id} пытается добавить уже существует.
+    Delete: Пользователь %{first_name} в чате %{chat_id} начал процесс удаления.
+    AuthRequest: Пользователь %{username} [%{first_name} %{last_name}] в чате %{chat_id} запросил доступ к сервисам бота.
+
+  Help: "
+    <b><b>Addarr Команды</b></b>
+    \n<i>Хотите снова прочитать эту справку? Используйте /%{help}</i>\n
+    \n• Перед первым использованием вам надо авторизоваться.
+    Используйте /%{authenticate} [пароль]
+    \n• Чтобы добавить фильм или сериал используйте /%{add}.
+    \n• Чтобы удалить фильм или сериал используйте /%{delete}.
+    \n• Чтобы просмотреть список всех сериалов в библиотеке используйте /%{allSeries}.
+    \n• Чтобы просмотреть список всех фильмов в библиотеке используйте /%{allMovies}.
+    \n\n<b>Мгновенные команды</b>
+    \n• Чтобы сразу добавить фильм или сериал можете использовать /%{movie} или /%{serie}.
+    \n  Например %{movie} Супермен или %{serie} Игра Престолов.
+    \n\n<b>настройки загрузчиков</b>
+    \n• Чтобы настроить скорость Transmission, используйте /%{transmission}.
+    \n• Чтобы настроить скорость Sabnzbd, используйте /%{sabnzbd}.
+    \n• Чтобы настроить скорость qBittorrent, используйте /%{qbittorrent}.
+    \n\n
+    Если хотите получить уведомление когда ваш выбор будет готов к просмотру используйте /%{notify}.
+    "
+
+  CommandDescriptions:
+    Authenticate: Авторизируйтесь перед первым использованием
+    Add: Добавить новое
+    Help: Справка по командам
+    Movie: Добавить фильм
+    Series: Добавить сериал
+    Delete: Удалить из библиотеки
+    AllMovies: Показать список всех фильмов в библиотеке
+    AllSeries: Показать список всех сериалов в библиотеке
+    Transmission: Изменить скорость Transmission
+    Sabnzbd: Изменить скорость Sabnzbd
+    qBittorrent: Изменить скорость qBittorrent
+    Notify: Получать уведомления по окончанию загрузки

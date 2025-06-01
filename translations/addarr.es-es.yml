@@ -1,48 +1,50 @@
-#Español - España
-es-es: 
-  Start: Iniciar
-  Stop: Detener
-  Movie: Pelicula
-  MovieWithArticle: pelicula
-  Series: Serie
-  SeriesWithArticle: serie
-  Start chatting: Empieza a chatear con Addarr en Telegram. La primera vez que uses "start" te pedira introducir tu contraseña configurada.
-  End: La adicion/eliminación de peliculas o series ha finalizado.
-  Title: "Introduce el titulo:"
-  What is this?: Esto es una pelicula o una serie?
-  New: Ejecuta un nuevo comando de busqueda
-  Next result: No, muestrame el siguiente resultado
-  Add: Si, añadir
-  Delete: Sí, eliminala
-  StopDelete: No, no quiero eliminarla
-  Select: Si, selecciona esto
-  Select a path: Por favor elige una ruta donde guardar
-  Select a quality: Por favor, seleccione la calidad para la pelicula o serie
-  Select from which season: Desde que temporada?
-  Selected and future seasons: Temporadas seleccionadas y futuras
-  Season: Temporada
-  Select all seasons: Seleccionar todas las temporadas
-  Deselect all seasons: Deseleccionar todas las temporadas
-  Authorize: Necesitas autorizar este chat primero. ¿Cuál es la contraseña?
-  Wrong password: Contraseña incorrecta. Prueba otra vez...
-  Chatid added: "Este chat ha sido autorizado correctamente. Ya puedes utilizar el bot."
-  NotAdmin: "Necesitas ser admin para ejecutar este comando."
-  Chatid already allowed: "Este chat ya esta autorizado."
-  Help: "Quieres volver a ver este texto? Usa /%{help}.
-    \n• Para autenticarte antes del primer uso debes usar /%{authenticate}.
-    \n• Para añadir una serie o película usa /%{add}.
-    \n• Para eliminar una serie o película usa /%{delete}.
-    \n• Para añadir directamente una película o serie usa /%{movie} or /%{serie}.
-    \n• Para comprobar que series hay en Sonarr usa /%{allSeries}.
-    \n• Para comprobar que películas hay en Radarr usa /%{allMovies}.
-    \n• Para alternar la velocidad de subida y bajada de Transmission utiliza /%{transmission}.
-    \n• Para cambiar la velocidad de subida y bajada de Sabnzbd utiliza /%{sabnzbd}."
-  Missing config: "Te faltan las siguientes keys en tu config.yaml-file: %{missingKeys}.
-    \nAñadelas antes de reiniciar el bot."
-  Wrong values: "Te faltan las siguientes keys tienen un valor incorrecto en tu config.yaml-file: %{wrongValues}.
-    \nCambialas antes de reiniciar el bot."
+﻿# es-ES Spanish (Spain)
+es-es:
+  General:
+    Start: Iniciar
+    Stop: Detener
+    Find: Buscar  #ADDED
+    Movie: Pelicula
+    MovieWithArticle: pelicula
+    Series: Serie
+    SeriesWithArticle: serie
+    Title: "Introduce el titulo:"
+    WhatIsThis: Esto es una pelicula o una serie?
+    New: Ejecuta un nuevo comando de busqueda
+    Season: Temporada
+    End: La adicion/eliminación de peliculas o series ha finalizado.
+    SelectAnInstance: Selecciona una instancia  #ADDED
+    SelectAPath: Por favor elige una ruta donde guardar
+    SelectAQuality: Por favor, seleccione la calidad para la pelicula o serie
+    SelectFromWhichSeason: Desde que temporada?
+    PreviousResult: Anterior  #ADDED
+    NextResult: Siguiente  #ADDED
 
-  messages:
+  Actions:
+    Add: Si, añadir
+    Delete: Sí, eliminala
+    StopDelete: No, no quiero eliminarla
+    Select: Si, selecciona esto
+    SelectedAndFutureSeasons: Temporadas seleccionadas y futuras  #ADDED
+    SelectAllSeasons: Seleccionar todas las temporadas  #ADDED
+    DeselectAllSeasons: Deseleccionar todas las temporadas  #ADDED
+
+  Authorization:
+    Authorize: Necesitas autorizar este chat primero. ¿Cuál es la contraseña?
+    WrongPassword: Contraseña incorrecta. Prueba otra vez...
+    ChatID_Added: "Este chat ha sido autorizado correctamente. Ya puedes utilizar el bot."
+    NotAdmin: "Necesitas ser admin para ejecutar este comando."
+    ChatID_Allowed: "Este chat ya esta autorizado."
+    User_Added: El usuario %{username} ha sido añadido a la lista de chats permitidos.  #ADDED
+    Accept: Aceptar  #ADDED
+    Reject: Rechazar  #ADDED
+
+  Notifications:  #ADDED
+    ProfileCreated: Perfiles de notificación creados. 
+    ProfileExists: Ya estás suscrito a notificaciones.
+    CreatingProfiles: Las suscripciones de notificaciones se crearán ahora.
+
+  Messages:
     Add: Si, añade esta %{subject}
     This: Es esta la %{subjectWithArticle} que quieres añadir?
     ThisDelete: Es esta la %{subjectWithArticle} que quieres eliminar?
@@ -52,12 +54,16 @@ es-es:
     DeleteSuccess: "La %{subjectWithArticle} se ha eliminado correctamente 🙂"
     Exist: La %{subjectWithArticle} ya existe 😉
     NoExist: La %{subjectWithArticle} no existe
+    LoadingAll: Esto puede tardar unos minutos dependiendo de tu biblioteca. Espera...  #ADDED
+    MissingConfig: "Te faltan las siguientes keys en tu config.yaml-file: %{missingKeys}.\nAñadelas antes de reiniciar el bot."
+    ConfigError: "Te faltan las siguientes keys tienen un valor incorrecto en tu config.yaml-file: %{wrongValues}.\nCambialas antes de reiniciar el bot."
+    StartChatting: Empieza a chatear con Addarr en Telegram. La primera vez que uses "start" te pedira introducir tu contraseña configurada.
 
-  searchresults:
+  SearchResults:
     zero: No se han encontrado resultados.
-    one: Se ha encontrado un resultado. 
+    one: Se ha encontrado un resultado.
     other: "Se han encontrado %{count} resultados. "
-
+  
   Transmission:
     NotEnabled: "La funcion de Transmission no esta activada."
     Speed: "Que velocidad quieres que use Transmission?"
@@ -77,10 +83,54 @@ es-es:
     ChangedTo100: Ningun limite aplicado
     Error: Algo ha fallado cuando se ha intentado cambiar la velocidad
 
-  Notifications:
+  qBittorrent:  #ADDED
+    NotEnabled: La función qBittorrent no está activada.
+    Speed: ¿Qué velocidad deseas que use qBittorrent?
+    Alternate: Límite de velocidad alternativo
+    Normal: Velocidad normal
+    ChangedToAlternate: Límite de velocidad alternativo activado
+    ChangedToNormal: Velocidad normal activada
+    Error: Error al configurar el límite de velocidad
+
+  AdminNotifications:
     Stop: El usuario %{first_name} con chat_id %{chat_id} ha parado el proceso.
     Start: El usuario %{first_name} con chat_id %{chat_id} ha iniciado una nueva solicitud.
     AddSuccess: La %{subjectWithArticle} %{title} del usuario %{first_name} con chat_id %{chat_id} se ha añadido.
     AddFailed: Error al añadir la %{subjectWithArticle} %{title} del usuario %{first_name} con chat_id %{chat_id}.
     Exist: La %{subjectWithArticle} %{title} que queria añadir el usuario %{first_name} con chat_id %{chat_id} ya existe.
     Delete: El usuario %{first_name} con chat_id %{chat_id} ha iniciado una nueva eliminación.
+    AuthRequest: El usuario %{username} [%{first_name} %{last_name}] con ID de chat %{chat_id} ha solicitado acceso a los servicios del bot.  #ADDED
+
+  #ADDED
+  Help: "
+    <b><b>Comandos de Addarr</b></b>
+    \n<i>¿Quieres ver este texto de nuevo? Usa /%{help}</i>\n
+    \n• Debes autorizarte antes del primer uso.
+        Usa /%{authenticate} [contraseña]
+    \n• Para añadir película o serie, usa /%{add}.
+    \n• Para eliminar película o serie, usa /%{delete}.
+    \n• Para listar series en Sonarr, usa /%{allSeries}.
+    \n• Para listar películas en Radarr, usa /%{allMovies}.
+    \n\n<b>Comandos de una línea</b>
+    \n• Para añadir inmediatamente película/serie: /%{movie} o /%{serie}.
+    \n  Ej: %{movie} Superman o %{serie} House.
+    \n\n<b>Ajustes cliente de descarga</b>
+    \n• Alternar velocidad en Transmission: /%{transmission}.
+    \n• Cambiar velocidad en Sabnzbd: /%{sabnzbd}.
+    \n• Cambiar velocidad en qBittorrent: /%{qbittorrent}.
+    \n\n
+    Notificaciones cuando el contenido esté listo: /%{notify}."
+
+  CommandDescriptions:  #ADDED
+    Authenticate: Autenticarse antes del primer uso
+    Add: Añadir contenido
+    Help: Descripción de comandos
+    Movie: Añadir película
+    Series: Añadir serie
+    Delete: Eliminar contenido
+    AllMovies: Mostrar todas las películas
+    AllSeries: Mostrar todas las series
+    Transmission: Cambiar velocidad de Transmission
+    Sabnzbd: Cambiar velocidad de Sabnzbd
+    qBittorrent: Cambiar velocidad de qBittorrent
+    Notify: Activar notificaciones

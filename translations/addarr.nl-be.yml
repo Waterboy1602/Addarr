@@ -1,48 +1,50 @@
-#Nederlands - België
-nl-be: 
-  Start: Start
-  Stop: Stop
-  Movie: Film
-  MovieWithArticle: De film
-  Series: Serie
-  SeriesWithArticle: De serie
-  Start chatting: Je kan nu chatten met Addarr op Telegram. De eerste keer dat je "start" gebruikt, zul je je wachtwoord moeten ingeven.
-  End: Het toevoegen/verwijderen van films of series is beëindigd.
-  Title: "Geef de titel:"
-  What is this?: Is dit een film of een serie?
-  New: Voer een nieuwe zoekopdracht uit
-  Next result: Nee, toon me volgend resultaat
-  Add: Ja, voeg deze toe
-  Delete: Ja, verwijder deze
-  StopDelete: No, ik wil dit niet verwijderen
-  Select: Ja, selecteer dit
-  Select a path: Kies een pad voor deze film of serie
-  Select a quality: Kies een kwaliteitsprofiel voor de film of serie
-  Select from which season: Vanaf welk seizoen?
-  Selected and future seasons: Geselecteerde en toekomstige seizoenen
-  Season: Seizoen
-  Select all seasons: Selecteer alle seizoenen
-  Deselect all seasons: Deselecteer alle seizoenen
-  Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
-  Wrong password: Het wachtwoord is verkeerd. Probeer opnieuw...
-  Chatid added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
-  NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
-  Chatid already allowed: "Deze chat heeft al toestemming."
-  Help: "Wil je deze tekst nog eens zien? Gebruik dan /%{help}.
-    \n• Om de eerste keer te authenticeren gebruik je /%{authenticate}.
-    \n• Om een film of serie toe te voegen kun je /%{add} gebruiken.
-    \n• Om een serie of film te verwijderen gebruikt u /%{delete}.
-    \n• Wil je meteen een keuze tussen film of serie maken, gebruik dan /${movie} of /%{serie}.
-    \n• Om te kijken welke series al in Sonarr zitten, gebruik je /%{allSeries}.
-    \n• Om te kijken welke films al in Radarr zitten, gebruik je /%{allMovies}.
-    \n• Wil je de snelheidslimiet van Transmission wijzigen, gebruik dan /%{transmission}.
-    \n• Wil je de snelheidslimiet van Sabnzbd wijzigen, gebruik dan /%{sabnzbd}."
-  Missing config: "Je komt de volgende instelling te kort in je config.yaml-bestand: %{missingKeys}.
-    \nVoeg deze eerst toe vooraleer de bot te herstarten."
-  Wrong values: "De volgende instelling heeft een verkeerde waarde in je config.yaml-bestand: %{wrongValues}.
-    \nVerander deze eerst vooraleer de bot te herstarten."
+﻿# nl-BE Dutch (Belgium)
+nl-be:
+  General:
+    Start: Start
+    Stop: Stop
+    Find: Zoeken  #ADDED
+    Movie: Film
+    MovieWithArticle: De film
+    Series: Serie
+    SeriesWithArticle: De serie
+    Title: "Geef de titel:"
+    WhatIsThis: Is dit een film of een serie?
+    New: Voer een nieuwe zoekopdracht uit
+    Season: Seizoen
+    End: Het toevoegen/verwijderen van films of series is beëindigd.
+    SelectAnInstance: Selecteer een instantie  #ADDED
+    SelectAPath: Kies een pad voor deze film of serie
+    SelectAQuality: Kies een kwaliteitsprofiel voor de film of serie
+    SelectFromWhichSeason: Vanaf welk seizoen?
+    PreviousResult: Vorige  #ADDED
+    NextResult: Volgende  #ADDED
 
-  messages:
+  Actions:
+    Add: Ja, voeg deze toe
+    Delete: Ja, verwijder deze
+    StopDelete: No, ik wil dit niet verwijderen
+    Select: Ja, selecteer dit
+    SelectedAndFutureSeasons: Geselecteerde en toekomstige seizoenen  #ADDED
+    SelectAllSeasons: Alle seizoenen selecteren  #ADDED
+    DeselectAllSeasons: Alle seizoenen deselecteren  #ADDED
+
+  Authorization:
+    Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
+    WrongPassword: Het wachtwoord is verkeerd. Probeer opnieuw...
+    ChatID_Added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
+    NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
+    ChatID_Allowed: "Deze chat heeft al toestemming."
+    User_Added: De gebruiker %{username} is toegevoegd aan de lijst met toegestane chats.  #ADDED
+    Accept: Accepteren  #ADDED
+    Reject: Weigeren  #ADDED
+
+  Notifications: #ADDED
+    ProfileCreated: Notificatieprofielen aangemaakt.
+    ProfileExists: Je bent al geabonneerd op notificaties.
+    CreatingProfiles: Notificatie-abonnementen worden nu aangemaakt.
+
+  Messages:
     Add: Ja, voeg deze %{subject} toe
     This: Is dit %{subjectWithArticle} die je wilt toevoegen?
     ThisDelete: Is dit %{subjectWithArticle} die je wilt verwijderen?
@@ -52,8 +54,12 @@ nl-be:
     DeleteSuccess: "%{subjectWithArticle} is met succes verwijderd 🙂"
     Exist: "%{subjectWithArticle} was al toegevoegd 😉"
     NoExist: "%{subjectWithArticle} bestaat niet"
-  
-  searchresults:
+    LoadingAll: Dit kan enkele minuten duren, afhankelijk van je bibliotheek. Even geduld...  #ADDED
+    MissingConfig: "Je komt de volgende instelling te kort in je config.yaml-bestand: %{missingKeys}.\nVoeg deze eerst toe vooraleer de bot te herstarten."
+    ConfigError: "De volgende instelling heeft een verkeerde waarde in je config.yaml-bestand: %{wrongValues}.\nVerander deze eerst vooraleer de bot te herstarten."
+    StartChatting: Je kan nu chatten met Addarr op Telegram. De eerste keer dat je "start" gebruikt, zul je je wachtwoord moeten ingeven.
+
+  SearchResults:
     zero: "Er zijn geen resultaten gevonden."
     one: Een zoekresultaat
     other: "%{count} zoekresultaten"
@@ -77,10 +83,54 @@ nl-be:
     ChangedTo100: Geen snelheidslimiet
     Error: Er ging iets fout tijdens het aanpassen van de snelheid
 
-  Notifications:
+  qBittorrent:  #ADDED
+    NotEnabled: De qBittorrent-functie is niet geactiveerd.
+    Speed: Welke snelheid moet qBittorrent gebruiken?
+    Alternate: Alternatieve snelheidslimiet
+    Normal: Normale snelheid
+    ChangedToAlternate: Alternatieve snelheidslimiet geactiveerd
+    ChangedToNormal: Normale snelheid geactiveerd
+    Error: Fout bij het instellen van de snelheidslimiet
+
+  AdminNotifications:
     Stop: Gebruiker %{first_name} met chat_id %{chat_id} heeft het proces gestopt.
     Start: Gebruiker %{first_name} met chat_id %{chat_id} heeft een nieuw verzoek gestart.
     AddSuccess: Het %{subjectWithArticle} %{title} van gebruiker %{first_name} met chat_id %{chat_id} is toegevoegd.
     AddFailed: Fout bij het toevoegen van het %{subjectWithArticle} %{title} van de gebruiker %{first_name} met chat_id %{chat_id}.
     Exist: Het %{subjectWithArticle} %{title} dat de gebruiker %{first_name} met chat_id %{chat_id} wilde toevoegen bestaat al.
     Delete: De gebruiker %{first_name} met chat_id %{chat_id} heeft een nieuwe verwijdering geïnitieerd.
+    AuthRequest: Gebruiker %{username} [%{first_name} %{last_name}] met chat-ID %{chat_id} heeft toegang tot de botdiensten aangevraagd.  #ADDED
+  
+  #ADDED
+  Help: "
+    <b><b>Addarr-commando's</b></b>
+    \n<i>Deze tekst opnieuw zien? Gebruik /%{help}</i>\n
+    \n• Eerst authenticeren:
+        Gebruik /%{authenticate} [wachtwoord]
+    \n• Toevoegen: /%{add}.
+    \n• Verwijderen: /%{delete}.
+    \n• Lijst series in Sonarr: /%{allSeries}.
+    \n• Lijst films in Radarr: /%{allMovies}.
+    \n\n<b>Snelle commando's</b>
+    \n• Direct toevoegen: /%{movie} of /%{serie}.
+    \n  Bijv: %{movie} Superman of %{serie} House.
+    \n\n<b>Downloadclients</b>
+    \n• Transmission-snelheid: /%{transmission}.
+    \n• Sabnzbd-snelheid: /%{sabnzbd}.
+    \n• qBittorrent-snelheid: /%{qbittorrent}.
+    \n\n
+    Meldingen bij gereed media: /%{notify}."
+
+  CommandDescriptions:  #ADDED
+    Authenticate: Authenticatie voor eerste gebruik
+    Add: Media toevoegen
+    Help: Commandoreferentie
+    Movie: Film toevoegen
+    Series: Serie toevoegen
+    Delete: Titel verwijderen
+    AllMovies: Alle films tonen
+    AllSeries: Alle series tonen
+    Transmission: Transmission-snelheid wijzigen
+    Sabnzbd: Sabnzbd-snelheid wijzigen
+    qBittorrent: qBittorrent-snelheid wijzigen
+    Notify: Meldingen ontvangen

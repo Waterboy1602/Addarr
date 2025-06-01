@@ -1,48 +1,50 @@
-#German - Germany
-de-de: 
-  Start: Start
-  Stop: Stop
-  Movie: Film
-  MovieWithArticle: Der Film
-  Series: Serie
-  SeriesWithArticle: Die Serie
-  Start chatting: Starte mit Addarr auf Telegram zu chatten. Das erste Mal wenn du "start" verwendest, wirst du gebeten, das Passwort einzugeben.
-  End: Das Hinzufügen / Löschen von Filmen oder Serien wurde beendet.
-  Title: "Gebe den Titel ein:"
-  What is this?: Ist das eine Serie oder ein Film?
-  New: Führe einen neuen Suchbefehl aus
-  Next result: Nein, zeige mir das nächste Ergebnis
-  Add: Ja, hinzufügen
-  Delete: Ja, löschen
-  StopDelete: Nein, nicht löschen
-  Select: Ja, auswählen
-  Select a path: Bitte wähle einen Pfad für die Serie oder den Film
-  Select a quality: Bitte wähle ein Qualitätsprofil
-  Select from which season: Ab welcher Staffel?
-  Selected and future seasons: Ausgewählte und zukünftige Staffeln
-  Season: Staffel
-  Select all seasons: Alle Staffeln auswählen
-  Deselect all seasons: Alle Staffeln abwählen
-  Authorize: Dieser Chat muss noch autorisiert werden. Wie ist dein Passwort?
-  Wrong password: Das Passwort ist nicht korrekt. Probiere es erneut.
-  Chatid added: "Dieser Chat wurde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \befehle müssen erneut ausgeführt werden."
-  NotAdmin: "Du musst ein Admin sein um diesen Befehl zu benutzen."
-  Chatid already allowed: "Dieser Chat ist bereits autorisiert."
-  Help: "Um diesen Text erneut zu sehen benutze /%{help}.
-    \n• Zur Authentifizierung benutze /%{authenticate}.
-    \n• Um einen Film oder eine Serie hinzuzufügen benutze /%{add}.
-    \n• Um eine Serie oder einen Film zu löschen, verwenden Sie /%{delete}.
-    \n• Um direkt einen Film oder eine Serie hinzuzufügen benutze /%{movie} oder /%{serie}.
-    \n• Um alle Serien in Sonarr anzuzeigen benutze /%{allSeries}.
-    \n• Um alle Filme in Radarr anzuzeigen benutze /%{allMovies}.
-    \n• Um die Up- und Download Geschwindigkeit von Transmission umzuschalten benutze /%{transmission}.
-    \n• Um die up- und Download Geschwindigkeit von Sabnzbd umzuschalten benutze /%{sabnzbd}."
-  Missing config: "Die folgenden Configkeys fehlen in der config.yaml-datei: %{missingKeys}.
-    \nBitte füge sie hinzu und starte den Bot neu."
-  Wrong values: "Die folgenden Configkeys sind falsch in der config.yaml-datei: %{wrongValues}.
-    \nBitte füge sie hinzu und starte den Bot neu."
+﻿# de-DE German (Germany)
+de-de:
+  General:
+    Start: Start
+    Stop: Stop
+    Find: Finden  #ADDED
+    Movie: Film
+    MovieWithArticle: Der Film
+    Series: Serie
+    SeriesWithArticle: Die Serie
+    Title: "Gebe den Titel ein:"
+    WhatIsThis: Ist das eine Serie oder ein Film?
+    New: Führe einen neuen Suchbefehl aus
+    Season: Staffel
+    End: Das Hinzufügen / Löschen von Filmen oder Serien wurde beendet.
+    SelectAnInstance: Bitte wähle eine Instanz  #ADDED
+    SelectAPath: Bitte wähle einen Pfad für die Serie oder den Film
+    SelectAQuality: Bitte wähle ein Qualitätsprofil
+    SelectFromWhichSeason: Ab welcher Staffel?
+    PreviousResult: Zurück  #ADDED
+    NextResult: Weiter  #ADDED
 
-  messages:
+  Actions:
+    Add: Ja, hinzufügen
+    Delete: Ja, löschen
+    StopDelete: Nein, nicht löschen
+    Select: Ja, auswählen
+    SelectedAndFutureSeasons: Ausgewählte und zukünftige Staffeln  #ADDED
+    SelectAllSeasons: Alle Staffeln auswählen  #ADDED
+    DeselectAllSeasons: Alle Staffeln abwählen  #ADDED
+
+  Authorization:
+    Authorize: Dieser Chat muss noch autorisiert werden. Wie ist dein Passwort?
+    WrongPassword: Das Passwort ist nicht korrekt. Probiere es erneut.
+    ChatID_Added: "Dieser Chat wurde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \nBefehle müssen erneut ausgeführt werden."
+    NotAdmin: "Du musst ein Admin sein um diesen Befehl zu benutzen."
+    ChatID_Allowed: "Dieser Chat ist bereits autorisiert."
+    User_Added: Der Benutzer %{username} wurde zur Liste der zugelassenen Chats hinzugefügt.  #ADDED
+    Accept: Akzeptieren  #ADDED
+    Reject: Ablehnen  #ADDED
+
+  Notifications:  #ADDED
+    ProfileCreated: Benachrichtigungsprofile erstellt.
+    ProfileExists: Du erhältst bereits Benachrichtigungen.
+    CreatingProfiles: Benachrichtigungsabonnements werden jetzt erstellt.
+
+  Messages:
     Add: Ja hinzufügen
     This: Willst du dieses Element hinzufügen?
     ThisDelete: Ist dies das korrekte Element, was gelöscht werden soll?
@@ -52,8 +54,12 @@ de-de:
     DeleteSuccess: "Wurde erfolgreich entfernt 🙂"
     Exist: "Das gibt's bereits 😉"
     NoExist: "Das Element existiert nicht."
+    LoadingAll: Dies kann einige Minuten dauern, je nach Bibliothek. Bitte warten...  #ADDED
+    MissingConfig: "Die folgenden Configkeys fehlen in der config.yaml-datei: %{missingKeys}.\nBitte füge sie hinzu und starte den Bot neu."
+    ConfigError: "Die folgenden Configkeys sind falsch in der config.yaml-datei: %{wrongValues}.\nBitte füge sie hinzu und starte den Bot neu."
+    StartChatting: Starte mit Addarr auf Telegram zu chatten. Das erste Mal wenn du "start" verwendest, wirst du gebeten, das Passwort einzugeben.
 
-  searchresults:
+  SearchResults:
     zero: Es wurden keine Ergebnisse gefunden
     one: Ein Ergebnis gefunden
     other: "%{count} Ergebnisse gefunden"
@@ -77,10 +83,54 @@ de-de:
     ChangedTo100: Kein Geschwindigkeit Limit
     Error: Bei der Änderung des Geschwindigkeitslimits ist Etwas ist schief gelaufen. Probiere es doch nochmal.
 
-  Notifications:
+  qBittorrent:  #ADDED
+    NotEnabled: Die qBittorrent-Funktion ist nicht aktiviert.
+    Speed: Welche Geschwindigkeit soll qBittorrent verwenden?
+    Alternate: Alternative Geschwindigkeitsbegrenzung
+    Normal: Normale Geschwindigkeit
+    ChangedToAlternate: Alternative Geschwindigkeitsbegrenzung aktiviert
+    ChangedToNormal: Normale Geschwindigkeit aktiviert
+    Error: Fehler beim Setzen der Geschwindigkeitsbegrenzung
+
+  AdminNotifications:
     Stop: Benutzer %{first_name} (%{chat_id}) hat den Bot-Prozess gestoppt.
     Start: Benutzer %{first_name} (%{chat_id}) hat einem neuen Bot-Prozess gestartet.
     AddSuccess: "Hinzufügen von \"%{title}\" für %{first_name} (%{chat_id}): Erfolgreich."
     AddFailed: "Hinzufügen von \"%{title}\" für %{first_name} (%{chat_id}): Fehlgeschlagen."
     Exist: "Hinzufügen von Element \"%{title}\" für %{first_name} (%{chat_id}): Existiert bereits."
     Delete: Der Benutzer %{first_name} (%{chat_id}) hat \"%{title}\" gelöscht.
+    AuthRequest: Der Benutzer %{username} [%{first_name} %{last_name}] mit der Chat-ID %{chat_id} hat Zugriff auf die Bot-Dienste angefordert.   #ADDED
+    
+  #ADDED
+  Help: "
+    <b><b>Addarr-Befehle</b></b>
+    \n<i>Diesen Text erneut anzeigen? Verwenden Sie /%{help}</i>\n
+    \n• Sie müssen sich vor der ersten Nutzung autorisieren.
+        Verwenden Sie /%{authenticate} [Passwort]
+    \n• Um einen Film oder eine Serie hinzuzufügen, verwenden Sie /%{add}.
+    \n• Um einen Film oder eine Serie zu löschen, verwenden Sie /%{delete}.
+    \n• Um Serien in Sonarr aufzulisten, verwenden Sie /%{allSeries}.
+    \n• Um Filme in Radarr aufzulisten, verwenden Sie /%{allMovies}.
+    \n\n<b>Einzeilige Befehle</b>
+    \n• Um sofort einen Film oder eine Serie hinzuzufügen, können Sie /%{movie} oder /%{serie} verwenden.
+    \n  z.B. %{movie} Superman oder %{serie} House.
+    \n\n<b>Download-Client-Einstellungen</b>
+    \n• Um die Upload- und Download-Geschwindigkeit von Transmission umzuschalten, verwenden Sie /%{transmission}.
+    \n• Um die Upload- und Download-Geschwindigkeit von Sabnzbd zu ändern, verwenden Sie /%{sabnzbd}.
+    \n• Um die Upload- und Download-Geschwindigkeit von qBittorrent zu ändern, verwenden Sie /%{qbittorrent}.
+    \n\n
+    Wenn Sie benachrichtigt werden möchten, wenn Ihre Medien bereit zum Ansehen sind, verwenden Sie /%{notify}."
+
+  CommandDescriptions:  #ADDED
+    Authenticate: Vor der ersten Nutzung autorisieren
+    Add: Medien hinzufügen
+    Help: Befehlsübersicht
+    Movie: Film hinzufügen
+    Series: Serie hinzufügen
+    Delete: Titel löschen
+    AllMovies: Alle Filme anzeigen
+    AllSeries: Alle Serien anzeigen
+    Transmission: Transmission-Geschwindigkeit ändern
+    Sabnzbd: Sabnzbd-Geschwindigkeit ändern
+    qBittorrent: qBittorrent-Geschwindigkeit ändern
+    Notify: Benachrichtigungen aktivieren

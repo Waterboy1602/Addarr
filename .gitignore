@@ -1,6 +1,7 @@
 #IGNORE
 .vscode/
 __pycache__/
+_Developer/
 
 *.code-workspace
 *.log
@@ -9,7 +10,7 @@ logs/
 env/
 venv/
 .idea/
-
+*.dev
 chatid.txt
 admin.txt
 allowlist.txt

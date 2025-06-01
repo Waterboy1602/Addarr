@@ -32,14 +32,14 @@ async def sabnzbd(update, context):
 
     if not checkId(update):
         await context.bot.send_message(
-            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorize")
+            chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorization.Authorize")
         )
         return SABNZBD_SPEED_LIMIT_100
 
     if config["onlyAdmin"] and not checkAllowed(update, "admin"):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
-            text=i18n.t("addarr.NotAdmin"),
+            text=i18n.t("addarr.Authorization.NotAdmin"),
         )
         return SABNZBD_SPEED_LIMIT_100
 
