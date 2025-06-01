@@ -33,7 +33,6 @@ def setInstance(label):
 
 
 def getInstance():
-    global radarr_config
     return radarr_config
 
 

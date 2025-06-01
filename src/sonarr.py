@@ -33,7 +33,6 @@ def setInstance(label):
 
 
 def getInstance():
-    global sonarr_config
     return sonarr_config
 
 

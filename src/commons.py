@@ -24,7 +24,6 @@ def setInstanceName(label: str):
 
 
 def getInstanceName() -> str:
-    global _current_instance
     return _current_instance
 
 
