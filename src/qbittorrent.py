@@ -17,12 +17,13 @@ config = config["qbittorrent"]
 
 QBT_AUTHENTICATE, QBT_GIVE_SPEED_TYPES = range(2)
 
+
 async def qbittorrent(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
-        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+    if config.get("enableAllowlist") and not checkAllowed(update, "regular"):
+        # When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
-        
+
     if not config["enable"]:
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
@@ -35,7 +36,7 @@ async def qbittorrent(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorization.Authorize")
         )
         return QBT_AUTHENTICATE
-    
+
     if config["onlyAdmin"] and not checkAllowed(update, "admin"):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
@@ -53,13 +54,14 @@ async def qbittorrent(update: Update, context: ContextTypes.DEFAULT_TYPE):
             callback_data=f"speedtype={i18n.t('addarr.qBittorrent.Normal')}"
         ),
     ]]
-    
+
     markup = InlineKeyboardMarkup(keyboard)
     msg = await update.message.reply_text(
         i18n.t("addarr.qBittorrent.Speed"), reply_markup=markup
     )
     context.user_data['qbit_msg'] = msg.message_id
     return QBT_GIVE_SPEED_TYPES
+
 
 async def setClientSpeed(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not checkId(update):
@@ -75,7 +77,7 @@ async def setClientSpeed(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply = update.callback_query.data
     else:
         return QBT_AUTHENTICATE
-    
+
     if not context.user_data.get("speedtype"):
         if reply.startswith("speedtype="):
             choice = reply.replace("speedtype=", "", 1)
@@ -103,7 +105,7 @@ async def setClientSpeed(update: Update, context: ContextTypes.DEFAULT_TYPE):
     session.post(url, data=form_data, headers=headers)
 
     toggle_url = generateServerAddr("qbittorrent") + "api/v2/transfer/toggleSpeedLimitsMode"
-    
+
     if choice == i18n.t("addarr.qBittorrent.Alternate"):
         logger.debug("setting alternate mode in form data")
         form_data = {"mode": 1}
@@ -113,7 +115,7 @@ async def setClientSpeed(update: Update, context: ContextTypes.DEFAULT_TYPE):
             message = i18n.t("addarr.qBittorrent.ChangedToAlternate")
         else:
             message = i18n.t("addarr.qBittorrent.Error")
-        
+
     elif choice == i18n.t("addarr.qBittorrent.Normal"):
         logger.debug("setting normal mode in form data")
         form_data = {"mode": 0}
@@ -123,11 +125,11 @@ async def setClientSpeed(update: Update, context: ContextTypes.DEFAULT_TYPE):
             message = i18n.t("addarr.qBittorrent.ChangedToNormal")
         else:
             message = i18n.t("addarr.qBittorrent.Error")
-        
+
     await context.bot.edit_message_text(
-            message_id=context.user_data["qbit_msg"],
-            chat_id=update.effective_message.chat_id,
-            text=message,
+        message_id=context.user_data["qbit_msg"],
+        chat_id=update.effective_message.chat_id,
+        text=message,
     )
 
     clearUserData(context)

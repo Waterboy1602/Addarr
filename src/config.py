@@ -11,15 +11,15 @@ for setting, default_value in DEFAULT_SETTINGS.items():
         config[setting] = default_value
 
 
-def flatten_dict(dd, separator ='/', prefix =''):
-    return { prefix + separator + k if prefix else k : v
-             for kk, vv in dd.items()
-             for k, v in flatten_dict(vv, separator, kk).items()
-             } if isinstance(dd, dict) else { prefix : dd }
+def flatten_dict(dd, separator='/', prefix=''):
+    return {prefix + separator + k if prefix else k : v
+            for kk, vv in dd.items()
+            for k, v in flatten_dict(vv, separator, kk).items()
+            } if isinstance(dd, dict) else {prefix : dd}
 
 
 def checkConfig():
-    missingConfig=[]
+    missingConfig = []
     for key_ex, value_ex in flatten_dict(config_example).items():
         if key_ex not in flatten_dict(config):
             missingConfig.append(key_ex)

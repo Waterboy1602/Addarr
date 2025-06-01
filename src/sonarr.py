@@ -17,6 +17,7 @@ sonarr_config = config["sonarr"] if isinstance(config["sonarr"]["instances"], li
 
 addSerieNeededFields = ["tvdbId", "tvRageId", "title", "titleSlug", "images", "seasons"]
 
+
 def setInstance(label):
     global sonarr_config
     sonarr_instances = config['sonarr']['instances']
@@ -30,9 +31,11 @@ def setInstance(label):
 
     logger.error(f"Sonarr instance with label '{label}' not found. Default instance will be used.")
 
+
 def getInstance():
     global sonarr_config
     return sonarr_config
+
 
 def search(title):
     parameters = {"term": title}
@@ -86,7 +89,7 @@ def addToLibrary(tvdbId, path, qualityProfileId, tags, seasonsSelected):
 
 
 def removeFromLibrary(tvdbId):
-    parameters = { 
+    parameters = {
         "deleteFiles": str(True)
     }
     dbId = getDbIdFromImdbId(tvdbId)
@@ -115,7 +118,8 @@ def buildData(json, path, qualityProfileId, tags, seasonsSelected):
         for key, value in show.items():
             if key in addSerieNeededFields:
                 built_data[key] = value
-            if key == "seasons": built_data["seasons"] = seasonsSelected
+            if key == "seasons":
+                built_data["seasons"] = seasonsSelected
     logger.debug(f"Query endpoint is: {commons.generateApiQuery('sonarr', 'series')}")
     return built_data
 
@@ -170,6 +174,7 @@ def getTags():
     parsed_json = json.loads(req.text)
     return parsed_json
 
+
 def createTag(tag):
     data_json = {
         "label": str(tag)
@@ -180,13 +185,15 @@ def createTag(tag):
         return response_content["id"]
     else:
         return -1
-    
+
+
 def tagExists(tag):
     tags = getTags()
     for item in tags:
         if item['label'] == str(tag).lower():
             return item['id']
     return -1
+
 
 def getSeasons(tvdbId):
     parameters = {"term": "tvdb:" + str(tvdbId)}
@@ -201,18 +208,19 @@ def getDbIdFromImdbId(tvdbId):
     dbId = [f["id"] for f in parsed_json if f["tvdbId"] == tvdbId]
     return dbId[0]
 
+
 def notificationProfileExist(chatid):
     # check if profile exists
     profiles = requests.get(commons.generateApiQuery("sonarr", "notification"))
     response_content = json.loads(profiles.content.decode('utf-8'))
     profileExists = any(str(chatid) in item['name'] for item in response_content)
-    if profileExists: 
+    if profileExists:
         label = getInstance()["label"]
         logger.debug(f'Notification Profile for user {chatid} already exists in instance {label}')
         return True
     else:
         return False
-    
+
 
 def createNotificationProfile(profileName, chatid):
     bot_token = config["telegram"]["token"]
@@ -228,14 +236,14 @@ def createNotificationProfile(profileName, chatid):
 
     if notificationProfileExist(chatid):
         return True
-    
+
     data_json = {
         "name": str(profileName),
         "implementation": "Telegram",
         "isEnabled": False,
         "configContract": "TelegramSettings",
         "fields": [
-              {
+            {
                 "order": 0,
                 "name": "botToken",
                 "label": "Bot Token",
@@ -245,8 +253,8 @@ def createNotificationProfile(profileName, chatid):
                 "privacy": "apiKey",
                 "isFloat": False,
                 "value": str(bot_token)
-              },
-              {
+            },
+            {
                 "order": 1,
                 "name": "chatId",
                 "label": "Chat ID",
@@ -257,8 +265,8 @@ def createNotificationProfile(profileName, chatid):
                 "privacy": "normal",
                 "isFloat": False,
                 "value": str(chatid)
-              },
-              {
+            },
+            {
                 "order": 2,
                 "name": "topicId",
                 "label": "Topic ID",
@@ -268,8 +276,8 @@ def createNotificationProfile(profileName, chatid):
                 "advanced": False,
                 "privacy": "normal",
                 "isFloat": False
-              },
-              {
+            },
+            {
                 "order": 3,
                 "name": "sendSilently",
                 "label": "Send Silently",
@@ -279,8 +287,8 @@ def createNotificationProfile(profileName, chatid):
                 "advanced": False,
                 "privacy": "normal",
                 "isFloat": False
-              },
-              {
+            },
+            {
                 "order": 4,
                 "name": "includeAppNameInTitle",
                 "label": "Include Radarr in Title",
@@ -290,8 +298,8 @@ def createNotificationProfile(profileName, chatid):
                 "advanced": False,
                 "privacy": "normal",
                 "isFloat": False
-              }
-            ],
+            }
+        ],
         "tags": [tag_id],
         "onGrab": False,
         "onDownload": True,
@@ -324,7 +332,6 @@ def createNotificationProfile(profileName, chatid):
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
-
 
     add = requests.post(commons.generateApiQuery("sonarr", "notification"), json=data_json, headers=headers)
 

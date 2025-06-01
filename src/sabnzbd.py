@@ -18,11 +18,11 @@ SABNZBD_SPEED_LIMIT_25, SABNZBD_SPEED_LIMIT_50, SABNZBD_SPEED_LIMIT_100 = range(
 
 
 async def sabnzbd(update, context):
-    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
-        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+    if config.get("enableAllowlist") and not checkAllowed(update, "regular"):
+        # When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
-        
+
     if not config["enable"]:
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,

@@ -12,8 +12,8 @@ from telegram.ext import (CallbackQueryHandler, CommandHandler,
 from telegram.warnings import PTBUserWarning
 
 from commons import (checkAllowed, checkId, authentication,
-                    format_bytes, getAuthChats, getService, clearUserData, 
-                    checkNotificationSubscribed, generateProfileName)
+                     format_bytes, getAuthChats, getService, clearUserData,
+                     checkNotificationSubscribed, generateProfileName)
 import logger
 import radarr as radarr
 import sonarr as sonarr
@@ -32,7 +32,7 @@ logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
 logger = logger.getLogger("addarr", logLevel, config.get("logToConsole", False))
 logger.debug(f"Addarr v{__version__} starting up...")
 
-MEDIA_AUTHENTICATED, GIVE_MEDIA_TYPE, GIVE_OPTION, GIVE_INSTANCE, GIVE_PATHS, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range (7)
+MEDIA_AUTHENTICATED, GIVE_MEDIA_TYPE, GIVE_OPTION, GIVE_INSTANCE, GIVE_PATHS, GIVE_QUALITY_PROFILES, SELECT_SEASONS = range(7)
 
 
 async def post_init(application: Application) -> None:
@@ -57,18 +57,19 @@ async def post_init(application: Application) -> None:
 
 application = Application.builder().token(config["telegram"]["token"]).post_init(post_init).build()
 
+
 async def startCheck():
     bot = telegram.Bot(token=config["telegram"]["token"])
     missingConfig = checkConfig()
     wrongValues = checkConfigValues()
-    check=True
-    if missingConfig: #empty list is False
+    check = True
+    if missingConfig:  # empty list is False
         check = False
         logger.error(i18n.t("addarr.Messages.MissingConfig", missingKeys=f"{missingConfig}"[1:-1]))
         for chat in getAuthChats():
             await bot.send_message(chat_id=chat, text=i18n.t("addarr.Messages.MissingConfig", missingKeys=f"{missingConfig}"[1:-1]))
     if wrongValues:
-        check=False
+        check = False
         logger.error(i18n.t("addarr.Messages.ConfigError", wrongValues=f"{wrongValues}"[1:-1]))
         for chat in getAuthChats():
             await bot.send_message(chat_id=chat, text=i18n.t("addarr.Messages.ConfigError", wrongValues=f"{wrongValues}"[1:-1]))
@@ -80,39 +81,39 @@ def main():
 
     auth_handler_command = CommandHandler(config["entrypointAuth"], authentication)
     auth_handler_text = MessageHandler(
-          filters.Regex(
-               re.compile(r"^/?"+ re.escape(config["entrypointAuth"]) + r"(?:\s.*)?$", re.IGNORECASE)
-          ),
-          authentication,
+        filters.Regex(
+            re.compile(r"^/?" + re.escape(config["entrypointAuth"]) + r"(?:\s.*)?$", re.IGNORECASE)
+        ),
+        authentication,
     )
-    
+
     notification_handler_command = CommandHandler(config["entrypointNotify"], addNotificationChannel)
     notification_handler_text = MessageHandler(
-          filters.Regex(
-               re.compile(r"^/?"+ re.escape(config["entrypointNotify"]) + r"(?:\s.*)?$", re.IGNORECASE)
-          ),
-          addNotificationChannel,
+        filters.Regex(
+            re.compile(r"^/?" + re.escape(config["entrypointNotify"]) + r"(?:\s.*)?$", re.IGNORECASE)
+        ),
+        addNotificationChannel,
     )
 
     listAllMediaHandler = ConversationHandler(
         entry_points=[
-                CommandHandler(config["entrypointAllSeries"], all.startAllSeries),
-                
-                CommandHandler(config["entrypointAllMovies"], all.startAllMovies),
+            CommandHandler(config["entrypointAllSeries"], all.startAllSeries),
 
-                MessageHandler(
-                    filters.Regex(
-                        re.compile(r"^" + config["entrypointAllSeries"] + "$", re.IGNORECASE)
-                    ),
-                    all.startAllSeries,
-                ),
+            CommandHandler(config["entrypointAllMovies"], all.startAllMovies),
 
-                MessageHandler(
-                    filters.Regex(
-                        re.compile(r"^" + config["entrypointAllMovies"] + "$", re.IGNORECASE)
-                    ),
-                    all.startAllMovies,
+            MessageHandler(
+                filters.Regex(
+                    re.compile(r"^" + config["entrypointAllSeries"] + "$", re.IGNORECASE)
                 ),
+                all.startAllSeries,
+            ),
+
+            MessageHandler(
+                filters.Regex(
+                    re.compile(r"^" + config["entrypointAllMovies"] + "$", re.IGNORECASE)
+                ),
+                all.startAllMovies,
+            ),
         ],
         states={
             all.LS_GIVE_MOVIE_INSTANCE: [
@@ -124,10 +125,10 @@ def main():
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.General.Stop")+"$"), stop),
-            CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.General.Stop")+"$"), 
+            MessageHandler(filters.Regex("(?i)^" + i18n.t("addarr.General.Stop") + "$"), stop),
+            CallbackQueryHandler(stop, pattern="(?i)^" + i18n.t("addarr.General.Stop") + "$"),
         ]
-    ) 
+    )
 
     deleteMedia_handler = ConversationHandler(
         entry_points=[
@@ -142,7 +143,7 @@ def main():
         states={
             delete.MEDIA_DELETE_AUTHENTICATED: [MessageHandler(filters.TEXT, delete.storeDeleteTitle)],
 
-            delete.MEDIA_DELETE_TYPE:[
+            delete.MEDIA_DELETE_TYPE: [
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.General.Movie")}|{i18n.t("addarr.General.Series")})$'),
                     delete.storeDeleteMediaType
@@ -156,8 +157,8 @@ def main():
             ],
 
             delete.GIVE_INSTANCE: [CallbackQueryHandler(delete.storeMediaInstance, pattern=r"^instance=(.+)")],
-            
-            delete.DELETE_CONFIRM:[
+
+            delete.DELETE_CONFIRM: [
                 CallbackQueryHandler(stop, pattern=f'({i18n.t("addarr.Actions.StopDelete")})'),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.Actions.StopDelete")})$'),
@@ -172,13 +173,13 @@ def main():
                     filters.Regex(f'^({i18n.t("addarr.General.New")})$'),
                     delete.startDelete
                 ),
-                CallbackQueryHandler(delete.startDelete, pattern=f'({i18n.t("addarr.General.New")})'),  
+                CallbackQueryHandler(delete.startDelete, pattern=f'({i18n.t("addarr.General.New")})'),
             ],
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.General.Stop")+"$"), stop),
-            CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.General.Stop")+"$"),
+            MessageHandler(filters.Regex("(?i)^" + i18n.t("addarr.General.Stop") + "$"), stop),
+            CallbackQueryHandler(stop, pattern="(?i)^" + i18n.t("addarr.General.Stop") + "$"),
         ],
     )
 
@@ -199,7 +200,7 @@ def main():
                 ),
                 startNewMedia,
             ),
-             MessageHandler(
+            MessageHandler(
                 filters.Regex(
                     re.compile(rf"^{i18n.t('addarr.General.Series')}$", re.IGNORECASE)
                 ),
@@ -269,11 +270,11 @@ def main():
         },
         fallbacks=[
             CommandHandler("stop", stop),
-            MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.General.Stop")+"$"), stop),
-            CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.General.Stop")+"$"),
+            MessageHandler(filters.Regex("(?i)^" + i18n.t("addarr.General.Stop") + "$"), stop),
+            CallbackQueryHandler(stop, pattern="(?i)^" + i18n.t("addarr.General.Stop") + "$"),
         ],
     )
-    
+
     if config["transmission"]["enable"]:
         import transmission as transmission
         changeTransmissionSpeed_handler = ConversationHandler(
@@ -295,8 +296,8 @@ def main():
             },
             fallbacks=[
                 CommandHandler("stop", stop),
-                MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.General.Stop")+"$"), stop),
-                CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.General.Stop")+"$"),
+                MessageHandler(filters.Regex("(?i)^" + i18n.t("addarr.General.Stop") + "$"), stop),
+                CallbackQueryHandler(stop, pattern="(?i)^" + i18n.t("addarr.General.Stop") + "$"),
             ],
         )
         application.add_handler(changeTransmissionSpeed_handler)
@@ -322,15 +323,15 @@ def main():
             },
             fallbacks=[
                 CommandHandler("stop", stop),
-                MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.General.Stop")+"$"), stop),
-                CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.General.Stop")+"$"),
+                MessageHandler(filters.Regex("(?i)^" + i18n.t("addarr.General.Stop") + "$"), stop),
+                CallbackQueryHandler(stop, pattern="(?i)^" + i18n.t("addarr.General.Stop") + "$"),
             ],
         )
         application.add_handler(changeSabznbdSpeed_handler)
-    
+
     if config["qbittorrent"]["enable"]:
         import qbittorrent as qbittorrent
-        
+
         changeqBittorrentSpeed_handler = ConversationHandler(
             entry_points=[
                 CommandHandler(config["entrypointqBittorrent"], qbittorrent.qbittorrent),
@@ -350,8 +351,8 @@ def main():
             },
             fallbacks=[
                 CommandHandler("stop", stop),
-                MessageHandler(filters.Regex("(?i)^"+i18n.t("addarr.General.Stop")+"$"), stop),
-                CallbackQueryHandler(stop, pattern=f"(?i)^"+i18n.t("addarr.General.Stop")+"$"),
+                MessageHandler(filters.Regex("(?i)^" + i18n.t("addarr.General.Stop") + "$"), stop),
+                CallbackQueryHandler(stop, pattern="(?i)^" + i18n.t("addarr.General.Stop") + "$"),
             ],
         )
 
@@ -375,8 +376,8 @@ def main():
 
 
 async def stop(update : Update, context: ContextTypes.DEFAULT_TYPE):
-    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
-        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+    if config.get("enableAllowlist") and not checkAllowed(update, "regular"):
+        # When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
 
@@ -385,8 +386,8 @@ async def stop(update : Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorization.Authorize")
         )
         return MEDIA_AUTHENTICATED
-        
-    if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
+
+    if not checkAllowed(update, "admin") and config.get("adminNotifyId") is not None:
         adminNotifyId = config.get("adminNotifyId")
         await context.bot.send_message(
             chat_id=adminNotifyId, text=i18n.t("addarr.AdminNotifications.Stop", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
@@ -399,11 +400,11 @@ async def stop(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
-    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
-        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+    if config.get("enableAllowlist") and not checkAllowed(update, "regular"):
+        # When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
-    
+
     if not checkId(update):
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorization.Authorize")
@@ -417,7 +418,6 @@ async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         return MEDIA_AUTHENTICATED
 
-    
     if i18n.t("addarr.General.Movie").lower() in reply.lower():
         logger.debug(
             f"User issued {reply} command, so processing for Movie."
@@ -432,47 +432,46 @@ async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data["choice"] = i18n.t("addarr.General.Movie")
             context.user_data["title"] = remaining_text
             logger.debug(f"Command: Movie, Title: {remaining_text}")
-            
+
             # Prompt user to select the instance
             service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.General.Movie").lower() else 'sonarr'
-            instances = config[service_name]["instances"] 
-    
+            instances = config[service_name]["instances"]
+
             if len(instances) == 1:
                 # There is only 1 instance, so use it!
                 logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
                 context.user_data["instance"] = instances[0]["label"]
-                await storeInstance(update, context) # skip to next step
+                await storeInstance(update, context)  # skip to next step
                 return GIVE_OPTION
-    
+
             keyboard = []
             for instance in instances:
                 label = instance['label']
                 keyboard += [[
                     InlineKeyboardButton(
-                    label,
-                    callback_data=f"instance={label}"
+                        label,
+                        callback_data=f"instance={label}"
                     ),
                 ]]
-    
+
             markup = InlineKeyboardMarkup(keyboard)
 
             if not config.get("update_msg"):
                 msg = await context.bot.send_message(
-                    chat_id=update.effective_message.chat_id, 
+                    chat_id=update.effective_message.chat_id,
                     text=i18n.t("addarr.General.SelectAnInstance"),
                     reply_markup=markup,
                 )
                 context.user_data["update_msg"] = msg.message_id
-            else: 
+            else:
                 await context.bot.edit_message_text(
                     message_id=context.user_data["update_msg"],
                     chat_id=update.effective_message.chat_id,
                     text=i18n.t("addarr.General.SelectAnInstance"),
                     reply_markup=markup,
                 )
-            
-            return GIVE_INSTANCE
 
+            return GIVE_INSTANCE
 
     elif i18n.t("addarr.General.Series").lower() in reply.lower():
         logger.debug(
@@ -488,16 +487,16 @@ async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
             context.user_data["choice"] = i18n.t("addarr.General.Series")
             context.user_data["title"] = remaining_text
             logger.debug(f"Command: Series, Title: {remaining_text}")
-            
+
             # Prompt user to select the instance
             service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.General.Movie").lower() else 'sonarr'
-            instances = config[service_name]["instances"] 
+            instances = config[service_name]["instances"]
 
             if len(instances) == 1:
                 # There is only 1 instance, so use it!
                 logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
                 context.user_data["instance"] = instances[0]["label"]
-                await storeInstance(update, context) # skip to next step
+                await storeInstance(update, context)  # skip to next step
                 return GIVE_OPTION
 
             keyboard = []
@@ -505,8 +504,8 @@ async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
                 label = instance['label']
                 keyboard += [[
                     InlineKeyboardButton(
-                    label,
-                    callback_data=f"instance={label}"
+                        label,
+                        callback_data=f"instance={label}"
                     ),
                 ]]
 
@@ -514,12 +513,12 @@ async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
             if not config.get("update_msg"):
                 msg = await context.bot.send_message(
-                    chat_id=update.effective_message.chat_id, 
+                    chat_id=update.effective_message.chat_id,
                     text=i18n.t("addarr.General.SelectAnInstance"),
                     reply_markup=markup,
                 )
                 context.user_data["update_msg"] = msg.message_id
-            else: 
+            else:
                 await context.bot.edit_message_text(
                     message_id=context.user_data["update_msg"],
                     chat_id=update.effective_message.chat_id,
@@ -532,8 +531,6 @@ async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
     elif reply.lower() == i18n.t("addarr.General.New").lower():
         logger.debug("User issued New command, so clearing user_data")
         clearUserData(context)
-
-
 
     if i18n.t("addarr.General.Movie").lower() in reply:
         logger.debug(
@@ -551,16 +548,15 @@ async def startNewMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
         logger.debug("User issued New command, so clearing user_data")
         clearUserData(context)
 
-
     await context.bot.send_message(
-        chat_id=update.effective_message.chat_id, text='\U0001F3F7 '+i18n.t("addarr.General.Title")
+        chat_id=update.effective_message.chat_id, text='\U0001F3F7 ' + i18n.t("addarr.General.Title")
     )
 
-    if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
+    if not checkAllowed(update, "admin") and config.get("adminNotifyId") is not None:
         logger.debug('Sending admin notification')
         adminNotifyId = config.get("adminNotifyId")
         await context.bot.send_message(
-            chat_id=adminNotifyId, 
+            chat_id=adminNotifyId,
             text=i18n.t("addarr.AdminNotifications.Start", first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
         )
 
@@ -582,13 +578,13 @@ async def storeMediaType(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         # Prompt user to select instance
         service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.General.Movie").lower() else 'sonarr'
-        instances = config[service_name]["instances"] 
+        instances = config[service_name]["instances"]
 
         if len(instances) == 1:
             # There is only 1 instance, so use it!
             logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
             context.user_data["instance"] = instances[0]["label"]
-            await storeInstance(update, context) # skip to next step
+            await storeInstance(update, context)  # skip to next step
             return GIVE_OPTION
 
         keyboard = []
@@ -596,8 +592,8 @@ async def storeMediaType(update: Update, context: ContextTypes.DEFAULT_TYPE):
             label = instance['label']
             keyboard += [[
                 InlineKeyboardButton(
-                label,
-                callback_data=f"instance={label}"
+                    label,
+                    callback_data=f"instance={label}"
                 ),
             ]]
 
@@ -609,7 +605,7 @@ async def storeMediaType(update: Update, context: ContextTypes.DEFAULT_TYPE):
             text=i18n.t("addarr.General.SelectAnInstance"),
             reply_markup=markup,
         )
-        
+
         return GIVE_INSTANCE
 
 
@@ -629,7 +625,7 @@ async def storeTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             return MEDIA_AUTHENTICATED
 
-        #check if its a single line command
+        # check if its a single line command
         singleLineCommand = re.match(
             rf'^({i18n.t("addarr.General.Movie")}|{i18n.t("addarr.General.Series")}) (.+)$',
             reply,
@@ -662,18 +658,18 @@ async def storeTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
                     keyboard = [
                         [
                             InlineKeyboardButton(
-                                '\U0001F3AC '+i18n.t("addarr.General.Movie"),
+                                '\U0001F3AC ' + i18n.t("addarr.General.Movie"),
                                 callback_data=i18n.t("addarr.General.Movie")
                             ),
                             InlineKeyboardButton(
-                                '\U0001F4FA '+i18n.t("addarr.General.Series"),
+                                '\U0001F4FA ' + i18n.t("addarr.General.Series"),
                                 callback_data=i18n.t("addarr.General.Series")
                             ),
                         ],
-                        [ InlineKeyboardButton(
-                                '\U0001F50D '+i18n.t("addarr.General.New"),
-                                callback_data=i18n.t("addarr.General.New")
-                            ),
+                        [InlineKeyboardButton(
+                            '\U0001F50D ' + i18n.t("addarr.General.New"),
+                            callback_data=i18n.t("addarr.General.New")
+                        ),
                         ]
                     ]
                     markup = InlineKeyboardMarkup(keyboard)
@@ -683,13 +679,13 @@ async def storeTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
         # Prompt user to select the instance
         service_name = 'radarr' if context.user_data["choice"].lower() == i18n.t("addarr.General.Movie").lower() else 'sonarr'
-        instances = config[service_name]["instances"] 
+        instances = config[service_name]["instances"]
 
         if len(instances) == 1:
             # There is only 1 instance, so use it!
             logger.debug(f"Only found 1 instance of {service_name}, so proceeding with that one...")
             context.user_data["instance"] = instances[0]["label"]
-            await storeInstance(update, context) # skip to next step
+            await storeInstance(update, context)  # skip to next step
             return GIVE_OPTION
 
         keyboard = []
@@ -697,8 +693,8 @@ async def storeTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
             label = instance['label']
             keyboard += [[
                 InlineKeyboardButton(
-                label,
-                callback_data=f"instance={label}"
+                    label,
+                    callback_data=f"instance={label}"
                 ),
             ]]
 
@@ -706,26 +702,26 @@ async def storeTitle(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
         if not config.get("update_msg"):
             msg = await context.bot.send_message(
-                chat_id=update.effective_message.chat_id, 
+                chat_id=update.effective_message.chat_id,
                 text=i18n.t("addarr.General.SelectAnInstance"),
                 reply_markup=markup,
             )
             context.user_data["update_msg"] = msg.message_id
-        else: 
+        else:
             await context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
                 text=i18n.t("addarr.General.SelectAnInstance"),
                 reply_markup=markup,
             )
-        
+
         return GIVE_INSTANCE
 
 
 async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
     if update.callback_query:
         await update.callback_query.answer()
-       
+
     # store selected instance and give out search results
     if update.message is not None:
         reply = update.message.text.lower()
@@ -734,7 +730,7 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
         reply = update.callback_query.data.lower()
     else:
         return MEDIA_AUTHENTICATED
-    
+
     if not context.user_data.get("instance"):
         if reply.startswith("instance="):
             label = reply.replace("instance=", "", 1)
@@ -743,7 +739,6 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data["instance"] = label
     else:
         logger.debug("Instance set from previous function")
-
 
     instance = context.user_data["instance"]
     title = context.user_data["title"]
@@ -756,17 +751,17 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not searchResult:
         logger.warning("No results found.")
-        await context.bot.send_message( 
-            chat_id=update.effective_message.chat_id, 
+        await context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
             text=i18n.t("addarr.SearchResults", count=0),
         )
         clearUserData(context)
         return ConversationHandler.END
 
     context.user_data["output"] = service.giveTitles(searchResult)
-    message=i18n.t("addarr.SearchResults", count=len(searchResult))
+    message = i18n.t("addarr.SearchResults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
-    
+
     if "update_msg" in context.user_data:
         await context.bot.edit_message_text(
             message_id=context.user_data["update_msg"],
@@ -775,20 +770,19 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode=ParseMode.MARKDOWN,
         )
     else:
-        msg = await context.bot.send_message(chat_id=update.effective_message.chat_id, text=message,parse_mode=ParseMode.MARKDOWN,)
+        msg = await context.bot.send_message(chat_id=update.effective_message.chat_id, text=message, parse_mode=ParseMode.MARKDOWN,)
         context.user_data["update_msg"] = msg.message_id
-    
+
     try:
         img = await context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,
             photo=context.user_data["output"][position]["poster"],
         )
-    except:
+    except Exception:
         context.user_data["photo_update_msg"] = None
     else:
         context.user_data["photo_update_msg"] = img.message_id
-    
-    
+
     keyboard = [
         [
             InlineKeyboardButton(
@@ -836,10 +830,10 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
     # Send the message with the inline keyboard
 
     if choice == i18n.t("addarr.General.Movie"):
-        message=i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle").lower())
+        message = i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle").lower())
     else:
-        message=i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle").lower())
-   
+        message = i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle").lower())
+
     msg = await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
     )
@@ -847,7 +841,7 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
     context.user_data["title_update_msg"] = context.user_data["update_msg"]
     context.user_data["update_msg"] = msg.message_id
-    
+
     return GIVE_OPTION
 
 
@@ -855,9 +849,9 @@ async def nextOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
     position = min(context.user_data["position"] + 1, len(context.user_data["output"]) - 1)
     context.user_data["position"] = position
     searchResult = context.user_data["output"]
-    choice = context.user_data["choice"]    
+    choice = context.user_data["choice"]
 
-    message=i18n.t("addarr.SearchResults", count=len(searchResult))
+    message = i18n.t("addarr.SearchResults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
 
     await context.bot.edit_message_text(
@@ -916,25 +910,25 @@ async def nextOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
             message_id=context.user_data["photo_update_msg"],
             chat_id=update.effective_message.chat_id,
         )
-    
+
     try:
         img = await context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,
             photo=context.user_data["output"][position]["poster"],
         )
-    except:
+    except Exception:
         context.user_data["photo_update_msg"] = None
     else:
         context.user_data["photo_update_msg"] = img.message_id
-    
+
     await context.bot.delete_message(
         message_id=context.user_data["update_msg"],
         chat_id=update.effective_message.chat_id,
     )
     if choice.lower() == i18n.t("addarr.General.Movie").lower():
-        message=i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle").lower())
+        message = i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle").lower())
     else:
-        message=i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle").lower())
+        message = i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle").lower())
     msg = await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
     )
@@ -946,18 +940,18 @@ async def prevOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
     position = max(context.user_data["position"] - 1, 0)
     context.user_data["position"] = position
     searchResult = context.user_data["output"]
-    choice = context.user_data["choice"]    
+    choice = context.user_data["choice"]
 
-    message=i18n.t("addarr.SearchResults", count=len(searchResult))
+    message = i18n.t("addarr.SearchResults", count=len(searchResult))
     message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
-    
+
     await context.bot.edit_message_text(
         message_id=context.user_data["title_update_msg"],
         chat_id=update.effective_message.chat_id,
         text=message,
         parse_mode=ParseMode.MARKDOWN,
     )
-    
+
     keyboard = [
         [
             InlineKeyboardButton(
@@ -1007,25 +1001,25 @@ async def prevOption(update: Update, context: ContextTypes.DEFAULT_TYPE):
             message_id=context.user_data["photo_update_msg"],
             chat_id=update.effective_message.chat_id,
         )
-    
+
     try:
         img = await context.bot.sendPhoto(
             chat_id=update.effective_message.chat_id,
             photo=context.user_data["output"][position]["poster"],
         )
-    except:
+    except Exception:
         context.user_data["photo_update_msg"] = None
     else:
         context.user_data["photo_update_msg"] = img.message_id
-    
+
     await context.bot.delete_message(
         message_id=context.user_data["update_msg"],
         chat_id=update.effective_message.chat_id,
     )
     if choice.lower() == i18n.t("addarr.General.Movie").lower():
-        message=i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle").lower())
+        message = i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle").lower())
     else:
-        message=i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle").lower())
+        message = i18n.t("addarr.Messages.This", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle").lower())
     msg = await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
     )
@@ -1041,7 +1035,7 @@ async def storeSelection(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
     service = getService(context)
     service.setInstance(context.user_data["instance"])
-    
+
     paths = service.getRootFolders()
     excluded_root_folders = service.config.get("excludedRootFolders", [])
     paths = [p for p in paths if p["path"] not in excluded_root_folders]
@@ -1052,19 +1046,19 @@ async def storeSelection(update : Update, context: ContextTypes.DEFAULT_TYPE):
         # There is only 1 path, so use it!
         logger.debug("Only found 1 path, so proceeding with that one...")
         context.user_data["path"] = paths[0]["path"]
-        return await storePath(update, context) # go back to previous step
-    
+        return await storePath(update, context)  # go back to previous step
+
     keyboard = []
     for p in paths:
         pathtxt = p['path']
         if service.config.get("narrowRootFolderNames"):
             pathlst = p['path'].split("/")
-            pathtxt = pathlst[len(pathlst)-1]
+            pathtxt = pathlst[len(pathlst) - 1]
         free = format_bytes(p['freeSpace'])
         keyboard += [[
             InlineKeyboardButton(
-            f"Path: {pathtxt}, Free: {free}",
-            callback_data=f"Path: {p['path']}"
+                f"Path: {pathtxt}, Free: {free}",
+                callback_data=f"Path: {p['path']}"
             ),
         ]]
     markup = InlineKeyboardMarkup(keyboard)
@@ -1075,7 +1069,7 @@ async def storeSelection(update : Update, context: ContextTypes.DEFAULT_TYPE):
         text=i18n.t("addarr.General.SelectAPath"),
         reply_markup=markup,
     )
-    
+
     return GIVE_PATHS
 
 
@@ -1094,7 +1088,7 @@ async def storePath(update : Update, context: ContextTypes.DEFAULT_TYPE):
                 f"Callback query [{update.callback_query.data.replace('Path: ', '').strip()}] doesn't match any of the paths. Sending paths for selection..."
             )
             return await storeSelection(update, context)  # go back to previous step
-    
+
     service = getService(context)
     service.setInstance(context.user_data["instance"])
 
@@ -1131,7 +1125,7 @@ async def storePath(update : Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def storeQualityProfile(update : Update, context: ContextTypes.DEFAULT_TYPE):
-    # store quality profile selection and save the movie. 
+    # store quality profile selection and save the movie.
     if not context.user_data.get("qualityProfile"):
         # Quality selection should be in the update message
         qualityProfile = None
@@ -1144,14 +1138,14 @@ async def storeQualityProfile(update : Update, context: ContextTypes.DEFAULT_TYP
             logger.debug(
                 f"Callback query [{update.callback_query.data.replace('Quality profile: ', '').strip()}] doesn't match any of the quality profiles. Sending quality profiles for selection..."
             )
-            return storePath(update, context) # go back to previous step
-  
+            return storePath(update, context)  # go back to previous step
+
     service = getService(context)
     service.setInstance(context.user_data["instance"])
 
     if service == radarr:
         return await addMedia(update, context)
-        
+
     position = context.user_data["position"]
     idnumber = context.user_data["output"][position]["id"]
     seasons = service.getSeasons(idnumber)
@@ -1159,7 +1153,7 @@ async def storeQualityProfile(update : Update, context: ContextTypes.DEFAULT_TYP
     context.user_data["seasons"] = seasonNumbers
     selectedSeasons = []
 
-    keyboard = [[InlineKeyboardButton('\U0001F5D3 ' + i18n.t("addarr.Actions.SelectedAndFutureSeasons"),callback_data="Season: Future and selected")]]
+    keyboard = [[InlineKeyboardButton('\U0001F5D3 ' + i18n.t("addarr.Actions.SelectedAndFutureSeasons"), callback_data="Season: Future and selected")]]
     for s in seasonNumbers:
         keyboard += [[
             InlineKeyboardButton(
@@ -1169,7 +1163,7 @@ async def storeQualityProfile(update : Update, context: ContextTypes.DEFAULT_TYP
         ]]
         selectedSeasons.append(int(s))
 
-    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Actions.DeselectAllSeasons"),callback_data=f"Season: None")]]
+    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Actions.DeselectAllSeasons"), callback_data="Season: None")]]
 
     markup = InlineKeyboardMarkup(keyboard)
 
@@ -1191,7 +1185,7 @@ async def storeSeasons(update : Update, context: ContextTypes.DEFAULT_TYPE):
     selectedSeasons = []
     if "selectedSeasons" in context.user_data:
         selectedSeasons = context.user_data["selectedSeasons"]
- 
+
     if choice.lower() == i18n.t("addarr.General.Series").lower():
         if update.callback_query is not None:
             insertSeason = update.callback_query.data.replace("Season: ", "").strip()
@@ -1208,10 +1202,10 @@ async def storeSeasons(update : Update, context: ContextTypes.DEFAULT_TYPE):
                         }
                     )
                 logger.debug(f"Seasons {seasonsSelected} have been selected.")
-                
+
                 context.user_data["selectedSeasons"] = selectedSeasons
                 return await addMedia(update, context)
-              
+
             else:
                 if insertSeason == "All":
                     for s in seasons:
@@ -1225,12 +1219,12 @@ async def storeSeasons(update : Update, context: ContextTypes.DEFAULT_TYPE):
                     selectedSeasons.append(int(insertSeason))
                 else:
                     selectedSeasons.remove(int(insertSeason))
-                    
+
                 context.user_data["selectedSeasons"] = selectedSeasons
-                keyboard = [[InlineKeyboardButton('\U0001F5D3 ' + i18n.t("addarr.Actions.SelectedAndFutureSeasons"),callback_data="Season: Future and selected")]]
+                keyboard = [[InlineKeyboardButton('\U0001F5D3 ' + i18n.t("addarr.Actions.SelectedAndFutureSeasons"), callback_data="Season: Future and selected")]]
                 for s in seasons:
-                    if s in selectedSeasons: 
-                        season = "\U00002705 " + f"{i18n.t('addarr.General.Season')} {s}" 
+                    if s in selectedSeasons:
+                        season = "\U00002705 " + f"{i18n.t('addarr.General.Season')} {s}"
                     else:
                         season = "\U00002B1C " + f"{i18n.t('addarr.General.Season')} {s}"
 
@@ -1240,11 +1234,11 @@ async def storeSeasons(update : Update, context: ContextTypes.DEFAULT_TYPE):
                             callback_data=f"Season: {s}"
                         )
                     ])
-                
+
                 if len(selectedSeasons) == len(seasons):
-                    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Actions.DeselectAllSeasons"),callback_data=f"Season: None")]]
+                    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Actions.DeselectAllSeasons"), callback_data="Season: None")]]
                 else:
-                    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Actions.SelectAllSeasons"),callback_data=f"Season: All")]]
+                    keyboard += [[InlineKeyboardButton(i18n.t("addarr.Actions.SelectAllSeasons"), callback_data="Season: All")]]
 
                 markup = InlineKeyboardMarkup(keyboard)
 
@@ -1255,12 +1249,12 @@ async def storeSeasons(update : Update, context: ContextTypes.DEFAULT_TYPE):
                     reply_markup=markup,
                 )
                 return SELECT_SEASONS
-            
+
         if selectedSeasons is None:
             logger.debug(
                 f"Callback query [{update.callback_query.data.replace('From season: ', '').strip()}] doesn't match any of the season options. Sending seasons for selection..."
             )
-            return await storeSeasons(update, context) 
+            return await storeSeasons(update, context)
 
 
 async def addMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1279,7 +1273,7 @@ async def addMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
             monitored = False
             if s in selectedSeasons:
                 monitored = True
-                
+
             seasonsSelected.append(
                 {
                     "seasonNumber": s,
@@ -1287,15 +1281,15 @@ async def addMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
                 }
             )
         logger.debug(f"Seasons {seasonsSelected} have been selected.")
-    
+
     qualityProfile = context.user_data["qualityProfile"]
 
     # Process the tags that will be added
     tags = []
     service_Config = service.getInstance()
 
-    #create tag that will be used: userid
-    
+    # create tag that will be used: userid
+
     if service_Config.get("addRequesterIdTag"):
         userTag = str(update.effective_message.chat.id)
         if service.tagExists(userTag) != -1:
@@ -1304,7 +1298,7 @@ async def addMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             logger.debug(f'The tag {userTag} does not exists. Creating new tag for user')
             newTag = service.createTag(userTag)
-            if newTag >=0: 
+            if newTag >= 0:
                 tags = [newTag]
             else:
                 instace_name = service.getInstance()
@@ -1313,35 +1307,35 @@ async def addMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
         logger.debug("tagging not included")
 
     if not tags:
-        logger.debug(f'Adding default tags')
+        logger.debug('Adding default tags')
         default_tags = service_Config.get("defaultTags", [])
         for tag in default_tags:
             if str(tag) not in [str(t["label"]) for t in service.getTags()]:
                 newTag = service.createTag(str(tag))
                 tags.append(newTag)
-    
+
     if not service.inLibrary(idnumber):
         if choice.lower() == i18n.t("addarr.General.Movie").lower():
             added = service.addToLibrary(idnumber, path, qualityProfile, tags)
         else:
             added = service.addToLibrary(idnumber, path, qualityProfile, tags, seasonsSelected)
-        
+
         if added:
             if choice.lower() == i18n.t("addarr.General.Movie").lower():
-                message=i18n.t("addarr.Messages.AddSuccess", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"))
+                message = i18n.t("addarr.Messages.AddSuccess", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"))
             else:
-                message=i18n.t("addarr.Messages.AddSuccess", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"))
+                message = i18n.t("addarr.Messages.AddSuccess", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"))
             await context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
                 text=message,
             )
-            if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
+            if not checkAllowed(update, "admin") and config.get("adminNotifyId") is not None:
                 adminNotifyId = config.get("adminNotifyId")
                 if choice.lower() == i18n.t("addarr.General.Movie").lower():
-                    message2=i18n.t("addarr.AdminNotifications.AddSuccess", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                    message2 = i18n.t("addarr.AdminNotifications.AddSuccess", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"), title=context.user_data['output'][position]['title'], first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 else:
-                    message2=i18n.t("addarr.AdminNotifications.AddSuccess", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                    message2 = i18n.t("addarr.AdminNotifications.AddSuccess", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"), title=context.user_data['output'][position]['title'], first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 await context.bot.send_message(
                     chat_id=adminNotifyId, text=message2
                 )
@@ -1349,20 +1343,20 @@ async def addMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
             return ConversationHandler.END
         else:
             if choice.lower() == i18n.t("addarr.General.Movie").lower():
-                message=i18n.t("addarr.Messages.AddFailed", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle").lower())
+                message = i18n.t("addarr.Messages.AddFailed", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle").lower())
             else:
-                message=i18n.t("addarr.Messages.AddFailed", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle").lower())
+                message = i18n.t("addarr.Messages.AddFailed", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle").lower())
             await context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
                 text=message,
             )
-            if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
+            if not checkAllowed(update, "admin") and config.get("adminNotifyId") is not None:
                 adminNotifyId = config.get("adminNotifyId")
                 if choice.lower() == i18n.t("addarr.General.Movie").lower():
-                    message2=i18n.t("addarr.AdminNotifications.AddFailed", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                    message2 = i18n.t("addarr.AdminNotifications.AddFailed", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"), title=context.user_data['output'][position]['title'], first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 else:
-                    message2=i18n.t("addarr.AdminNotifications.AddFailed", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                    message2 = i18n.t("addarr.AdminNotifications.AddFailed", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"), title=context.user_data['output'][position]['title'], first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 await context.bot.send_message(
                     chat_id=adminNotifyId, text=message2
                 )
@@ -1370,33 +1364,34 @@ async def addMedia(update : Update, context: ContextTypes.DEFAULT_TYPE):
             return ConversationHandler.END
     else:
         if choice.lower() == i18n.t("addarr.General.Movie").lower():
-            message=i18n.t("addarr.Messages.Exist", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"))
+            message = i18n.t("addarr.Messages.Exist", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"))
         else:
-            message=i18n.t("addarr.Messages.Exist", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"))
+            message = i18n.t("addarr.Messages.Exist", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"))
         await context.bot.edit_message_text(
             message_id=context.user_data["update_msg"],
             chat_id=update.effective_message.chat_id,
             text=message,
         )
-            
-        if not checkAllowed(update,"admin") and config.get("adminNotifyId") is not None:
+
+        if not checkAllowed(update, "admin") and config.get("adminNotifyId") is not None:
             adminNotifyId = config.get("adminNotifyId")
             if choice.lower() == i18n.t("addarr.General.Movie").lower():
-                message2=i18n.t("addarr.AdminNotifications.Exist", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                message2 = i18n.t("addarr.AdminNotifications.Exist", subjectWithArticle=i18n.t("addarr.General.MovieWithArticle"), title=context.user_data['output'][position]['title'], first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
             else:
-                message2=i18n.t("addarr.AdminNotifications.Exist", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                message2 = i18n.t("addarr.AdminNotifications.Exist", subjectWithArticle=i18n.t("addarr.General.SeriesWithArticle"), title=context.user_data['output'][position]['title'], first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
             await context.bot.send_message(
                 chat_id=adminNotifyId, text=message2
             )
         clearUserData(context)
         return ConversationHandler.END
 
+
 async def addNotificationChannel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
-        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+    if config.get("enableAllowlist") and not checkAllowed(update, "regular"):
+        # When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
-    
+
     subbed = await checkNotificationSubscribed(update.effective_message.chat_id)
     if subbed:
         await context.bot.send_message(
@@ -1404,9 +1399,9 @@ async def addNotificationChannel(update: Update, context: ContextTypes.DEFAULT_T
             text=i18n.t("addarr.Notifications.ProfileExists"),
         )
         return
-    
+
     await context.bot.send_message(
-        chat_id=update.effective_message.chat_id, 
+        chat_id=update.effective_message.chat_id,
         text=i18n.t("addarr.Notifications.CreatingProfiles")
     )
     # add notifications to each instance. check each instance before adding. use chatID as profileName
@@ -1425,8 +1420,7 @@ async def addNotificationChannel(update: Update, context: ContextTypes.DEFAULT_T
             if status:
                 label = instance["label"]
                 logger.info(f"Successfully created notification profiles for Radarr instance {label}")
-    
-        
+
     for instance in sonarr_instances:
         sonarr.setInstance(instance["label"])
         if not sonarr.notificationProfileExist(chatId):
@@ -1442,35 +1436,35 @@ async def addNotificationChannel(update: Update, context: ContextTypes.DEFAULT_T
         text=i18n.t("addarr.Notifications.ProfileCreated"),
     )
 
+
 async def help(update : Update, context: ContextTypes.DEFAULT_TYPE):
-    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
-        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+    if config.get("enableAllowlist") and not checkAllowed(update, "regular"):
+        # When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
-    
+
     helpText = i18n.t("addarr.Help",
-            help=config["entrypointHelp"],
-            authenticate=config["entrypointAuth"],
-            add=config["entrypointAdd"],
-            delete=config["entrypointDelete"],
-            movie=i18n.t("addarr.General.Movie").lower(),
-            serie=i18n.t("addarr.General.Series").lower(),
-            allSeries=config["entrypointAllSeries"],
-            allMovies=config["entrypointAllMovies"],
-            transmission=config["entrypointTransmission"],
-            sabnzbd=config["entrypointSabnzbd"],
-            qbittorrent=config["entrypointqBittorrent"],
-            notify=config["entrypointNotify"],
-        )
-    
+                      help=config["entrypointHelp"],
+                      authenticate=config["entrypointAuth"],
+                      add=config["entrypointAdd"],
+                      delete=config["entrypointDelete"],
+                      movie=i18n.t("addarr.General.Movie").lower(),
+                      serie=i18n.t("addarr.General.Series").lower(),
+                      allSeries=config["entrypointAllSeries"],
+                      allMovies=config["entrypointAllMovies"],
+                      transmission=config["entrypointTransmission"],
+                      sabnzbd=config["entrypointSabnzbd"],
+                      qbittorrent=config["entrypointqBittorrent"],
+                      notify=config["entrypointNotify"],
+                      )
+
     await context.bot.send_message(
-        chat_id=update.effective_message.chat_id, 
+        chat_id=update.effective_message.chat_id,
         text=helpText,
         parse_mode=ParseMode.HTML
 
     )
     return ConversationHandler.END
-
 
 
 if __name__ == "__main__":

@@ -1,11 +1,10 @@
 import logging
 import math
 import os
-import re
 from telegram.ext import ConversationHandler
 import logger
 from config import config
-from definitions import ADMIN_PATH, CHATID_PATH, ALLOWLIST_PATH, NOTIFICATIONLIST_PATH
+from definitions import ADMIN_PATH, CHATID_PATH, ALLOWLIST_PATH
 from translations import i18n
 import radarr as radarr
 import sonarr as sonarr
@@ -17,13 +16,17 @@ logger = logger.getLogger("addarr.commons", logLevel, config.get("logToConsole",
 _current_instance = None
 
 # Sets the global label that can be accessed within other functions
+
+
 def setInstanceName(label: str):
     global _current_instance
     _current_instance = label
 
+
 def getInstanceName() -> str:
     global _current_instance
     return _current_instance
+
 
 def getInstance(app):
     instances = config[app]["instances"]
@@ -34,7 +37,7 @@ def getInstance(app):
                 return instance
     else:
         logger.warning('instance not set')
-            
+
 
 def generateServerAddr(app: str):
     try:
@@ -61,12 +64,12 @@ def generateServerAddr(app: str):
             addr = instance["server"]["addr"]
             port = instance["server"]["port"]
             path = instance["server"]["path"]
-        
+
             return f"{http}{addr}:{port}{path}"
-       
+
     except KeyError as e:
         logger.warning(f"Missing key {e} in configuration for {_current_instance} instance.")
-            
+
     except Exception as e:
         logger.warning(f"Failed to generate server address for {_current_instance}: {e}")
 
@@ -79,7 +82,7 @@ def cleanUrl(text):
 def generateApiQuery(app, endpoint, parameters={}):
     try:
         instance = getInstance(app)
-        
+
         apikey = instance["auth"]["apikey"]
         url = (
             generateServerAddr(app) + "api/v3/" + str(endpoint) + "?apikey=" + str(apikey)
@@ -99,11 +102,11 @@ def generateApiQuery(app, endpoint, parameters={}):
 # Check if Id is authenticated
 def checkId(update):
     authorize = False
-    
+
     if not os.path.exists(CHATID_PATH):
         with open(CHATID_PATH, "w") as file:
             pass  # Create an empty file
-    
+
     with open(CHATID_PATH, "r") as file:
         firstChar = file.read(1)
         if not firstChar:  # File is empty
@@ -118,6 +121,8 @@ def checkId(update):
     return authorize
 
 # Check if user has subscribed to notifications
+
+
 async def checkNotificationSubscribed(chatid):
     onInstance = False
     radarr_instances = config['radarr']['instances']
@@ -127,13 +132,14 @@ async def checkNotificationSubscribed(chatid):
         radarr.setInstance(instance["label"])
         setInstanceName(instance["label"])
         onInstance = radarr.notificationProfileExist(chatid)
-        
+
     for instance in sonarr_instances:
         sonarr.setInstance(instance["label"])
         setInstanceName(instance["label"])
         onInstance = sonarr.notificationProfileExist(chatid)
 
     return onInstance
+
 
 async def generateProfileName(context, chatid):
     chat = await context.bot.get_chat(chatid)
@@ -154,17 +160,17 @@ async def generateProfileName(context, chatid):
         return f"{str(chatid)} ({chatName})"
     else:
         return str(chatid)
-    
+
 
 async def authentication(update, context):
-    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
-        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+    if config.get("enableAllowlist") and not checkAllowed(update, "regular"):
+        # When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
-        
+
     chatid = update.effective_message.chat_id
     with open(CHATID_PATH, "r") as file:
-        if(str(chatid) in file.read()):
+        if (str(chatid) in file.read()):
             await context.bot.send_message(
                 chat_id=update.effective_message.chat_id,
                 text=i18n.t("addarr.Authorization.ChatID_Allowed"),
@@ -175,7 +181,7 @@ async def authentication(update, context):
             password = update.message.text
             # This will remove both /auth and auth from the password string if they are present.
             # It ensures that even if there is no leading slash, it will still be detected and removed.
-            if("auth" in password.lower()):
+            if ("auth" in password.lower()):
                 password = password.lower().replace("/auth", "").replace("auth", "").strip()
             if str(password).strip() == str(config["telegram"]["password"]):
                 with open(CHATID_PATH, "a") as file:
@@ -193,7 +199,7 @@ async def authentication(update, context):
                 await context.bot.send_message(
                     chat_id=update.effective_message.chat_id, text=i18n.t("addarr.Authorization.WrongPassword")
                 )
-                return ConversationHandler.END # This only stops the auth conv, so it goes back to choosing screen
+                return ConversationHandler.END  # This only stops the auth conv, so it goes back to choosing screen
 
 
 async def getChatName(context, chatid):
@@ -220,9 +226,9 @@ async def getChatName(context, chatid):
 
 # Check if user is an admin or an allowed user
 def checkAllowed(update, mode):
-    if mode == "admin": 
+    if mode == "admin":
         path = ADMIN_PATH
-    else: 
+    else:
         path = ALLOWLIST_PATH
 
     if not os.path.exists(path):
@@ -242,7 +248,7 @@ def checkAllowed(update, mode):
 
 
 def format_bytes(num, suffix='B'):
-    for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
+    for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
         if abs(num) < 1024.0:
             return "%3.1f%s%s" % (num, unit, suffix)
         num /= 1024.0
@@ -305,6 +311,7 @@ def getAuthChats():
         file.close()
     return chats
 
+
 def getService(context):
     if context.user_data.get("choice").lower() == i18n.t("addarr.General.Series").lower():
         return sonarr
@@ -315,7 +322,7 @@ def getService(context):
         raise ValueError(
             f"Cannot determine service based on unknown or missing choice: {context.user_data.get('choice')}"
         )
-    
+
 
 def clearUserData(context):
     logger.debug(

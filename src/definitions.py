@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 
 
 # Set Projects Root Directory
@@ -16,18 +15,18 @@ ALLOWLIST_PATH = os.path.join(ROOT_DIR, "allowlist.txt")
 NOTIFICATIONLIST_PATH = os.path.join(ROOT_DIR, "notification.txt")
 
 DEFAULT_SETTINGS = {
-    "entrypointAuth": "auth", #auth or a custom entrypoint
-    "entrypointAdd": "start", #start or a custom entrypoint
-    "entrypointDelete": "delete", #start or a custom entrypoint
-    "entrypointAllSeries": "allSeries", #allSeries or a custom entrypoint
-    "entrypointAllMovies": "allMovies", #allMovies or a custom entrypoint
-    "entrypointNotify": "notify", #notify or a custom entrypoint
-    "entrypointTransmission": "transmission", #transmission or a custom entrypoint
-    "entrypointSabnzbd": "sabnzbd", #sabnzbd or a custom entrypoint
-    "entrypointqBittorrent": "qbittorrent", #qbittorrent or a custom entrypoint
+    "entrypointAuth": "auth",  # auth or a custom entrypoint
+    "entrypointAdd": "start",  # start or a custom entrypoint
+    "entrypointDelete": "delete",  # start or a custom entrypoint
+    "entrypointAllSeries": "allSeries",  # allSeries or a custom entrypoint
+    "entrypointAllMovies": "allMovies",  # allMovies or a custom entrypoint
+    "entrypointNotify": "notify",  # notify or a custom entrypoint
+    "entrypointTransmission": "transmission",  # transmission or a custom entrypoint
+    "entrypointSabnzbd": "sabnzbd",  # sabnzbd or a custom entrypoint
+    "entrypointqBittorrent": "qbittorrent",  # qbittorrent or a custom entrypoint
     "logToConsole": True,
     "debugLogging": False,
     "language": "en-us",
-    "transmission": { "enable": False },
+    "transmission": {"enable": False},
     "enableAdmin": False
 }

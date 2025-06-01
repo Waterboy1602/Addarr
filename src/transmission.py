@@ -19,11 +19,11 @@ TSL_LIMIT, TSL_NORMAL = range(2)
 
 
 async def transmission(update, context):
-    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
-        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+    if config.get("enableAllowlist") and not checkAllowed(update, "regular"):
+        # When using this mode, bot will remain silent if user is not in the allowlist.txt
         logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
         return ConversationHandler.END
-    
+
     if not config["enable"]:
         await context.bot.send_message(
             chat_id=update.effective_message.chat_id,
@@ -46,11 +46,11 @@ async def transmission(update, context):
 
     keyboard = [[
         InlineKeyboardButton(
-            '\U0001F40C '+i18n.t("addarr.Transmission.TSL"),
+            '\U0001F40C ' + i18n.t("addarr.Transmission.TSL"),
             callback_data=TSL_LIMIT
         ),
         InlineKeyboardButton(
-            '\U0001F406 '+i18n.t("addarr.Transmission.Normal"),
+            '\U0001F406 ' + i18n.t("addarr.Transmission.Normal"),
             callback_data=TSL_NORMAL
         ),
     ]]
@@ -67,7 +67,7 @@ async def changeSpeedTransmission(update, context):
             await authentication(update, context) == "added"
         ):  # To also stop the beginning command
             return ConversationHandler.END
-    
+
     choice = update.callback_query.data
     command = f"transmission-remote {config['host']}"
     if config["authentication"]:
@@ -77,19 +77,19 @@ async def changeSpeedTransmission(update, context):
             + ":"
             + config["password"]
         )
-    
+
     message = None
     if choice == TSL_NORMAL:
         command += ' --no-alt-speed'
         message = i18n.t("addarr.Transmission.ChangedToNormal")
     elif choice == TSL_LIMIT:
         command += ' --alt-speed'
-        message=i18n.t("addarr.Transmission.ChangedToTSL"),
-    
+        message = i18n.t("addarr.Transmission.ChangedToTSL"),
+
     os.system(command)
 
     await context.bot.send_message(
-            chat_id=update.effective_message.chat_id,
-            text=message,
-        )
+        chat_id=update.effective_message.chat_id,
+        text=message,
+    )
     return ConversationHandler.END
