@@ -1,4 +1,5 @@
-﻿ru-ru:
+#Ru
+ru-ru:
   General:
     Start: Начать
     Stop: Стоп
@@ -20,10 +21,10 @@
     SelectFromWhichSeason: С какого сезона?
 
   Actions:
-    Add: Да, вот это
+    Add: Да, это он
     Delete: Да, удалить
     StopDelete: Нет, я не хочу его удалять
-    Select: Да, выбрать это
+    Select: Да, выбрать его
     SelectedAndFutureSeasons: Выбранные и будущие сезоны
     SelectAllSeasons: Выбрать все сезоны
     DeselectAllSeasons: Снять выбор с всех сезонов
@@ -48,7 +49,7 @@
     This: "Вы хотите добавить вот это %{subjectWithArticle} ?"
     ThisDelete: "Вы хотите удалить вот это %{subjectWithArticle} ?"
     AddFailed: Упс, ошибочка в процессе добавления %{subjectWithArticle}. Может попробуете ещё раз?
-    DeleteFailed: Упс, ошибока в процессе удаления %{subjectWithArticle}. Может попробуете ещё раз?
+    DeleteFailed: Упс, ошибочка в процессе удаления %{subjectWithArticle}. Может попробуете ещё раз?
     AddSuccess: "%{subjectWithArticle} успешно добавлено 🙂"
     DeleteSuccess: "%{subjectWithArticle} успешно удалено 🙂"
     Exist: "%{subjectWithArticle} уже существует 😉"
