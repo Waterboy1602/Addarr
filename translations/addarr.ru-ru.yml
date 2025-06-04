@@ -97,9 +97,9 @@ ru-ru:
   AdminNotifications:
     Stop: Пользователь %{first_name} в чате %{chat_id} остановил процесс.
     Start: Пользователь %{first_name} в чате %{chat_id} запустил новый запрос.
-    AddSuccess: %{subjectWithArticle} %{title} был добавлен пользователем %{first_name} в чате %{chat_id}.
+    AddSuccess: "%{subjectWithArticle} %{title} был добавлен пользователем %{first_name} в чате %{chat_id}."
     AddFailed: Ошибка в процесе добавления %{subjectWithArticle} %{title} пользователем %{first_name} в чате %{chat_id}.
-    Exist: %{subjectWithArticle} %{title} который пользователь %{first_name} в чате %{chat_id} пытается добавить уже существует.
+    Exist: "%{subjectWithArticle} %{title} который пользователь %{first_name} в чате %{chat_id} пытается добавить уже существует."
     Delete: Пользователь %{first_name} в чате %{chat_id} начал процесс удаления.
     AuthRequest: Пользователь %{username} [%{first_name} %{last_name}] в чате %{chat_id} запросил доступ к сервисам бота.
 
