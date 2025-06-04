@@ -1,12 +1,12 @@
 #Ru
 ru-ru:
   General:
-    Start: Начать
+    Start: Start
     Stop: Стоп
     Find: Поиск
-    Movie: Фильм
+    Movie: Movie
     MovieWithArticle: Фильм
-    Series: Сериал
+    Series: Series
     SeriesWithArticle: Сериал
     Title: Введите название
     WhatIsThis: Это фильм или сериал?
