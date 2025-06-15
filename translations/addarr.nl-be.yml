@@ -3,7 +3,7 @@ nl-be:
   General:
     Start: Start
     Stop: Stop
-    Find: Zoeken  #ADDED
+    Find: Zoeken #ADDED
     Movie: Film
     MovieWithArticle: De film
     Series: Serie
@@ -13,21 +13,21 @@ nl-be:
     New: Voer een nieuwe zoekopdracht uit
     Season: Seizoen
     End: Het toevoegen/verwijderen van films of series is beëindigd.
-    SelectAnInstance: Selecteer een instantie  #ADDED
+    SelectAnInstance: Selecteer een instantie #ADDED
     SelectAPath: Kies een pad voor deze film of serie
     SelectAQuality: Kies een kwaliteitsprofiel voor de film of serie
     SelectFromWhichSeason: Vanaf welk seizoen?
-    PreviousResult: Vorige  #ADDED
-    NextResult: Volgende  #ADDED
+    PreviousResult: Vorige #ADDED
+    NextResult: Volgende #ADDED
 
   Actions:
     Add: Ja, voeg deze toe
     Delete: Ja, verwijder deze
     StopDelete: No, ik wil dit niet verwijderen
     Select: Ja, selecteer dit
-    SelectedAndFutureSeasons: Geselecteerde en toekomstige seizoenen  #ADDED
-    SelectAllSeasons: Alle seizoenen selecteren  #ADDED
-    DeselectAllSeasons: Alle seizoenen deselecteren  #ADDED
+    SelectedAndFutureSeasons: Geselecteerde en toekomstige seizoenen #ADDED
+    SelectAllSeasons: Alle seizoenen selecteren #ADDED
+    DeselectAllSeasons: Alle seizoenen deselecteren #ADDED
 
   Authorization:
     Authorize: Je moet eerst deze chat toestemming geven. Wat is het wachtwoord?
@@ -35,9 +35,9 @@ nl-be:
     ChatID_Added: "Deze chat is succesvol toegevoegd aan de lijst met toegestane chats. Nu kan je deze bot gebruiken. \nAls je een commando had ingegeven, moet je deze opnieuw uitvoeren."
     NotAdmin: "Je moet administrator zijn vooraleer je dit commando kunt uitvoeren."
     ChatID_Allowed: "Deze chat heeft al toestemming."
-    User_Added: De gebruiker %{username} is toegevoegd aan de lijst met toegestane chats.  #ADDED
-    Accept: Accepteren  #ADDED
-    Reject: Weigeren  #ADDED
+    User_Added: De gebruiker %{username} is toegevoegd aan de lijst met toegestane chats. #ADDED
+    Accept: Accepteren #ADDED
+    Reject: Weigeren #ADDED
 
   Notifications: #ADDED
     ProfileCreated: Notificatieprofielen aangemaakt.
@@ -54,7 +54,7 @@ nl-be:
     DeleteSuccess: "%{subjectWithArticle} is met succes verwijderd 🙂"
     Exist: "%{subjectWithArticle} was al toegevoegd 😉"
     NoExist: "%{subjectWithArticle} bestaat niet"
-    LoadingAll: Dit kan enkele minuten duren, afhankelijk van je bibliotheek. Even geduld...  #ADDED
+    LoadingAll: Dit kan enkele minuten duren, afhankelijk van je bibliotheek. Even geduld... #ADDED
     MissingConfig: "Je komt de volgende instelling te kort in je config.yaml-bestand: %{missingKeys}.\nVoeg deze eerst toe vooraleer de bot te herstarten."
     ConfigError: "De volgende instelling heeft een verkeerde waarde in je config.yaml-bestand: %{wrongValues}.\nVerander deze eerst vooraleer de bot te herstarten."
     StartChatting: Je kan nu chatten met Addarr op Telegram. De eerste keer dat je "start" gebruikt, zul je je wachtwoord moeten ingeven.
@@ -83,7 +83,7 @@ nl-be:
     ChangedTo100: Geen snelheidslimiet
     Error: Er ging iets fout tijdens het aanpassen van de snelheid
 
-  qBittorrent:  #ADDED
+  qBittorrent: #ADDED
     NotEnabled: De qBittorrent-functie is niet geactiveerd.
     Speed: Welke snelheid moet qBittorrent gebruiken?
     Alternate: Alternatieve snelheidslimiet
@@ -99,14 +99,14 @@ nl-be:
     AddFailed: Fout bij het toevoegen van het %{subjectWithArticle} %{title} van de gebruiker %{first_name} met chat_id %{chat_id}.
     Exist: Het %{subjectWithArticle} %{title} dat de gebruiker %{first_name} met chat_id %{chat_id} wilde toevoegen bestaat al.
     Delete: De gebruiker %{first_name} met chat_id %{chat_id} heeft een nieuwe verwijdering geïnitieerd.
-    AuthRequest: Gebruiker %{username} [%{first_name} %{last_name}] met chat-ID %{chat_id} heeft toegang tot de botdiensten aangevraagd.  #ADDED
-  
+    AuthRequest: Gebruiker %{username} [%{first_name} %{last_name}] met chat-ID %{chat_id} heeft toegang tot de botdiensten aangevraagd. #ADDED
+
   #ADDED
   Help: "
     <b><b>Addarr-commando's</b></b>
     \n<i>Deze tekst opnieuw zien? Gebruik /%{help}</i>\n
     \n• Eerst authenticeren:
-        Gebruik /%{authenticate} [wachtwoord]
+    Gebruik /%{authenticate} [wachtwoord]
     \n• Toevoegen: /%{add}.
     \n• Verwijderen: /%{delete}.
     \n• Lijst series in Sonarr: /%{allSeries}.
@@ -121,7 +121,9 @@ nl-be:
     \n\n
     Meldingen bij gereed media: /%{notify}."
 
-  CommandDescriptions:  #ADDED
+  CommandDescriptions: #ADDED
+    Start: Start de bot
+    Stop: Stopt het huidige commando
     Authenticate: Authenticatie voor eerste gebruik
     Add: Media toevoegen
     Help: Commandoreferentie

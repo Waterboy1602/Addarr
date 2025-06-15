@@ -3,7 +3,7 @@ de-de:
   General:
     Start: Start
     Stop: Stop
-    Find: Finden  #ADDED
+    Find: Finden #ADDED
     Movie: Film
     MovieWithArticle: Der Film
     Series: Serie
@@ -13,21 +13,21 @@ de-de:
     New: Führe einen neuen Suchbefehl aus
     Season: Staffel
     End: Das Hinzufügen / Löschen von Filmen oder Serien wurde beendet.
-    SelectAnInstance: Bitte wähle eine Instanz  #ADDED
+    SelectAnInstance: Bitte wähle eine Instanz #ADDED
     SelectAPath: Bitte wähle einen Pfad für die Serie oder den Film
     SelectAQuality: Bitte wähle ein Qualitätsprofil
     SelectFromWhichSeason: Ab welcher Staffel?
-    PreviousResult: Zurück  #ADDED
-    NextResult: Weiter  #ADDED
+    PreviousResult: Zurück #ADDED
+    NextResult: Weiter #ADDED
 
   Actions:
     Add: Ja, hinzufügen
     Delete: Ja, löschen
     StopDelete: Nein, nicht löschen
     Select: Ja, auswählen
-    SelectedAndFutureSeasons: Ausgewählte und zukünftige Staffeln  #ADDED
-    SelectAllSeasons: Alle Staffeln auswählen  #ADDED
-    DeselectAllSeasons: Alle Staffeln abwählen  #ADDED
+    SelectedAndFutureSeasons: Ausgewählte und zukünftige Staffeln #ADDED
+    SelectAllSeasons: Alle Staffeln auswählen #ADDED
+    DeselectAllSeasons: Alle Staffeln abwählen #ADDED
 
   Authorization:
     Authorize: Dieser Chat muss noch autorisiert werden. Wie ist dein Passwort?
@@ -35,11 +35,11 @@ de-de:
     ChatID_Added: "Dieser Chat wurde zur autorisierten liste hinzugefügt. Nun kannst du den Bot benutzen. \nBefehle müssen erneut ausgeführt werden."
     NotAdmin: "Du musst ein Admin sein um diesen Befehl zu benutzen."
     ChatID_Allowed: "Dieser Chat ist bereits autorisiert."
-    User_Added: Der Benutzer %{username} wurde zur Liste der zugelassenen Chats hinzugefügt.  #ADDED
-    Accept: Akzeptieren  #ADDED
-    Reject: Ablehnen  #ADDED
+    User_Added: Der Benutzer %{username} wurde zur Liste der zugelassenen Chats hinzugefügt. #ADDED
+    Accept: Akzeptieren #ADDED
+    Reject: Ablehnen #ADDED
 
-  Notifications:  #ADDED
+  Notifications: #ADDED
     ProfileCreated: Benachrichtigungsprofile erstellt.
     ProfileExists: Du erhältst bereits Benachrichtigungen.
     CreatingProfiles: Benachrichtigungsabonnements werden jetzt erstellt.
@@ -54,7 +54,7 @@ de-de:
     DeleteSuccess: "Wurde erfolgreich entfernt 🙂"
     Exist: "Das gibt's bereits 😉"
     NoExist: "Das Element existiert nicht."
-    LoadingAll: Dies kann einige Minuten dauern, je nach Bibliothek. Bitte warten...  #ADDED
+    LoadingAll: Dies kann einige Minuten dauern, je nach Bibliothek. Bitte warten... #ADDED
     MissingConfig: "Die folgenden Configkeys fehlen in der config.yaml-datei: %{missingKeys}.\nBitte füge sie hinzu und starte den Bot neu."
     ConfigError: "Die folgenden Configkeys sind falsch in der config.yaml-datei: %{wrongValues}.\nBitte füge sie hinzu und starte den Bot neu."
     StartChatting: Starte mit Addarr auf Telegram zu chatten. Das erste Mal wenn du "start" verwendest, wirst du gebeten, das Passwort einzugeben.
@@ -83,7 +83,7 @@ de-de:
     ChangedTo100: Kein Geschwindigkeit Limit
     Error: Bei der Änderung des Geschwindigkeitslimits ist Etwas ist schief gelaufen. Probiere es doch nochmal.
 
-  qBittorrent:  #ADDED
+  qBittorrent: #ADDED
     NotEnabled: Die qBittorrent-Funktion ist nicht aktiviert.
     Speed: Welche Geschwindigkeit soll qBittorrent verwenden?
     Alternate: Alternative Geschwindigkeitsbegrenzung
@@ -95,18 +95,18 @@ de-de:
   AdminNotifications:
     Stop: Benutzer %{first_name} (%{chat_id}) hat den Bot-Prozess gestoppt.
     Start: Benutzer %{first_name} (%{chat_id}) hat einem neuen Bot-Prozess gestartet.
-    AddSuccess: "Hinzufügen von \"%{title}\" für %{first_name} (%{chat_id}): Erfolgreich."
-    AddFailed: "Hinzufügen von \"%{title}\" für %{first_name} (%{chat_id}): Fehlgeschlagen."
-    Exist: "Hinzufügen von Element \"%{title}\" für %{first_name} (%{chat_id}): Existiert bereits."
+    AddSuccess: 'Hinzufügen von "%{title}" für %{first_name} (%{chat_id}): Erfolgreich.'
+    AddFailed: 'Hinzufügen von "%{title}" für %{first_name} (%{chat_id}): Fehlgeschlagen.'
+    Exist: 'Hinzufügen von Element "%{title}" für %{first_name} (%{chat_id}): Existiert bereits.'
     Delete: Der Benutzer %{first_name} (%{chat_id}) hat \"%{title}\" gelöscht.
-    AuthRequest: Der Benutzer %{username} [%{first_name} %{last_name}] mit der Chat-ID %{chat_id} hat Zugriff auf die Bot-Dienste angefordert.   #ADDED
-    
+    AuthRequest: Der Benutzer %{username} [%{first_name} %{last_name}] mit der Chat-ID %{chat_id} hat Zugriff auf die Bot-Dienste angefordert. #ADDED
+
   #ADDED
   Help: "
     <b><b>Addarr-Befehle</b></b>
     \n<i>Diesen Text erneut anzeigen? Verwenden Sie /%{help}</i>\n
     \n• Sie müssen sich vor der ersten Nutzung autorisieren.
-        Verwenden Sie /%{authenticate} [Passwort]
+    Verwenden Sie /%{authenticate} [Passwort]
     \n• Um einen Film oder eine Serie hinzuzufügen, verwenden Sie /%{add}.
     \n• Um einen Film oder eine Serie zu löschen, verwenden Sie /%{delete}.
     \n• Um Serien in Sonarr aufzulisten, verwenden Sie /%{allSeries}.
@@ -121,7 +121,9 @@ de-de:
     \n\n
     Wenn Sie benachrichtigt werden möchten, wenn Ihre Medien bereit zum Ansehen sind, verwenden Sie /%{notify}."
 
-  CommandDescriptions:  #ADDED
+  CommandDescriptions: #ADDED
+    Start: Started den Bot #DEEPL
+    Stop: Stoppt den laufenden Befehl #DEEPL
     Authenticate: Vor der ersten Nutzung autorisieren
     Add: Medien hinzufügen
     Help: Befehlsübersicht

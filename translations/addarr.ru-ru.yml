@@ -2,7 +2,7 @@
 ru-ru:
   General:
     Start: Start
-    Stop: Стоп
+    Stop: Stop
     Find: Поиск
     Movie: Movie
     MovieWithArticle: Фильм
@@ -124,6 +124,8 @@ ru-ru:
     "
 
   CommandDescriptions:
+    Start: Запустите бота #DEEPL
+    Stop: Остановить  выполнение текущей команды #DEEPL
     Authenticate: Авторизируйтесь перед первым использованием
     Add: Добавить новое
     Help: Справка по командам

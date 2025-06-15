@@ -126,6 +126,8 @@ en-us:
     "
 
   CommandDescriptions:
+    Start: Starts the bot
+    Stop: Stops the current command
     Authenticate: Authorize yourself before first use
     Add: Add new media
     Help: Details on commands and bot usage

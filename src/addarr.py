@@ -36,9 +36,10 @@ MEDIA_AUTHENTICATED, GIVE_MEDIA_TYPE, GIVE_OPTION, GIVE_INSTANCE, GIVE_PATHS, GI
 
 
 async def post_init(application: Application) -> None:
-    await application.bot.set_my_commands([('start', 'Starts the bot')])
 
     commands = [
+        (i18n.t("addarr.General.Start").lower(), i18n.t("addarr.CommandDescriptions.Start")),
+        (i18n.t("addarr.General.Stop").lower(), i18n.t("addarr.CommandDescriptions.Stop")),
         (config["entrypointAuth"].lower(), i18n.t("addarr.CommandDescriptions.Authenticate")),
         (config["entrypointAdd"].lower(), i18n.t("addarr.CommandDescriptions.Add")),
         (config["entrypointHelp"].lower(), i18n.t("addarr.CommandDescriptions.Help")),

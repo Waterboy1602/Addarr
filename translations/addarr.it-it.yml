@@ -3,7 +3,7 @@ it-it:
   General:
     Start: Inizia
     Stop: Ferma
-    Find: Trova  #ADDED
+    Find: Trova #ADDED
     Movie: Film
     MovieWithArticle: Film
     Series: Serie
@@ -13,12 +13,12 @@ it-it:
     New: Inizia una nuova ricerca
     Season: Stagione
     End: L'aggiunta/eliminazione di film o serie è terminata.
-    SelectAnInstance: Seleziona un'istanza  #ADDED
+    SelectAnInstance: Seleziona un'istanza #ADDED
     SelectAPath: Per favore scegli una cartella per il film o per la serie
     SelectAQuality: Per favore seleziona un profilo di qualità per il film o la serie
     SelectFromWhichSeason: Da quale stagione?
-    PreviousResult: Precedente  #ADDED
-    NextResult: Successivo  #ADDED
+    PreviousResult: Precedente #ADDED
+    NextResult: Successivo #ADDED
 
   Actions:
     Add: Sì, aggiungilo
@@ -26,8 +26,8 @@ it-it:
     StopDelete: No, non voglio cancellarlo
     Select: Sì, seleziona questo
     SelectedAndFutureSeasons: Stagioni selezionate e future #ADDED
-    SelectAllSeasons: Seleziona tutte le stagioni  #ADDED
-    DeselectAllSeasons: Deseleziona tutte le stagioni  #ADDED
+    SelectAllSeasons: Seleziona tutte le stagioni #ADDED
+    DeselectAllSeasons: Deseleziona tutte le stagioni #ADDED
 
   Authorization:
     Authorize: Devi prima autenticare questa chat. Qual'è la password?
@@ -35,14 +35,14 @@ it-it:
     ChatID_Added: "Questa chat è stata aggiunta alla lista delle chat autorizzate. Ora puoi utilizzare il bot. \nSe avevi inviato un comando, dovrai inviarlo di nuovo."
     NotAdmin: "Devi essere un amministratore per eseguire questo comando."
     ChatID_Allowed: "Chat già autorizzata"
-    User_Added: L'utente %{username} è stato aggiunto alla lista delle chat consentite.  #ADDED
-    Accept: Accetta  #ADDED
-    Reject: Rifiuta  #ADDED
+    User_Added: L'utente %{username} è stato aggiunto alla lista delle chat consentite. #ADDED
+    Accept: Accetta #ADDED
+    Reject: Rifiuta #ADDED
 
   Notifications:
-    ProfileCreated: Profili di notifica creati.  #ADDED
-    ProfileExists: Sei già iscritto alle notifiche.  #ADDED
-    CreatingProfiles: Le sottoscrizioni alle notifiche verranno ora create.  #ADDED
+    ProfileCreated: Profili di notifica creati. #ADDED
+    ProfileExists: Sei già iscritto alle notifiche. #ADDED
+    CreatingProfiles: Le sottoscrizioni alle notifiche verranno ora create. #ADDED
 
   Messages:
     Add: Si, aggiungi %{subject}
@@ -54,7 +54,7 @@ it-it:
     DeleteSuccess: "%{subjectWithArticle} è stato rimosso con successo 🙂"
     Exist: "%{subjectWithArticle} già esistente 😉"
     NoExist: "%{subjectWithArticle} non esiste."
-    LoadingAll: Questo potrebbe richiedere alcuni minuti a seconda della tua libreria. Attendere...  #ADDED
+    LoadingAll: Questo potrebbe richiedere alcuni minuti a seconda della tua libreria. Attendere... #ADDED
     MissingConfig: "You are missing the following configkeys in your config.yaml-file: %{missingKeys}.\nAdd these before restarting the bot."
     ConfigError: "The following configkeys has a wrong value in your config.yaml-file: %{wrongValues}.\nChange these before restarting the bot."
     StartChatting: Inizia a chattare con Addarr su Telegram. La prima volta che usi "start" dovrai inserire la password.
@@ -83,7 +83,7 @@ it-it:
     ChangedTo100: Limite disattivato
     Error: Errore nell'impostazione della velocità
 
-  qBittorrent:  #ADDED
+  qBittorrent: #ADDED
     NotEnabled: La funzione qBittorrent non è attivata.
     Speed: Quale velocità vuoi che qBittorrent utilizzi?
     Alternate: Limite di velocità alternativo
@@ -106,7 +106,7 @@ it-it:
     <b><b>Comandi Addarr</b></b>
     \n<i>Rivedere questo testo? Usa /%{help}</i>\n
     \n• Autenticati prima del primo uso.
-        Usa /%{authenticate} [password]
+    Usa /%{authenticate} [password]
     \n• Aggiungi contenuti: /%{add}.
     \n• Elimina contenuti: /%{delete}.
     \n• Elenca serie in Sonarr: /%{allSeries}.
@@ -121,7 +121,9 @@ it-it:
     \n\n
     Notifiche quando i media sono pronti: /%{notify}."
 
-  CommandDescriptions:  #ADDED
+  CommandDescriptions: #ADDED
+    Start: Avvia il bot #DEEPL
+    Stop: Interrompe il comando corrente #DEEPL
     Authenticate: Autenticati prima del primo utilizzo
     Add: Aggiungi media
     Help: Guida ai comandi
