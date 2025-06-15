@@ -3,6 +3,8 @@
 import logging
 import logging.handlers
 import os
+import sys
+import io
 
 from definitions import LOG_PATH
 
@@ -24,7 +26,10 @@ def getLogger(loggerName, logLevel, logToConsole):
         fileHandler.setFormatter(logFormatter)
         logger.addHandler(fileHandler)
         if logToConsole:
-            consoleHandler = logging.StreamHandler()
+            if sys.stdout.encoding.lower() != "utf-8":
+                sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+            consoleHandler = logging.StreamHandler(sys.stdout)
             consoleHandler.setLevel(logLevel)
             consoleHandler.setFormatter(logFormatter)
             logger.addHandler(consoleHandler)
