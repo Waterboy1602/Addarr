@@ -10,6 +10,7 @@ from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ConversationHandler, filters, MessageHandler,
                           ContextTypes, Application)
 from telegram.warnings import PTBUserWarning
+from telegram.helpers import escape_markdown
 
 from commons import (checkAllowed, checkId, authentication,
                      format_bytes, getAuthChats, getService, clearUserData,
@@ -760,15 +761,17 @@ async def storeInstance(update : Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
 
     context.user_data["output"] = service.giveTitles(searchResult)
+    title = escape_markdown(context.user_data['output'][position]['title'], version=2)
+    year = escape_markdown(str(context.user_data['output'][position]['year']), version=2)
     message = i18n.t("addarr.SearchResults", count=len(searchResult))
-    message += f"\n\n*{context.user_data['output'][position]['title']} ({context.user_data['output'][position]['year']})*"
+    message += f"\n\n*{title} \\({year}\\)*"
 
     if "update_msg" in context.user_data:
         await context.bot.edit_message_text(
             message_id=context.user_data["update_msg"],
             chat_id=update.effective_message.chat_id,
             text=message,
-            parse_mode=ParseMode.MARKDOWN,
+            parse_mode=ParseMode.MARKDOWN_V2,
         )
     else:
         msg = await context.bot.send_message(chat_id=update.effective_message.chat_id, text=message, parse_mode=ParseMode.MARKDOWN,)
