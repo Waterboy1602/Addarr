@@ -58,7 +58,7 @@ async def sabnzbd(update, context):
         ),
     ]]
     markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text(
+    await update.message.reply_text(
         i18n.t("addarr.Sabnzbd.Speed"), reply_markup=markup
     )
     return SABNZBD_SPEED_LIMIT_100
