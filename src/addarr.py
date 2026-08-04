@@ -15,6 +15,7 @@ from commons import checkAllowed, checkId, authentication, format_bytes, getAuth
 import logger
 import radarr as radarr
 import sonarr as sonarr
+import sportarr as sportarr
 import delete as delete
 import all as all
 from config import checkConfigValues, config, checkConfig
@@ -71,6 +72,14 @@ def main():
                             all.allSeries,
                         )
 
+    allSports_handler_command = CommandHandler(config["entrypointAllSports"], all.allSports)
+    allSports_handler_text = MessageHandler(
+        filters.Regex(
+            re.compile(r"^" + config["entrypointAllSports"] + "$", re.IGNORECASE)
+        ),
+        all.allSports,
+    )
+
     allMovies_handler_command = CommandHandler(config["entrypointAllMovies"], all.allMovies)
     allMovies_handler_text = MessageHandler(
         filters.Regex(
@@ -93,10 +102,10 @@ def main():
             SERIE_MOVIE_DELETE: [MessageHandler(filters.TEXT, choiceSerieMovie)],
             READ_DELETE_CHOICE: [
                 MessageHandler(
-                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}|{i18n.t("addarr.Sport")})$'),
                     delete.confirmDelete,
                 ),
-                CallbackQueryHandler(delete.confirmDelete, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$')
+                CallbackQueryHandler(delete.confirmDelete, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}|{i18n.t("addarr.Sport")})$')
             ],
             GIVE_OPTION: [
                 CallbackQueryHandler(delete.deleteSerieMovie, pattern=f'({i18n.t("addarr.Delete")})'),
@@ -123,6 +132,7 @@ def main():
             CommandHandler(config["entrypointAdd"], startSerieMovie),
             CommandHandler(i18n.t("addarr.Movie"), startSerieMovie),
             CommandHandler(i18n.t("addarr.Series"), startSerieMovie),
+            CommandHandler(i18n.t("addarr.Sport"), startSerieMovie),
             MessageHandler(
                 filters.Regex(
                     re.compile(r'^' + config["entrypointAdd"] + '$', re.IGNORECASE)
@@ -134,10 +144,10 @@ def main():
             SERIE_MOVIE_AUTHENTICATED: [MessageHandler(filters.TEXT, choiceSerieMovie)],
             READ_CHOICE: [
                 MessageHandler(
-                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                    filters.Regex(f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}|{i18n.t("addarr.Sport")})$'),
                     searchSerieMovie,
                 ),
-                CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")})$'),
+                CallbackQueryHandler(searchSerieMovie, pattern=f'^({i18n.t("addarr.Movie")}|{i18n.t("addarr.Series")}|{i18n.t("addarr.Sport")})$'),
                 MessageHandler(
                     filters.Regex(f'^({i18n.t("addarr.New")})$'),
                     startSerieMovie
@@ -238,6 +248,8 @@ def main():
     application.add_handler(auth_handler_text)
     application.add_handler(allSeries_handler_command)
     application.add_handler(allSeries_handler_text)
+    application.add_handler(allSports_handler_command)
+    application.add_handler(allSports_handler_text)
     application.add_handler(allMovies_handler_command)
     application.add_handler(allMovies_handler_text)
     application.add_handler(addMovieserie_handler)
@@ -341,6 +353,7 @@ async def choiceSerieMovie(update, context):
 
         if reply.lower() not in [
             i18n.t("addarr.Series").lower(),
+            i18n.t("addarr.Sport").lower(),
             i18n.t("addarr.Movie").lower(),
         ]:
             logger.debug(
@@ -350,6 +363,7 @@ async def choiceSerieMovie(update, context):
 
         if context.user_data.get("choice") in [
             i18n.t("addarr.Series"),
+            i18n.t("addarr.Sport"),
             i18n.t("addarr.Movie"),
         ]:
             logger.debug(
@@ -366,6 +380,10 @@ async def choiceSerieMovie(update, context):
                     InlineKeyboardButton(
                         '\U0001F4FA '+i18n.t("addarr.Series"),
                         callback_data=i18n.t("addarr.Series")
+                    ),
+                    InlineKeyboardButton(
+                        '\U0001F3C6 '+i18n.t("addarr.Sport"),
+                        callback_data=i18n.t("addarr.Sport")
                     ),
                 ],
                 [ InlineKeyboardButton(
@@ -479,7 +497,7 @@ async def searchSerieMovie(update, context):
     if choice == i18n.t("addarr.Movie"):
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
     else:
-        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+        message=i18n.t("addarr.messages.This", subjectWithArticle=serieOrSportArticle(context).lower())
     msg = await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
     )
@@ -571,7 +589,7 @@ async def nextOption(update, context):
     if choice == i18n.t("addarr.Movie"):
         message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
     else:
-        message=i18n.t("addarr.messages.This", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+        message=i18n.t("addarr.messages.This", subjectWithArticle=serieOrSportArticle(context).lower())
     msg = await context.bot.send_message(
         chat_id=update.effective_message.chat_id, text=message, reply_markup=markup
     )
@@ -841,7 +859,7 @@ async def addSerieMovie(update, context):
             if choice == i18n.t("addarr.Movie"):
                 message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
             else:
-                message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+                message=i18n.t("addarr.messages.AddSuccess", subjectWithArticle=serieOrSportArticle(context))
             await context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
@@ -852,7 +870,7 @@ async def addSerieMovie(update, context):
                 if choice == i18n.t("addarr.Movie"):
                     message2=i18n.t("addarr.Notifications.AddSuccess", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 else:
-                    message2=i18n.t("addarr.Notifications.AddSuccess", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                    message2=i18n.t("addarr.Notifications.AddSuccess", subjectWithArticle=serieOrSportArticle(context),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 await context.bot.send_message(
                     chat_id=adminNotifyId, text=message2
                 )
@@ -862,7 +880,7 @@ async def addSerieMovie(update, context):
             if choice == i18n.t("addarr.Movie"):
                 message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle").lower())
             else:
-                message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle").lower())
+                message=i18n.t("addarr.messages.AddFailed", subjectWithArticle=serieOrSportArticle(context).lower())
             await context.bot.edit_message_text(
                 message_id=context.user_data["update_msg"],
                 chat_id=update.effective_message.chat_id,
@@ -873,7 +891,7 @@ async def addSerieMovie(update, context):
                 if choice == i18n.t("addarr.Movie"):
                     message2=i18n.t("addarr.Notifications.AddFailed", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 else:
-                    message2=i18n.t("addarr.Notifications.AddFailed", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                    message2=i18n.t("addarr.Notifications.AddFailed", subjectWithArticle=serieOrSportArticle(context),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
                 await context.bot.send_message(
                     chat_id=adminNotifyId, text=message2
                 )
@@ -883,7 +901,7 @@ async def addSerieMovie(update, context):
         if choice == i18n.t("addarr.Movie"):
             message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"))
         else:
-            message=i18n.t("addarr.messages.Exist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"))
+            message=i18n.t("addarr.messages.Exist", subjectWithArticle=serieOrSportArticle(context))
         await context.bot.edit_message_text(
             message_id=context.user_data["update_msg"],
             chat_id=update.effective_message.chat_id,
@@ -895,7 +913,7 @@ async def addSerieMovie(update, context):
             if choice == i18n.t("addarr.Movie"):
                 message2=i18n.t("addarr.Notifications.Exist", subjectWithArticle=i18n.t("addarr.MovieWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
             else:
-                message2=i18n.t("addarr.Notifications.Exist", subjectWithArticle=i18n.t("addarr.SeriesWithArticle"),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
+                message2=i18n.t("addarr.Notifications.Exist", subjectWithArticle=serieOrSportArticle(context),title=context.user_data['output'][position]['title'],first_name=update.effective_message.chat.first_name, chat_id=update.effective_message.chat.id)
             await context.bot.send_message(
                 chat_id=adminNotifyId, text=message2
             )
@@ -903,9 +921,18 @@ async def addSerieMovie(update, context):
         return ConversationHandler.END
 
 
+def serieOrSportArticle(context):
+    """Sport shares the series flow; only the user-facing wording differs."""
+    if context.user_data.get("choice") == i18n.t("addarr.Sport"):
+        return i18n.t("addarr.SportWithArticle")
+    return serieOrSportArticle(context)
+
+
 def getService(context):
     if context.user_data.get("choice") == i18n.t("addarr.Series"):
         return sonarr
+    elif context.user_data.get("choice") == i18n.t("addarr.Sport"):
+        return sportarr
     elif context.user_data.get("choice") == i18n.t("addarr.Movie"):
         return radarr
     else:
@@ -928,7 +955,9 @@ async def help(update, context):
             delete=config["entrypointDelete"],
             movie=i18n.t("addarr.Movie").lower(),
             serie=i18n.t("addarr.Series").lower(),
+            sport=i18n.t("addarr.Sport").lower(),
             allSeries=config["entrypointAllSeries"],
+            allSports=config["entrypointAllSports"],
             allMovies=config["entrypointAllMovies"],
             transmission=config["entrypointTransmission"],
             sabnzbd=config["entrypointSabnzbd"],
