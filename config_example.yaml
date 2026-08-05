@@ -21,6 +21,29 @@ sonarr:
   addRequesterIdTag: true # Add telegram user id as tag on series
   adminRestrictions: false
 
+# Sportarr Configuration (sports leagues via https://github.com/Sportarr/Sportarr)
+sportarr:
+  server:
+    addr:
+    port : 1867 # Default is 1867
+    path: / # Default is / . If set, it must start and finish with / . Eg: /sportarr/
+    ssl: false # Default false
+  auth:
+    apikey:
+    username:
+    password:
+  search: true # Start search after adding league
+  seasonFolder: true
+  excludedRootFolders: # If set must not have a trailing slash Eg: /mnt/Media
+    - # First excluded folder, add others with a "-" on a new line (same indentation)
+  narrowRootFolderNames: true # If true, only the last folder name will be shown instead of full path
+  excludedQualityProfiles:
+    -
+  defaultTags: # If set must be existing tags
+    - telegram
+  addRequesterIdTag: true # Add telegram user id as tag on league
+  adminRestrictions: false
+
 # Radarr Configuration
 radarr:
   server:
@@ -81,6 +104,7 @@ entrypointHelp: help # help entrypoint
 entrypointAdd: start # start or a custom entrypoint
 entrypointAllSeries: allSeries # allSeries or a custom entrypoint
 entrypointAllMovies: allMovies # allMovies or a custom entrypoint
+entrypointAllSports: allSports # allSports or a custom entrypoint
 entrypointTransmission: transmission # transmission or a custom entrypoint
 entrypointSabnzbd: sabnzbd # sabnzbd or a custom entrypoint
 

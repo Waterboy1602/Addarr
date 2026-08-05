@@ -7,6 +7,7 @@ from config import config
 from translations import i18n
 import radarr as radarr
 import sonarr as sonarr
+import sportarr as sportarr
 
 # Set up logging
 logLevel = logging.DEBUG if config.get("debugLogging", False) else logging.INFO
@@ -70,6 +71,42 @@ async def allMovies(update, context):
             return ConversationHandler.END
     else:
         result = radarr.all_movies()
+        content = format_long_list_message(result)
+
+        if isinstance(content, str):
+            await context.bot.send_message(
+                chat_id=update.effective_message.chat_id,
+                text=content,
+            )
+        else:
+            # print every substring
+            for subString in content:
+                await context.bot.send_message(
+                    chat_id=update.effective_message.chat_id,
+                    text=subString,
+                )
+        return ConversationHandler.END
+
+async def allSports(update, context):
+    if config.get("enableAllowlist") and not checkAllowed(update,"regular"):
+        #When using this mode, bot will remain silent if user is not in the allowlist.txt
+        logger.info("Allowlist is enabled, but userID isn't added into 'allowlist.txt'. So bot stays silent")
+        return ConversationHandler.END
+
+    if sportarr.config.get("adminRestrictions") and not checkAllowed(update,"admin"):
+        await context.bot.send_message(
+            chat_id=update.effective_message.chat_id,
+            text=i18n.t("addarr.NotAdmin"),
+        )
+        return ConversationHandler.END
+
+    if not checkId(update):
+        if (
+            await authentication(update, context) == "added"
+        ):  # To also stop the beginning command
+            return ConversationHandler.END
+    else:
+        result = sportarr.allSeries()
         content = format_long_list_message(result)
 
         if isinstance(content, str):
