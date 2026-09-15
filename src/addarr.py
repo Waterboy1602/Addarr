@@ -925,7 +925,7 @@ def serieOrSportArticle(context):
     """Sport shares the series flow; only the user-facing wording differs."""
     if context.user_data.get("choice") == i18n.t("addarr.Sport"):
         return i18n.t("addarr.SportWithArticle")
-    return serieOrSportArticle(context)
+    return i18n.t("addarr.SeriesWithArticle")
 
 
 def getService(context):
