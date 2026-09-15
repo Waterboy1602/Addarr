@@ -20,11 +20,25 @@ DEFAULT_SETTINGS = {
     "entrypointDelete": "delete", #start or a custom entrypoint
     "entrypointAllSeries": "allSeries", #allSeries or a custom entrypoint
     "entrypointAllMovies": "allMovies", #allSeries or a custom entrypoint
+    "entrypointAllSports": "allSports", #allSports or a custom entrypoint
     "entrypointTransmission": "transmission", #transmission or a custom entrypoint
     "entrypointSabnzbd": "sabnzbd", #sabnzbd or a custom entrypoint
     "logToConsole": True,
     "debugLogging": False,
     "language": "en-us",
     "transmission": { "enable": False },
+    # Sportarr ships disabled by default so existing configs keep working
+    "sportarr": {
+        "server": { "addr": "", "port": 1867, "path": "/", "ssl": False },
+        "auth": { "apikey": "", "username": None, "password": None },
+        "search": True,
+        "seasonFolder": True,
+        "excludedRootFolders": [],
+        "narrowRootFolderNames": True,
+        "excludedQualityProfiles": [],
+        "defaultTags": [],
+        "addRequesterIdTag": True,
+        "adminRestrictions": False,
+    },
     "enableAdmin": False
 }
