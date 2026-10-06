@@ -817,7 +817,6 @@ async def addSerieMovie(update, context):
     qualityProfile = context.user_data["qualityProfile"]
 
     #Add tag for user 
-    #TODO (creation does not work right now, creation should be manual)
     tags = []
     if service.config.get("addRequesterIdTag"):
         if str(update.effective_message.chat.id) not in [str(t["label"]) for t in service.getTags()]:
